@@ -80,7 +80,7 @@ classdef TemplateHTML < handle
 
         function createHTML(obj)
             finalStr = obj.str;
-            outname = obj.outFolder+"\"+obj.name+".html";
+            outname = fullfile(obj.outFolder, obj.name + ".html");
             currDate = date;
             finalStr = filSTR(obj,finalStr,"{NAME}",obj.name);
             finalStr = filSTR(obj,finalStr,"{DATE}",string(currDate));
