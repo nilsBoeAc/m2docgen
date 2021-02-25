@@ -1,4 +1,24 @@
 classdef createDoc < handle
+% This is the main class that controlls the export of .m files to an html
+% documentation of a toolbox. 
+%% Description:
+%   Here comes a description. The Code-Word ist "Description" starting with
+%   two %%. The Block ends when the next comment-Block starts (next two %%)
+%   Each Block does contain a "Code-Word". Those will be stored in a dummy
+%   object. 
+%   
+%% Syntax:
+%   obj = createDoc(opts)
+%       read about the opts structure in the run_m2doc.m file.
+%
+%% References:
+%   m2html
+%
+%% Disclaimer:
+%
+% Author: Pierre Ollfisch
+% Copyright (c) 2021
+
    properties (Access = public)
       % from initial call
       delOld logical; 
@@ -11,6 +31,7 @@ classdef createDoc < handle
       startPage string;
       htmlFolderName string;
       toc cell;
+      verbose logical;
       % from GenerateFileList()
       fileList struct;
       % from GenerateFuncRefList()
@@ -30,6 +51,10 @@ classdef createDoc < handle
          obj.startPage      = opts.startPage;
          obj.toc            = opts.toc;
          obj.htmlFolderName = opts.htmlFolderName;
+         obj.verbose        = opts.verbose;
+         if obj.verbose
+             disp("Sucessfully created m2doc object");
+         end
       end
       %% external functions
       GenerateFilteredFileList(obj);

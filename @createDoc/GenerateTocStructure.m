@@ -1,9 +1,40 @@
 function GenerateTocStructure(obj)
+% Decide where the converted m-file shoudl be acessible and save to the
+% objects file list.
+%% Description:
+%   This function assignes each file a table of contents path. For Example,
+%   if a file can be found unter /MyToolbox/Vehicles/Air/plane.m and the
+%   obj.toc is structured like "/MyToolbox/Aircraft", then each file in
+%   the Vehicles/Air/-subfolder will be assigned the toc path 
+%   "/MyToolbox/Aircraft". This works by (ONLY) checking the last folder of
+%   the current .m file and cross-referencing it by revursively going
+%   through the obj.toc structure, finding the last folder and writing the
+%   current toc path to the file list.
+%
+%% Syntax:
+%   obj.GenerateTocStructure
+%
+%% Input:
+%   no direct inputs
+%       gets obj.fileList
+%
+%% Output:
+%   no direct outputs
+%       saves obj.fileList
+%
+%% Disclaimer:
+%
+% Author: Pierre Ollfisch
+% Copyright (c) 2021
+
 %% initialize
 fileList = obj.fileList;
 toc = "";
 tbsplit = strsplit(obj.mFolder, filesep);
 tbroot = tbsplit{end};
+if obj.verbose
+    obj.printToc;
+end
 
 %% loop through file path and assign toc heading
 if isempty(obj.toc)
@@ -28,11 +59,24 @@ else
     end
 end
 [fileList.toc] = toc{:};
+
+%% return value to object
 obj.fileList = fileList;
+if obj.verbose
+    disp("Sucessfully assigned toc structure to files!")
+end
+
 end % end function
 
 %----------local functions----------------
 function localPath = getTocPath(searchFolder, tocCell, tocPath)  
+% recursive function assign the current .m file a toc path. This works by
+% calling this function with a lastFolder keyword (constant), a cell to
+% look for the keyword (changes) and the "path" to that cell (changes). If
+% the searchFolder cant be found in the second cell column, then the
+% function checks if the third column contains cells. If yes, then this
+% function is called again, this time with the new cell as tocCell and the
+% "chain"/path to the current cell as tocPath. 
     localPath = "";
     localToc = tocCell;
     fn = string(localToc(:,1)); 

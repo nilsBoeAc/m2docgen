@@ -11,6 +11,23 @@ function GenerateFilteredFileList(obj)
 % for the extension and relative path is added. Lastly, all files whose 
 % path or names contains elements from opts.excludeFolder or 
 % opts.excludeFile areremoved.
+%
+%% Inputs:
+%   no inputs
+%
+%% Outputs:
+%   no direct outputs
+%       saves obj.fileList
+%
+%% Syntax:
+%   obj.GenerateFilteredFileList;
+%
+%% Disclaimer:
+%
+% Author: Nils Böhnisch
+% Copyright (c) 2021
+
+
 
 %% generate overview of all files with .m as part of the name
 allFileList = dir(fullfile(obj.mFolder, '**\*.m*'));
@@ -63,4 +80,7 @@ end
 
 %% return list to object
 obj.fileList = allFileList;
+if obj.verbose
+    disp("Sucessfully created list of files with " + length(allFileList) + " elements!");
+end
 end
