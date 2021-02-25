@@ -47,6 +47,9 @@ function m2doc = run_m2doc()
 %           - All files whose last folder is either "cars" or "rocket" will
 %           be found under a new sub-toc element instead of the root dir:
 %           Mytoolbox->Vehicles
+%   verbose - boolean: false
+%       If true, then more intermediate steps will be documented in the
+%       command window.
 clc;clearvars ;close all;
 
 opts = struct(  'delOld',           true, ...
@@ -58,7 +61,8 @@ opts = struct(  'delOld',           true, ...
                 'htmlFolderName',   "html", ...
                 'htmlMetaFolder',   "ressources", ...
                 'startPage',        ["SDBox.html"], ...
-                'toc',              [] );
+                'toc',              [], ...
+                'verbose',          true);
              
 opts.toc = {"SDBox",    "/",            []; ...
             "SDBoxApp", "@SDBoxApp",    []};
@@ -84,26 +88,35 @@ m2doc = createDoc(opts);
 m2doc.GenerateFilteredFileList;
 % Add toc structure field to file list
 m2doc.GenerateTocStructure;
-% add relative output path to file list
+% add relative (html) output path to file list
 m2doc.GenerateRelOutputPath;
 
 %% delete old documentation if option is set
 if opts.delOld && exist(opts.outputFolder)
+    if opts.verbose
+        disp("Removing previous documentation...")
+    else
+        warning('off');
+    end
     rmdir(opts.outputFolder, 's'); % also removes subfolders and files
     % please close all programms that currently access the html documents
     % (e.g. browsers, matlab, editors, etc..)
+    warning('on');
 end
 
 %% copy important style files and images etc to doc folder
+if opts.verbose
+    disp("Creating documentation folder structure...")
+end
 mkdir(opts.outputFolder);
 mkdir(fullfile(opts.outputFolder, opts.htmlFolderName));
 % copy entire folder with all meta files to target directory
 copyfile(pwd + "\Templates\Standard_V1", fullfile(opts.outputFolder,opts.htmlMetaFolder));
 
-
 %% Convert m files to html
-% generate reference list with all functions
+% first: generate reference list with all functions
 m2doc.GenerateFuncRefList;
+% second: loop through all files in m2doc.fileList and convert them
 fileList = m2doc.fileList;
 for i = 1:length(fileList)
     % assign general variables
@@ -124,12 +137,16 @@ for i = 1:length(fileList)
     outputFolder = currFileOutputFolder;
     styleFolder = "..\" + opts.htmlMetaFolder;
     homePath = opts.startPage;
-    myhtml = TemplateHTML(myName,tplFolder,outputFolder,styleFolder,homePath);
+    myhtml = TemplateHTML(myName,tplFolder,outputFolder,styleFolder,homePath, opts.verbose);
     myhtml.parseStr(currMFile.dummyList);
     myhtml.createHTML;
 end
 
 %% build xml file (helptoc.xml)
 
-
+%% print stats
+if m2doc.verbose
+    disp("Sucessfully converted " + length(m2doc.fileList) + " script files" ...
+        + " to a html documentation!");
+end
 end

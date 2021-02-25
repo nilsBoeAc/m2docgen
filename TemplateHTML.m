@@ -13,6 +13,7 @@ classdef TemplateHTML < handle
         outFolder string;   % Output folder: Here will the html be stored
         styleFolder string; % Ref Folder where style are located for the output
         homePath string;    % Path to home.html
+        verbose logical;    % controls how much spam will be printed to the command window
     end
     properties (Dependent)
         listFilKeys string;
@@ -20,7 +21,7 @@ classdef TemplateHTML < handle
     
     %% Methods
     methods
-        function obj = TemplateHTML(name,templateFolder,outFolder,styleFolder,homePath)
+        function obj = TemplateHTML(name,templateFolder,outFolder,styleFolder,homePath, verbose)
             % TemplateHTML Construct an instance of this class
             
             % Set location where template get from
@@ -40,6 +41,7 @@ classdef TemplateHTML < handle
             dat = textscan(fil,'%s','delimiter','\n');
             fclose(fil);
             obj.str = string(dat{1});
+            obj.verbose = verbose;
         end
                 
         function parseStr(obj,dummyList)
@@ -90,8 +92,10 @@ classdef TemplateHTML < handle
             obj.str = finalStr;
             
             if(~isempty(obj.listFilKeys))
-                disp("Open Key-Words - remove Blocks:");
-                disp(obj.listFilKeys);
+                if obj.verbose
+                    disp("Open Key-Words - remove Blocks:");
+                    disp(obj.listFilKeys);
+                end
                 obj.str = removeBlocks(obj);
             end
             
