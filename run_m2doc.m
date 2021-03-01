@@ -1,6 +1,8 @@
 function m2doc = run_m2doc()
 % create options struct and run the script to convert m files a html doc
 %% Options:
+%   toolboxName - string : "Name_of_the_toolbox"
+%       Distinct name that will be shown in the documentation
 %   delOld - boolean: true
 %       If documentation folder opts.outputFolder already exist, delete it 
 %       first.
@@ -50,19 +52,20 @@ function m2doc = run_m2doc()
 %   verbose - boolean: false
 %       If true, then more intermediate steps will be documented in the
 %       command window.
-clc;clearvars ;close all;
+clc;clearvars ;close all; fclose('all');
 
-opts = struct(  'delOld',           true, ...
+opts = struct(  'toolboxName',      "SDBox", ...
+                'delOld',           true, ...
                 'mFolder',          ["C:\Users\pubbe\Documents\GitHub\sdbox\TB_Code"], ...
                 'outputFolder',     ["C:\Users\pubbe\Documents\GitHub\sdbox\TB_Code\sd_doc"], ...
                 'buildSubDir',      false, ...
                 'excludeFolder',	["debug" "external_Modules" "geometry"], ...
                 'excludeFile',      ["sdp_template"], ...
-                'htmlFolderName',   "html", ...
+                'htmlFolderName',   "", ...
                 'htmlMetaFolder',   "ressources", ...
                 'startPage',        ["SDBox.html"], ...
                 'toc',              [], ...
-                'verbose',          true);
+                'verbose',          false);
              
 opts.toc = {"SDBox",    "/",            []; ...
             "SDBoxApp", "@SDBoxApp",    []};
@@ -135,7 +138,7 @@ for i = 1:length(fileList)
     myName      = currMFile.name;
     tplFolder   = pwd + "\Templates\Standard_V1";
     outputFolder = currFileOutputFolder;
-    styleFolder = "..\" + opts.htmlMetaFolder;
+    styleFolder = opts.htmlMetaFolder;
     homePath = opts.startPage;
     myhtml = TemplateHTML(myName,tplFolder,outputFolder,styleFolder,homePath, opts.verbose);
     myhtml.parseStr(currMFile.dummyList);
@@ -143,6 +146,10 @@ for i = 1:length(fileList)
 end
 
 %% build xml file (helptoc.xml)
+m2doc.GenerateTocXml;
+
+%% build info.xml file
+m2doc.GenerateInfoXml;
 
 %% print stats
 if m2doc.verbose
