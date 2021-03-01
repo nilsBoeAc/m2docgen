@@ -21,6 +21,7 @@ classdef createDoc < handle
 
    properties (Access = public)
       % from initial call
+      toolboxName string;
       delOld logical; 
       mFolder string;
       outputFolder string;
@@ -52,6 +53,7 @@ classdef createDoc < handle
          obj.toc            = opts.toc;
          obj.htmlFolderName = opts.htmlFolderName;
          obj.verbose        = opts.verbose;
+         obj.toolboxName    = opts.toolboxName;
          if obj.verbose
              disp("Sucessfully created m2doc object");
          end
@@ -61,5 +63,8 @@ classdef createDoc < handle
       GenerateTocStructure(obj);
       printToc(obj);
       GenerateRelOutputPath(obj);
+      GenerateTocXml(obj);
+      GenerateInfoXml(obj);
+      
    end
 end
