@@ -151,6 +151,9 @@ m2doc.GenerateTocXml;
 %% build info.xml file
 m2doc.GenerateInfoXml;
 
+%% try to build the search extension 
+m2doc.GenerateSearchDatabase; 
+
 %% print stats
 if m2doc.verbose
     disp("Sucessfully converted " + length(m2doc.fileList) + " script files" ...
