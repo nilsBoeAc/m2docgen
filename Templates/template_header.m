@@ -12,6 +12,7 @@ function template_header()
 %
 %% Input:
 %   Input Values
+%
 %% Output:
 %   Output Values
 %
@@ -21,6 +22,8 @@ function template_header()
 %
 %% Disclaimer:
 %
-% Author: Nils Böhnisch
+% Last editor:  Pierre Ollfisch
+% Last edit on: DD.MM.YYYY
+% Code version: X.Y.Z
 % Copyright (c) 2021
 end
