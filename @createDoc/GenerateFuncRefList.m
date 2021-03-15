@@ -23,7 +23,7 @@ function GenerateFuncRefList(obj)
 
 fileList = obj.fileList;
 refNames = string({fileList.name});
-refHTMLPath = fullfile("..",string({fileList.htmlOutputPath}),refNames + ".html");
+refHTMLPath = fullfile(string({fileList.htmlOutputPath}),refNames + ".html");
 
 %% return value to object
 obj.funcRefList = [refNames' refHTMLPath'];
