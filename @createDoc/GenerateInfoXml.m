@@ -8,6 +8,7 @@ function GenerateInfoXml(obj)
 %
 %% Input:
 %   no direct inputs
+%       requires obj.toolboxName, obj.outputFolder
 %   
 %% Output:
 %   saves the info.xml file into the folder specified by obj.mFolder 
@@ -19,6 +20,7 @@ function GenerateInfoXml(obj)
 
 %% get template text and prepare xml file
 templateTxt = getTemplate();
+templateTxt = strrep(templateTxt, newline, ""); % otherwise there will be two newlines...
 % template contains two "%s" which can directly be addressed by sprintf or
 % fprintf. 
 path2info   = fullfile(obj.mFolder, "info.xml");
@@ -37,6 +39,8 @@ disp("Generated the info.xml file!")
 end
 
 function strTemplate = getTemplate()
-infoTemplate = "./Templates/info.xml";
-strTemplate = fileread(infoTemplate);
+% extra function because i needed to change this frequently to find the
+% correct one for this case...
+infoTemplate    = "./Templates/info.xml";
+strTemplate     = fileread(infoTemplate);
 end

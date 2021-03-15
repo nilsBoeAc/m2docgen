@@ -27,8 +27,6 @@ function GenerateFilteredFileList(obj)
 % Author: Nils Böhnisch
 % Copyright (c) 2021
 
-
-
 %% generate overview of all files with .m as part of the name
 allFileList = dir(fullfile(obj.mFolder, '**\*.m*'));
 

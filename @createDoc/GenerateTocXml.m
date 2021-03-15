@@ -42,7 +42,8 @@ writeTocRec(tocFid, obj.fileList, obj.toc, "", "");
 fprintf(tocFid,'\n</toc>');
 fclose(tocFid);
 disp("Generated the helptoc.xml file!")
-end
+end % end function GenerateTocXml
+% ---------------- start local functions ---------------
 
 function writeTocRec(tocFid, fileList, tocCell, preTxt, tocPath)
 currTocCell = tocCell;
@@ -56,11 +57,13 @@ for i = 1:size(currTocCell,1)
     currTocPath     = fullfile(tocPath, currTocElement);
     % write current element to file
     pathToHtml      = ".html"; % complete path to html file (link of text) 
+    pathToHtml      = getHeadingHTMLPath(currTocElement);
     tocName         = currTocElement; % Text that will appear in the toc
     % fprintf(%s spaces  %s relative-path-to-html-file  %s displayed name)
     fprintf(tocFid,['%s<tocitem target="%s" ', ... 
         'image="$toolbox/matlab/icons/book_mat.gif">%s\n'], ...
         currPreTxt, pathToHtml, tocName); 
+    
     % loop throoug file list and add all files that belong to that toc
     for ii = 1:size(fileList,1)
         tmpFileToc  = fileList(ii).toc;
@@ -83,6 +86,10 @@ for i = 1:size(currTocCell,1)
     
     % close current toc element
     fprintf(tocFid,'%s</tocitem>\n', currPreTxt);
-end
+end % end for i
+end % end local function writeTocRec
 
-end
+function htmlPath = getHeadingHTMLPath(myName)
+% by default it should display a html file with the same name
+htmlPath = myName + ".html";
+end % end function getHeadingPath
