@@ -1,4 +1,4 @@
-function dispstat(TXT,varargin)
+function dispstat2(TXT,varargin)
 % Prints overwritable message to the command line. If you dont want to keep
 % this message, call dispstat function with option 'keepthis'. If you want to
 % keep the previous message, use option 'keepprev'. First argument must be
