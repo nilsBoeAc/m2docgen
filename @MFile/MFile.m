@@ -10,7 +10,7 @@ classdef MFile < handle
         knownBlocks = ["DESCRIPTION","SYNTAX","INPUT","OUTPUT", ...
                         "REFERENCES","DISCLAIMER"]; % for functions
                     
-        classBlocks = ["METHODS"]; % in addition for classes, "PROPERTIES" is already done by other script
+        classBlocks = ["METHODS", "PROPERTIES"];
         
         dummyList   ={}; %List with dummies
     end
