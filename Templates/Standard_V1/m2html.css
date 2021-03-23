@@ -150,3 +150,10 @@ hr.btw {
 img{
 	width: 80px;
 }
+
+.comment {
+	font-weight: normal;
+	color: #3c763D;
+	margin-bottom: 0px;
+	display: inline;
+}

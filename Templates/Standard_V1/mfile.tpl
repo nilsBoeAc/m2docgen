@@ -19,6 +19,11 @@
 <div><pre class="firstDesc">{SHORT_DESC}</pre></div>
 <!-- END SHORT_DESC / important comment -->
 
+<!-- START DESCRIPTION / important comment -->
+<h2><a name="_description"></a>Description <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">{DESCRIPTION}</pres></div>
+<!-- END DESCRIPTION / important comment -->
+
 <!-- START SYNTAX / important comment -->
 <h2><a name="_synopsis"></a>Syntax <a href="#_top"></a></h2><hr class="btw">
 <div class="fragment"><pre class="syntax">{SYNTAX}</pre></div>
@@ -34,11 +39,6 @@
 <div class="fragment"><pre class="io">{OUTPUT}</pre></div>
 <!-- END OUTPUT / important comment -->
 
-<!-- START DESCRIPTION / important comment -->
-<h2><a name="_description"></a>Description <a href="#_top"></a></h2><hr  class="btw">
-<div class="fragment"><pre class="text">{DESCRIPTION}</pres></div>
-<!-- END DESCRIPTION / important comment -->
-
 <!-- START REFERENCES / important comment -->
 <h2><a name="_description"></a>References <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text">{REFERENCES}</pre></div>
@@ -48,6 +48,16 @@
 <h2><a name="_description"></a>Disclaimer <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text">{DISCLAIMER}</pre></div>
 <!-- END DISCLAIMER / important comment -->
+
+<!-- START PROPERTIES / important comment -->
+<h2><a name="_description"></a>Properties <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">{PROPERTIES}</pre></div>
+<!-- END PROPERTIES / important comment -->
+
+<!-- START METHODS / important comment -->
+<h2><a name="_description"></a>Methods <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">{METHODS}</pre></div>
+<!-- END METHODS / important comment -->
 
 
 <!-- START TOTAL_CALL / important comment-->
