@@ -21,6 +21,10 @@ function parseFile(obj)
 % Author: Pierre Ollfisch
 % Copyright (c) 2021
 
+%% ToDo / Changelog:
+% - make style changes to css divs instead of html, e.g. bold attributes:
+%   switch from <b> to <div class="attInfo"> or something like that
+
 txt = obj.text;
 
 %% Check for SHORT_DESC (has to be first comment line)
@@ -100,22 +104,26 @@ if obj.type == "class"
                     % no special definition was found
                     currDescr = "no attributes defined";
                 end
+                currDescr = ['<b>',char(currDescr),'</b>']; % make it bold. TODO: make it a div
                 % collect text block
                 tmpTxt     = txt(firstLine(j)+1:lastLine(j)-1); % code with comments
                 tmpTxtNoC  = txtNoCom(firstLine(j)+1:lastLine(j)-1); % code without comments
                 
                 % modify text according to keyword
-                if lower(currKeyword) == "methods"
-                    % if keyword is method, then hunt for other functions
-                    currTxt     = scanFunctionText(tmpTxt, tmpTxtNoC);
-                    currTxt     = [currDescr; currTxt];
-                else
-                    currTxt     = [currDescr; tmpTxt];
+                switch lower(currKeyword)
+                    case "methods"
+                        currTxt     = scanFunctionText(tmpTxt, tmpTxtNoC);
+                        currTxt     = [currDescr; currTxt];
+                    case "properties"
+                         currTxt     = [currDescr; tmpTxt];
+                    otherwise
+                         currTxt     = [currDescr; tmpTxt];
                 end
                 
                 % assemble everything into a dummy
                 dum = Dummy(currKeyword, currTxt);
                 % add dummy to obj
+                dum.type = "classBlock";
                 obj.addDummy(dum);
             end % end for j
         end % end if
@@ -149,7 +157,13 @@ while(1)
         cE = cE +1;
     end
 end % end while
-end
+% check if the result vars have been set / keywords were found
+if exist('firstLine') && exist('lastLine')
+else
+    firstLine = 0;
+    lastLine = 0;
+end % if
+end % local function findBlocks
 
 function newTxt = scanFunctionText(txt, txtNC)
 % text of codeblock : txt
