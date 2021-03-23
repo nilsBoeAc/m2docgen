@@ -65,6 +65,16 @@ obj.fileList = fileList;
 if obj.verbose
     disp("Sucessfully assigned toc structure to files!")
 end
+ 
+%% update toc cell with new information:
+for i = 1:length(toc)
+    if (~isempty(toc(i))) && (toc(i) ~= "/") && (toc(i) ~= "\")
+        currTocFolder = toc(i);
+        tocParts = string(strsplit(currTocFolder, filesep));
+        tocParts = tocParts(tocParts ~= ""); %filter out empty strings
+        obj.toc = checkToc(tocParts, 1, obj.toc);
+    end % if
+end
 
 end % end function
 
@@ -94,5 +104,27 @@ function localPath = getTocPath(searchFolder, tocCell, tocPath)
                 end
             end
         end
+    end
+end
+
+function tocCell = checkToc(tocParts, tocPos, tocCell)
+    currToc = tocCell;
+    [tocCell, elemPos] = scanTocLayer(currToc,tocParts(tocPos));
+    if tocPos == numel(tocParts)
+    else
+        tocCell{elemPos, 3} = checkToc(tocParts, tocPos +1, currToc{elemPos, 3});
+    end
+end
+
+function [tocCell, elemPos] = scanTocLayer(tocCell, tocElement)
+% this 
+	tocList = string(tocCell(:,1));
+    locMask = strcmp(tocList, tocElement);
+    elemPos = find(locMask);
+    if isempty(elemPos)
+        elemPos = size(tocCell,1) +1;
+        tocCell{elemPos,1} = tocElement;
+        tocCell{elemPos,2} = tocElement;
+        tocCell{elemPos,3} = {};
     end
 end
