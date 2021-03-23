@@ -4,7 +4,7 @@ classdef TemplateHTML < handle
     %% Properties
     properties
         name string;
-        str string;
+        str string;         % at first only template, after parseStr also the entire content
         
         % Ref Folder
         templFolder string; % root where templates are located
@@ -45,19 +45,24 @@ classdef TemplateHTML < handle
         end
                 
         function parseStr(obj,dummyList)
-            strT = obj.str;
-            for di = 1:length(dummyList)
-                key = dummyList{di}.name;
-                filling = dummyList{di}.filling;
-                refPath = dummyList{di}.refPath;
+        % read in the template and replace designated parts with dummy text
+        % blocks. Loop through the dummy list, find the corresponding
+        % element in the template and replace it.
+            strT = obj.str;     % string template
+            for di = 1:length(dummyList) % di = dummy index
+                currDummy = dummyList{di};
+                key     = currDummy.name;
+                filling = currDummy.filling;
+                refPath = currDummy.refPath;
+                dumType = char(currDummy.type);
                 
-                switch char((dummyList{di}.type))
+                switch dumType
                     case char('functRef')
                         strT = filSTR(obj,strT,key,"");
                         strT = filSTR(obj,strT,"{TOTAL_CALL}","");
                         
                         % get Block for adding List
-                        strBlock = getTPL(obj,dummyList{di}.type);
+                        strBlock = getTPL(obj,currDummy.type);
                         if(key == "{NAME_CALL}")
                             keyPlace = 'functRef above';
                         else
@@ -73,6 +78,20 @@ classdef TemplateHTML < handle
                         end
                         
                         strT = addBlock(obj,strT,strBlock,keyPlace);
+                    case char("classBlock")
+                        % remove curly bracket text from html document
+                        strT = filSTR(obj,strT,key,"");
+                        % get Block for adding List
+                        strBlock    = getTPL(obj,currDummy.type);
+                        key         = "{CONTENT}"; % new key for new block
+                        if currDummy.name == "{METHODS}"
+                            keyPlace    = "END METHODS";
+                        else
+                            keyPlace    = "END PROPERTIES";
+                        end
+                        strBlock        = filSTR(obj,strBlock,key,filling);
+                        strT = addBlock(obj,strT,strBlock,keyPlace);
+                        
                     otherwise
                         strT = filSTR(obj,strT,key,filling);
                 end
@@ -81,8 +100,8 @@ classdef TemplateHTML < handle
         end % parseStr
 
         function createHTML(obj)
-            finalStr = obj.str;
-            outname = fullfile(obj.outFolder, obj.name + ".html");
+            finalStr = obj.str; % html document in txt form
+            outname = fullfile(obj.outFolder, obj.name + ".html"); % complete html path
             currDate = date;
             finalStr = filSTR(obj,finalStr,"{NAME}",obj.name);
             finalStr = filSTR(obj,finalStr,"{DATE}",string(currDate));
@@ -116,16 +135,18 @@ classdef TemplateHTML < handle
     
     %% File Adjust Functions
     methods
-        function strT = filSTR(obj,strT,old,new)
+        function strT = filSTR(obj,strT,strReplaceMarker,strOverwrite)
+        % this function looks for a string defined by "strRelaceMarker" and 
+        % replaces it with the string defined in "strOverwrite". 
             tline = 0;
             while(1)
                 tline = tline+1;
                 if(tline>length(strT))
                     break;
                 end
-                if(contains(strT(tline),old))
-                    splitSTR = split(strT(tline),old);
-                    fil = new;
+                if(contains(strT(tline),strReplaceMarker))
+                    splitSTR = split(strT(tline),strReplaceMarker);
+                    fil = strOverwrite;
                     fil(1) = splitSTR(1)+fil(1);
                     fil(end) = fil(end) + splitSTR(end);
                     strT = [strT(1:tline-1); fil; strT(tline+1:end)];
@@ -133,15 +154,17 @@ classdef TemplateHTML < handle
             end
         end % filSTR
         
-        function strT = addBlock(obj,strT,strBlock,keyword)
+        function mainHTML = addBlock(obj,mainHTML,strBlock,keyword)
+            % this function looks for a magic comment (keyword) and inserts
+            % the new content (strBlock) above the magic keyword
             tline = 0;
             while(1)
                 tline = tline+1;
-                if(tline>length(strT))
+                if(tline>length(mainHTML))
                     break;
                 end
-                if(contains(strT(tline),keyword))
-                    strT = [strT(1:tline-1); strBlock; strT(tline:end)];
+                if(contains(mainHTML(tline),keyword))
+                    mainHTML = [mainHTML(1:tline-1); strBlock; mainHTML(tline:end)];
                     break;
                 end
             end
