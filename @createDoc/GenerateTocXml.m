@@ -46,6 +46,7 @@ end % end function GenerateTocXml
 % ---------------- start local functions ---------------
 
 function writeTocRec(tocFid, fileList, tocCell, preTxt, tocPath)
+% tocFid = file id from fopen to the helptoc.xml file
 currTocCell = tocCell;
 currPreTxt  = preTxt; % preTxt are the spaces before a line in the xml document
 % index i:  toc element from currToc
@@ -64,11 +65,24 @@ for i = 1:size(currTocCell,1)
         'image="$toolbox/matlab/icons/book_mat.gif">%s\n'], ...
         currPreTxt, pathToHtml, tocName); 
     
+    % if available, do the loop on subelements of that toc ("subfolders")
+    if ~isempty(currTocCell{i,3}) && iscell(currTocCell{i,3})
+        newPreTxt = currPreTxt + "    ";
+        writeTocRec(tocFid, fileList, currTocCell{i,3}, newPreTxt, currTocPath);
+    end
+    
     % loop throoug file list and add all files that belong to that toc
     for ii = 1:size(fileList,1)
         tmpFileToc  = fileList(ii).toc;
         tmpFileName = fileList(ii).name;
-        if tmpFileToc == currTocPath
+        % special flag if the file should be put in the root toc directory
+        rootFlag = false;
+        if tmpFileToc == "/" || tmpFileToc == "\"
+            if tocPath == ""
+                rootFlag = true;
+            end
+        end
+        if tmpFileToc == currTocPath || rootFlag
             % fprintf(%s spaces  %s path_to_html_file  %s displayed name);
             preSpaces = preTxt + "    ";
             htmlpath  = fullfile(fileList(ii).htmlOutputPath, tmpFileName + ".html");
@@ -76,12 +90,6 @@ for i = 1:size(currTocCell,1)
             fprintf(tocFid,'%s<tocitem target="%s">%s</tocitem>\n', ...
 					preSpaces, htmlpath, fileName);
         end
-    end
-    
-    % if available, do the loop on subelements of that toc
-    if ~isempty(currTocCell{i,3}) && iscell(currTocCell{i,3})
-        newPreTxt = currPreTxt + "    ";
-        writeTocRec(tocFid, fileList, currTocCell{i,3}, newPreTxt, currTocPath);
     end
     
     % close current toc element
