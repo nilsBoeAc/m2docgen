@@ -43,8 +43,36 @@ classdef Dummy < handle
         end
         
         function set.filling(obj,fil)
-            % Removes '%' at the beginning
-            fil = strrep(fil,"%","");
+            switch lower(obj.name)
+                case {'{methods}' '{properties}'}
+                    % search for comments and mark them up with color div
+                    strDivStart = '<div class="comment">';
+                    strDivEnd = '</div>';
+                    for l = 1:length(fil) % l= line
+                        if contains(fil(l), "%")
+                            txtLine = char(fil(l));
+                            idx = strfind(txtLine, "%");
+                            % split string at first % and insert div tag
+                            if idx(1) == 1
+                                newTxt = [strDivStart, txtLine, strDivEnd];
+                            else
+                                newTxt = [txtLine(1:idx(1)-1), strDivStart, ...
+                                    txtLine(idx(1):end), strDivEnd];
+                            end
+                            fil(l) = newTxt;
+                        end
+                    end
+                    
+                    
+                case {'{description}' '{short_desc}' '{syntax}' ...
+                        '{input}' '{output}' '{disclaimer}' '{references}'}
+                    % Removes '%' at the beginning
+                    fil = strrep(fil,"%","");
+                otherwise
+                    % Removes '%' at the beginning
+                    fil = strrep(fil,"%","");
+            end
+            
             obj.filling = fil;
         end
     end
