@@ -1,4 +1,4 @@
-function m2doc = run_m2doc()
+function m2doc = m2doc(varargin)
 % create options struct and run the script to convert m files a html doc
 %% Options:
 %   toolboxName - string : "Name_of_the_toolbox"
@@ -56,37 +56,29 @@ function m2doc = run_m2doc()
 %   verbose - boolean: false
 %       If true, then more intermediate steps will be documented in the
 %       command window.
-clc;clearvars ;close all; fclose('all');
-
-opts = struct(  'toolboxName',      "SDBox", ...
-                'delOld',           true, ...
-                'mFolder',          ["C:\Users\pubbe\Documents\GitHub\sdbox\TB_Code"], ...
-                'outputFolder',     ["C:\Users\pubbe\Documents\GitHub\sdbox\TB_Code\sd_doc"], ...
-                'buildSubDir',      false, ...
-                'excludeFolder',	["debug" "external_Modules" "geometry"], ...
-                'excludeFile',      ["sdp_template"], ...
-                'htmlFolderName',   "", ...
-                'htmlMetaFolder',   "ressources", ...
-                'htmlTemplate',     "\Templates\Standard_V1", ...
-                'startPage',        ["SDBox.html"], ...
-                'toc',              [], ...
-                'verbose',          false);
-             
-opts.toc = {"SDBox",    "/",            []; ...
-            "SDBoxApp", "@SDBoxApp",    []};
-
-opts.toc{1,3} = {   "sdb_system",   "@sdb_system",   [];
-                    "Modules",      "modules",      [];
-                    "Excitation",   "excitation",   []};
-                
-opts.toc{1,3}{1,3} = {"Result Classes" , ["@sdb_FFT" "@sdb_TF"], []};
-
+clc;clearvars -except varargin;close all; fclose('all');
 
 %% add functions/path of m2doc to matlab path
 thisScript  = mfilename('fullpath');
 m2docFolder = fileparts(thisScript);
 cd(m2docFolder);
 addpath(genpath(m2docFolder));
+
+%% load options
+% check if they were given when calling this function
+p = inputParser();
+p.StructExpand = false;
+p.addOptional("opts", struct)
+p.parse(varargin{:})
+opts = p.Results.opts;
+if isempty(fieldnames(opts))
+    warning("Please specify an option structure when calling m2doc." ...
+        + "An example can be found in getOptions.m");
+else
+    if numel(fieldnames(opts)) == 1
+        opts = opts.opts; % catch if loaded from mat-file with load
+    end
+end
 addpath(genpath(opts.mFolder));
 
 %% create main object
