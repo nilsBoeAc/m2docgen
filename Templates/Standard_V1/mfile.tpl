@@ -45,18 +45,27 @@
 <!-- END REFERENCES / important comment -->
 
 <!-- START DISCLAIMER / important comment -->
-<h2><a name="_description"></a>Disclaimer <a href="#_top"></a></h2><hr  class="btw">
+<h2><a name="_description"></a>Disclaimer <a href="#_top"></a></h2><hr class="btw">
 <div class="fragment"><pre class="text">{DISCLAIMER}</pre></div>
 <!-- END DISCLAIMER / important comment -->
 
+<!-- START CONSTRUCTOR / important comment -->
+<h2><a name="_description"></a>Constructor <a href="#_top"></a></h2><hr class="btw">
+<div class="fragment"><pre class="text">{CONSTRUCTOR}</pre></div>
+<!-- END CONSTRUCTOR / important comment -->
+
 <!-- START PROPERTIES / important comment -->
-<h2><a name="_description"></a>Properties <a href="#_top"></a></h2><hr  class="btw">
-<div class="fragment"><pre class="text">{PROPERTIES}</pre></div>
+<h2><a name="_description"></a>{PROPERTIES}Properties <a href="#_top"></a></h2><hr class="btw">
+<ul>
+<!-- properties above / important comment -->
+</ul>
 <!-- END PROPERTIES / important comment -->
 
 <!-- START METHODS / important comment -->
-<h2><a name="_description"></a>Methods <a href="#_top"></a></h2><hr  class="btw">
-<div class="fragment"><pre class="text">{METHODS}</pre></div>
+<h2><a name="_description"></a>{METHODS}Methods <a href="#_top"></a></h2><hr class="btw">
+<ul>
+<!-- methods above / important comment -->
+</ul>
 <!-- END METHODS / important comment -->
 
 
