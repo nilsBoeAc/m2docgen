@@ -44,7 +44,7 @@ classdef Dummy < handle
         
         function set.filling(obj,fil)
             switch lower(obj.name)
-                case {'{methods}' '{properties}'}
+                case {'{methods}' '{properties}' '{constructor}'}
                     % search for comments and mark them up with color div
                     strDivStart = '<div class="comment">';
                     strDivEnd = '</div>';
