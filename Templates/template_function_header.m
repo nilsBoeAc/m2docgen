@@ -1,4 +1,4 @@
-function template_header()
+function template_function_header()
 % Here comes a short description.Do not use two %% 
 % It will read unitl the line starts with '%%'
 %% Description:
@@ -26,4 +26,9 @@ function template_header()
 % Last edit on: DD.MM.YYYY
 % Code version: X.Y.Z
 % Copyright (c) 2021
+
+%% ToDo / Changelog
+% - because the ToDo is seperated by an empty line from the rest of the
+%   header (and there is no block for it in the template), this list will
+%   not be on the final html page.
 end

@@ -1,7 +1,9 @@
 function GenerateInfoXml(obj)
 % generates the info.xml file which controlls the documentation
 %% Description:
-%   A template for the xml file is loaded, modified and saved.
+%   A template for the xml file, which controlls the addition of the custom
+%   documentation to the MATLAB DOCUMENTATION, is loaded, modified and
+%   saved. 
 %   
 %% Syntax:
 %   obj.GenerateInfoXml;
@@ -19,10 +21,10 @@ function GenerateInfoXml(obj)
 % Copyright (c) 2021
 
 %% get template text and prepare xml file
-templateTxt = getTemplate();
-templateTxt = strrep(templateTxt, newline, ""); % otherwise there will be two newlines...
-% template contains two "%s" which can directly be addressed by sprintf or
-% fprintf. 
+templateTxt = getTemplate(obj);
+%templateTxt = strrep(templateTxt, newline, ""); % otherwise there will be two newlines...
+% template contains target markers with %s, which can directly be addressed 
+% by sprintf or fprintf. 
 path2info   = fullfile(obj.mFolder, "info.xml");
 infoID      = fopen(path2info,'wt');
 
@@ -38,9 +40,9 @@ fclose(infoID);
 disp("Generated the info.xml file!")
 end
 
-function strTemplate = getTemplate()
+function strTemplate = getTemplate(obj)
 % extra function because i needed to change this frequently to find the
 % correct one for this case...
-infoTemplate    = "./Templates/info.xml";
+infoTemplate    = fullfile(".",obj.htmlTemplate,"info.xml");
 strTemplate     = fileread(infoTemplate);
 end

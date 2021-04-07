@@ -1,5 +1,5 @@
 function printToc(obj)
-% This function prints the obj.toc cell to the command window.
+% This debug function prints the obj.toc cell to the command window.
 %% Description:
 %   The structured cell of obj.toc will be looped through recursively and
 %   printed out along the way.
