@@ -1,19 +1,65 @@
 classdef TemplateHTML < handle
-    % Template for creating HTML File for MATLAB Custom Documentation
+% insert text dummys into html template, also does markup
+%% Description:
+%   This function reads in a template of a HTML document that includes
+%   markings where to insert the text dummys from MFile.parse. It will be
+%   stored in obj.str. Then it loops through all dummys and inserts them
+%   accordingly. While doing that, some highlighting occurs.
+%   
+%% Syntax:
+%   dm = TemplateHTML(name, templateFolder, outFolder, styleFolder, ...
+%                       homePath, verbose);
+%
+%% Input:
+% required input values;
+%   name            - name of the m-file: "string"
+%                     Name of the m-file that is converted to an HTML file 
+%                     (including extension) 
+%   templateFolder  - folder to template: "string"
+%                     Absolute path to the template folder within m2doc 
+%                     that contains all html templates and meta files.
+%   outFolder       - output folder: "string"
+%                     Target folder where to save the HTML document
+%   styleFolder     - meta folder path: "string"
+%                     relative path to the folder containing meta files
+%                     (css, images), relative to the outFolder
+%   homePath        - home target site: "string"
+%                     relative path to the page that should open when
+%                     clicking the home symbol on the website. Relative to
+%                     outFolder. 
+%   verbose         - debugging flag: logical
+%                     if true then infos for each file will be spammed into
+%                     the command line.
+%
+%% Properties:
+%   name            - see inputs
+%   templateFolder  - see inputs
+%   outFolder       - see inputs
+%   styleFolder     - see inputs
+%   homePath        - see inputs
+%   verbose         - see inputs
+%   str             - entire html document: "string"
+%                     At first only the preformatted html template, but is
+%                     filled with all text dummys.
+%
+%% Disclaimer:
+%
+% Last editor:  Pierre Ollfisch
+% Last edit on: 07.04.2021
+% Code version: 1.0
+% Copyright (c) 2021
     
     %% Properties
     properties
-        name string;
-        str string;         % at first only template, after parseStr also the entire content
-        
+        name        string;     % name of the currently converting m-file
+        str         string;     % at first only template, after parseStr also the entire content
         % Ref Folder
-        templFolder string; % root where templates are located
-        
+        templFolder string;     % root where templates are located
         % For Output:
-        outFolder string;   % Output folder: Here will the html be stored
-        styleFolder string; % Ref Folder where style are located for the output
-        homePath string;    % Path to home.html
-        verbose logical;    % controls how much spam will be printed to the command window
+        outFolder   string;     % Output folder: Here will the html be stored
+        styleFolder string;     % Ref Folder where style are located for the output
+        homePath    string;     % Path to home.html
+        verbose     logical;    % controls how much spam will be printed to the command window
     end
     properties (Dependent)
         listFilKeys string;
@@ -21,6 +67,7 @@ classdef TemplateHTML < handle
     
     %% Methods
     methods
+        %% Constructor
         function obj = TemplateHTML(name,templateFolder,outFolder,styleFolder,homePath, verbose)
             % TemplateHTML Construct an instance of this class
             
@@ -208,8 +255,8 @@ classdef TemplateHTML < handle
                 end
             end
             strT = obj.str;
-        end % removeBlocks
-    end
+        end % function removeBlocks
+    end % methods
     
     methods
         %% set Functions
@@ -255,6 +302,6 @@ classdef TemplateHTML < handle
             
             listN = word;
         end
-    end
-end
+    end % methods
+end % classdef
 

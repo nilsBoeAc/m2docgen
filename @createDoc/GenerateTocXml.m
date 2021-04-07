@@ -2,10 +2,9 @@ function GenerateTocXml(obj)
 % this function generates the helptoc.xml file that controls the displayed
 % table of contents in the matlab documentation of the toolbox.
 %% Description:
-%   Here comes a description. The Code-Word ist "Description" starting with
-%   two %%. The Block ends when the next comment-Block starts (next two %%)
-%   Each Block does contain a "Code-Word". Those will be stored in a dummy
-%   object. 
+%   This function loads a template of an xml file which controlls the table
+%   of content structure of the custom MATLAB toolbox documentation. The
+%   structure will follow the one given by the cell structure obj.toc
 %   
 %% Syntax:
 %   obj.GenerateTocXml

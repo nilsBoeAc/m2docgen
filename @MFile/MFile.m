@@ -1,18 +1,55 @@
 classdef MFile < handle
-    % MFile
-    
+% class that finds important comments in a specified m-file and reads out 
+% the following text block into dummy objects.
+%% Description:
+%   This class is used to read out important text from a header of an
+%   m-file. If specific keywords are found, e.g. "Description", then the
+%   text up to the next two percentage signs is read into a Dummy class
+%   object. 
+%   
+%% Syntax:
+%   mf = MFile(name,path);
+%
+%% Input:
+%   name - m-file name:     "string"
+%       file name, including the extension
+%   path - path to m-file:  "string"
+%       path to folder that contains the m-file
+%
+%% Properties:
+%   name - see inputs
+%   path - see inputs
+%   text - m-file text: "string"
+%       string does not contain newline chars,  but is a vertical string
+%   knownBlocks - keywords for functions: "string array"
+%       keywords that should be looked out for in a function m-file.
+%   classBlocks - keywords for classes: "string array"
+%       keywords that are looked for additionally to knownBlocks in a class
+%       m-file.
+%   dummyList - list of all dummys: cell (vertical);
+%
+%% Disclaimer:
+%
+% Last editor:  Pierre Ollfisch
+% Last edit on: 07.04.2021
+% Code version: 1.2
+% Copyright (c) 2021
+
+%% ToDo / Changelog
+% - remove HTML markup from this class and put into TEMPLATEHTML
+
     %% Properties
     properties
         name string; % Name of File
         path string; % Full Path of File
-        text string;  % text of File
+        text string; % text of File
 
         knownBlocks = ["DESCRIPTION","SYNTAX","INPUT","OUTPUT", ...
                         "REFERENCES","DISCLAIMER"]; % for functions
                     
-        classBlocks = ["METHODS", "PROPERTIES"];
+        classBlocks = ["METHODS", "PROPERTIES"]; % CONSTRUCTOR?
         
-        dummyList   ={}; %List with dummies
+        dummyList   = {}; %List with dummies
     end
     
     properties (Dependent)
@@ -33,18 +70,15 @@ classdef MFile < handle
             
             % Reduced Text to header
             obj.text = string(dat{1});
-        end
-    end
-    
-    %% Get / Set Functions
-    methods
+        end % Constructor
+
         function set.path(obj,p)
             tmp = char(p);
             if(tmp(end)~="\")
                 p = p+"\";
             end
             obj.path = p;
-        end
+        end % function set.path
         
         function t = get.type(obj)
             lineOne = lower(obj.text(1));
@@ -55,20 +89,20 @@ classdef MFile < handle
             else
                 t = "script";
             end
-        end
-        redTxt = reduceText(obj,txt)
-        redTxt = noComments(obj, txt)
-    end
+        end % function get.type
+        
+        function addDummy(obj,dum)
+            obj.dummyList{end+1,1} = dum;
+        end % function addDummy
+
+    end % methods (interla)
     
-    %% further Method
+    %% external defined functions
     methods
         parseFile(obj)
         checkCrossRef(obj,fctlist)
         getConstructor(obj);
-        
-        function addDummy(obj,dum)
-            obj.dummyList{end+1,1} = dum;
-        end
-        
-    end % end methods
+        redTxt = reduceText(obj,txt)
+        redTxt = noComments(obj, txt)
+    end % methods (external)
 end % end classdef
