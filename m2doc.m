@@ -88,6 +88,11 @@ m2doc.GenerateInfoXml;
 %% try to build the search extension 
 m2doc.GenerateSearchDatabase; 
 
+%% add output folder and subfolders to matlab path
+% only then the matlab documentation will find the info.xml and display the
+% custom documentation inside the MATLAB documentation
+addpath(genpath(opts.outputFolder));
+
 %% print stats
 if m2doc.verbose
     disp("Sucessfully converted " + length(m2doc.fileList) + " script files" ...
