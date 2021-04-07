@@ -1,16 +1,17 @@
 function ConvertFiles(obj)
 % converts the elements from obj.fileList to HTML documents
 %% Description:
-%
+% This function is part of m2doc and converts all files listed in
+% obj.fileList into html documents. 
 %   
 %% Syntax:
-%   Here are the syntax
+%   obj.ConvertFiles;
 %
 %% Input:
-%   Input Values
+%   no input values required
 %
 %% Output:
-%   Output Values
+%   no direct output values
 %
 %% References:
 %   m2html
@@ -22,7 +23,7 @@ function ConvertFiles(obj)
 % Code version: 1.0
 % Copyright (c) 2021
 
-% loop through all files in m2doc.fileList and convert them
+%% loop through all files in m2doc.fileList and convert them
 fileList = obj.fileList;
 for i = 1:length(fileList)
     % assign general variables
@@ -33,14 +34,14 @@ for i = 1:length(fileList)
     fprintf('Converting file <a href="matlab: open(%s)">%s</a>\n',"'" + ...
         fullfile(currFileFolder, currFileName) + "'", string(currFileName));
     
-    % read m file and extract "dummys"
+    % read m file and extract text "dummys"
     currMFile       = MFile(currFileName, currFileFolder);
     currMFile.parseFile; % find text dummys and add them to currMFile obj
     currMFile.checkCrossRef(obj.funcRefList);
     
-    % use dummys and a template html to generate html file
+    % insert text dummys into template html to generate html file
     myName          = currMFile.name;
-    tplFolder       = pwd + obj.htmlTemplate;
+    tplFolder       = fullfile(pwd,obj.htmlTemplate);
     outputFolder    = currFileOutputFolder;
     styleFolder     = obj.htmlMetaFolder;
     homePath        = obj.startPage;
