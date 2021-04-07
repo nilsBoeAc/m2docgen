@@ -26,4 +26,16 @@ mySource = fullfile(pwd, obj.htmlTemplate);
 myTarget = fullfile(obj.outputFolder,obj.htmlMetaFolder);
 
 copyfile(mySource, myTarget);
+
+% remove everything that is related to the creation of the documentation
+strExclude = ["info.xml" ".tpl"];
+listFolder = dir(myTarget);
+for i = length(listFolder):-1:1
+    currName = string(listFolder(i).name);
+    if contains(currName, strExclude)
+        tmpPath = fullfile(myTarget, currName, listFolder(i).name);
+        delete(tmpPath);
+    end
+end
+
 end
