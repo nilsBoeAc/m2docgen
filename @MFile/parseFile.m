@@ -82,106 +82,119 @@ end %for
 %% classdef searches for definitions of methods etc
 if obj.type == "class"
     txtNoCom = obj.noComments(txt);     %remove all comments from txt, but keep line count
-    obj.getConstructor;         % TODO build html page for constructor
-    % loop through all keywords and find those in the txtNoCom:
-    for i = 1:length(obj.classBlocks)
-        currKeyword = obj.classBlocks(i);
-        [firstLine, lastLine] = findBlocks(txtNoCom, currKeyword);
-        % up till here the firstLine contains all beginnings of *keyword*
-        % the text must be extracted for each found text block, if found
-        if(any(firstLine)>0 && any(lastLine)>0)
-            % loop through all found entries and merge
-            for j = 1:numel(firstLine)
-                % look for defnition of access etc..
-                currHead    = txtNoCom(firstLine(j));
-                currDescr = strrep(lower(currHead), lower(currKeyword),"");
-                if currDescr ~= lower(currHead)
-                    % remove braces and empty spaces
-                    currDescr = strrep(currDescr," ", "");
-                    currDescr = strrep(currDescr,"(", "");
-                    currDescr = strrep(currDescr,")", "");
+    [~, fileName] = fileparts(obj.name);
+    propertiesList = properties(fileName);
+    methodsList = methods(fileName);
+    % remove unwanted elements from methods block, like self call
+    % (constructor) or handle class specific items:
+    handleElement = {'addlistener' 'eq' 'findprop' 'gt' 'le' 'lt' 'notify' ...
+        'delete' 'findobj' 'ge' 'isvalid' 'listener' 'ne' fileName};
+    for i = length(methodsList):-1:1
+        currMeth = string(methodsList{i});
+        for ii = 1:length(handleElement)
+            if currMeth == string(handleElement{ii})
+                methodsList(i) = [];
+            end
+        end
+    end
+    
+    % add all list elements to text dummies
+    % methods
+    for i = 1:length(methodsList)
+        singleMeth = methodsList{i};
+        dum = Dummy("METHODS", singleMeth);
+        dum.type = "classBlock";
+        obj.addDummy(dum);
+    end
+    % properties
+    for i = 1:length(propertiesList)
+        singleProp = propertiesList{i};
+        dum = Dummy("PROPERTIES", singleProp);
+        dum.type = "classBlock";
+        obj.addDummy(dum);
+    end
+
+    %% find constructor and entirely add as dummy text
+    txt = obj.text;
+    [~,strCoName] = fileparts(obj.name);
+    % onyl works if its defined in the class m-file itself
+    startLine = -1;
+    endLine = -1;
+    % keywords that require an "end" afterwards
+    strKeyword = ["if " "try " "while " "for " "parfor " "switch "];
+    endCounter = 0;
+    for i = 1:length(txtNoCom)
+        currLine = lower(txtNoCom(i));
+        if contains(currLine, "function") && contains(currLine, strCoName)
+            % constructor found, now find the end of it
+            startLine = i;
+        end
+        % increment or decrement endCounter
+        if startLine ~= -1
+            txt(i) = highlightKeywords(txt(i));
+            if contains(currLine, strKeyword) 
+                endCounter = endCounter +1;
+            end
+            if currLine == "end"
+                if endCounter == 0
+                    endLine = i;
+                    break; %  break out of loop if finished
                 else
-                    % no special definition was found
-                    currDescr = "no attributes defined";
+                    endCounter = endCounter -1;
                 end
-                currDescr = ['<b>',char(currDescr),'</b>']; % make it bold. TODO: make it a div
-                % collect text block
-                tmpTxt     = txt(firstLine(j)+1:lastLine(j)-1); % code with comments
-                tmpTxtNoC  = txtNoCom(firstLine(j)+1:lastLine(j)-1); % code without comments
-                
-                % modify text according to keyword
-                switch lower(currKeyword)
-                    case "methods"
-                        currTxt     = scanFunctionText(tmpTxt, tmpTxtNoC);
-                        currTxt     = [currDescr; currTxt];
-                    case "properties"
-                         currTxt     = [currDescr; tmpTxt];
-                    otherwise
-                         currTxt     = [currDescr; tmpTxt];
-                end
-                
-                % assemble everything into a dummy
-                dum = Dummy(currKeyword, currTxt);
-                % add dummy to obj
-                dum.type = "classBlock";
-                obj.addDummy(dum);
-            end % end for j
-        end % end if
-    end % end for (class extras)
+            end
+        end
+
+    end % for i
+    if startLine ~= -1 && endLine ~= -1
+        strConstructor = txt(startLine:endLine); % includes comments
+        dum = Dummy("CONSTRUCTOR",strConstructor);
+        dum.type = "constructor";
+        obj.addDummy(dum);
+    end
 end % end if is class
 end % end function parseFile
 
-%------------ start of local functions-----------------------
+%% ------------ start of local functions --------------
 
-function [firstLine, lastLine] = findBlocks(txt, keyword)
-% find beginnings and endings of *keyword* blocks
-% use txt without comments for best results
-line = 0;
-cE = 1; % count number of elements
-st_found = false;
-while(1)
-    line = line +1;
-    % break criterium
-    if line > length(txt)
-        break;
+function modTxt = highlightKeywords(inputTxt, identLvl)
+    % insert spaces for indentation
+    modTxt = string(inputTxt);
+    if nargin ==1
+        identLvl = 0;
+    else
+        indent = strjoin(repmat(" ", 1, identLvl));
+        modTxt = indent + inputTxt;
     end
-    cL = char(txt(line));
-    cL = strrep(cL,' ','');
-    % search for the strings
-    if contains(upper(cL), keyword)
-        st_found = true;
-        firstLine(cE) = line;
-    elseif upper(cL) == "END" && st_found
-        lastLine(cE) = line;
-        st_found = false;
-        cE = cE +1;
+    
+    % markup keywords
+    keywords = ["if " "try " "while " "for " "parfor " "switch " ...
+        "function " "end"];
+    if contains(modTxt, keywords)
+        for i = 1:length(keywords)
+            currKey = keywords(i);
+            idx = strfind(modTxt, currKey);
+            if ~isempty(idx)
+                idEnd = idx(1) + length(char(currKey))-1;
+%                 if contains(currKey, " ")
+%                     idEnd = idEnd -1;
+%                 end
+                modChar = char(modTxt);
+                if idx == 1
+                    preTxt = "";
+                else
+                    preTxt = string(modChar(1:idx));
+                end
+                startD = "<div class='functionKeyword'>";
+                endDiv = "</div>";
+                if idEnd == length(modChar)
+                    aftTxt = "";
+                else
+                    aftTxt = string(modChar(idEnd:end));
+                end
+                modTxt = preTxt + startD + ...
+                    string(modChar(idx(1):idEnd)) +endDiv + aftTxt;
+            end
+        end
     end
-end % end while
-% check if the result vars have been set / keywords were found
-if exist('firstLine') && exist('lastLine')
-else
-    firstLine = 0;
-    lastLine = 0;
-end % if
-end % local function findBlocks
-
-function newTxt = scanFunctionText(txt, txtNC)
-% text of codeblock : txt
-% txt w/o comments: txtNC
-newTxt = txt;
-% cTxt   = 2;
-% 
-% i = 1; % counter for line of code
-% while i<=length(txt)
-%     if contains(lower(txtNC(i)), "function")
-%         % if function block is found, then add that to the newTxt list
-%         fncCall      = erase(txt(i), "function"); % only add function call
-%         newTxt(cTxt) = erase(fncCall, ";");
-%         cTxt = cTxt +1;
-%     elseif contains(lower(txtNC(i)),");")
-%         tmp = regexp(lower(txtNC(i)),"\w*);",'match');
-%     end
-%     i=i+1;
-% end
-
 end

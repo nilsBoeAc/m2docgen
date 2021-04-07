@@ -1,2 +1,1 @@
-
-<div class="fragment"><pre class="text">{CONTENT}</pre></div>
+<li><div class="classBlock">{SUB}</div></li>

@@ -48,18 +48,19 @@ classdef TemplateHTML < handle
         % read in the template and replace designated parts with dummy text
         % blocks. Loop through the dummy list, find the corresponding
         % element in the template and replace it.
-            strT = obj.str;     % string template
+            strTemplate = obj.str;     % string template
             for di = 1:length(dummyList) % di = dummy index
                 currDummy = dummyList{di};
                 key     = currDummy.name;
                 filling = currDummy.filling;
                 refPath = currDummy.refPath;
                 dumType = char(currDummy.type);
+                dummyList{di,2} = currDummy.name; % for debugging in the workspace
                 
                 switch dumType
                     case char('functRef')
-                        strT = filSTR(obj,strT,key,"");
-                        strT = filSTR(obj,strT,"{TOTAL_CALL}","");
+                        strTemplate = filSTR(obj,strTemplate,key,"");
+                        strTemplate = filSTR(obj,strTemplate,"{TOTAL_CALL}","");
                         
                         % get Block for adding List
                         strBlock = getTPL(obj,currDummy.type);
@@ -77,26 +78,26 @@ classdef TemplateHTML < handle
                             strBlock = filSTR(obj,strBlock,"{REF_CALL}",refPath);
                         end
                         
-                        strT = addBlock(obj,strT,strBlock,keyPlace);
+                        strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
                     case char("classBlock")
-                        % remove curly bracket text from html document
-                        strT = filSTR(obj,strT,key,"");
-                        % get Block for adding List
+                        % remove curly bracket text (PROPERTIES / METHODS)
+                        %   from html document
+                        strTemplate = filSTR(obj,strTemplate,key,"");
+                        % get template for this content
                         strBlock    = getTPL(obj,currDummy.type);
-                        key         = "{CONTENT}"; % new key for new block
-                        if currDummy.name == "{METHODS}"
-                            keyPlace    = "END METHODS";
-                        else
-                            keyPlace    = "END PROPERTIES";
-                        end
+                        key         = "{SUB}"; % new key for new block
                         strBlock        = filSTR(obj,strBlock,key,filling);
-                        strT = addBlock(obj,strT,strBlock,keyPlace);
-                        
+                        if currDummy.name == "{METHODS}"
+                            keyPlace    = "methods above";
+                        else
+                            keyPlace    = "properties above";
+                        end
+                        strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
                     otherwise
-                        strT = filSTR(obj,strT,key,filling);
+                        strTemplate = filSTR(obj,strTemplate,key,filling);
                 end
             end
-            obj.str = strT;
+            obj.str = strTemplate;
         end % parseStr
 
         function createHTML(obj)
@@ -135,21 +136,33 @@ classdef TemplateHTML < handle
     
     %% File Adjust Functions
     methods
-        function strT = filSTR(obj,strT,strReplaceMarker,strOverwrite)
+        function entireTxt = filSTR(obj,entireTxt,strReplaceMarker,strOverwrite)
         % this function looks for a string defined by "strRelaceMarker" and 
         % replaces it with the string defined in "strOverwrite". 
             tline = 0;
             while(1)
                 tline = tline+1;
-                if(tline>length(strT))
+                if(tline>length(entireTxt))
                     break;
                 end
-                if(contains(strT(tline),strReplaceMarker))
-                    splitSTR = split(strT(tline),strReplaceMarker);
+                if(contains(entireTxt(tline),strReplaceMarker))
+                    splitSTR = split(entireTxt(tline),strReplaceMarker);
                     fil = strOverwrite;
                     fil(1) = splitSTR(1)+fil(1);
                     fil(end) = fil(end) + splitSTR(end);
-                    strT = [strT(1:tline-1); fil; strT(tline+1:end)];
+                    if length(entireTxt) == 1
+                        entireTxt = [fil];
+                    else
+                        if tline == 1
+                            entireTxt = [fil; entireTxt(1:end)];
+                        elseif tline == length(entireTxt)
+                            entireTxt = [entireTxt(1:end-1); fil];
+                        else
+                            entireTxt = [entireTxt(1:tline-1); fil; entireTxt(tline+1:end)];
+                        end
+                    end
+                    tline = tline + length(fil) -1;
+                    %break;
                 end
             end
         end % filSTR

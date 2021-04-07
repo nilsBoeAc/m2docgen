@@ -157,3 +157,15 @@ img{
 	margin-bottom: 0px;
 	display: inline;
 }
+
+.classBlock {
+	font-weight: normal;
+	color: #000000;
+	margin-bottom: 0px;
+	/* display: inline; */
+}
+
+.functionKeyword{
+	color: #0000FF;
+	display: inline;
+}
