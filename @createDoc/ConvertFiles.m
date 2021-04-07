@@ -47,7 +47,7 @@ for i = 1:length(fileList)
     homePath        = obj.startPage;
     myhtml          = TemplateHTML(myName, tplFolder, outputFolder, ...
                         styleFolder,homePath, obj.verbose);
-    myhtml.parseStr(currMFile.dummyList); % add dummy blocks to template html document
+    myhtml.parseDummysIntoTemplate(currMFile.dummyList); % add dummy blocks to template html document
     myhtml.createHTML; % save string as html file
 end % for i
 end % function ConvertFiles

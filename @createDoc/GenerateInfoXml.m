@@ -22,9 +22,9 @@ function GenerateInfoXml(obj)
 
 %% get template text and prepare xml file
 templateTxt = getTemplate(obj);
-templateTxt = strrep(templateTxt, newline, ""); % otherwise there will be two newlines...
-% template contains two "%s" which can directly be addressed by sprintf or
-% fprintf. 
+%templateTxt = strrep(templateTxt, newline, ""); % otherwise there will be two newlines...
+% template contains target markers with %s, which can directly be addressed 
+% by sprintf or fprintf. 
 path2info   = fullfile(obj.mFolder, "info.xml");
 infoID      = fopen(path2info,'wt');
 

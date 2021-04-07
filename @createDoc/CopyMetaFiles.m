@@ -33,7 +33,7 @@ listFolder = dir(myTarget);
 for i = length(listFolder):-1:1
     currName = string(listFolder(i).name);
     if contains(currName, strExclude)
-        tmpPath = fullfile(myTarget, currName, listFolder(i).name);
+        tmpPath = fullfile(myTarget, currName);
         delete(tmpPath);
     end
 end
