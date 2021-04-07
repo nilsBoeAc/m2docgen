@@ -1,13 +1,14 @@
 function parseFile(obj)
-% scans the file for text blocks "dummys"
+% scans the file for text blocks "dummys", part of class MFile 
 %% Description:
-%   Here comes a description. The Code-Word ist "Description" starting with
-%   two %%. The Block ends when the next comment-Block starts (next two %%)
-%   Each Block does contain a "Code-Word". Those will be stored in a dummy
-%   object. 
+%   This function reads in a m-file in the form of a vertical string (no
+%   newline chars in the string) and searches for certain keywords (see
+%   properties knownBlocks and classBlocks). The following text will up
+%   until the next double percentage sign "%%" will be stored as dummy.
+%   Dummys will later on be used  by TemplateHTML to fill a HTML document.
 %   
 %% Syntax:
-%   obj.parseFile;
+%   [MFile].parseFile;
 %
 %% Input:
 %   no direct inputs
@@ -22,8 +23,8 @@ function parseFile(obj)
 % Copyright (c) 2021
 
 %% ToDo / Changelog:
-% - make style changes to css divs instead of html, e.g. bold attributes:
-%   switch from <b> to <div class="attInfo"> or something like that
+% - remove string manipulation that adds html div tags, now done in
+%   TemplateHTML (po - 07.04.2021)
 
 txt = obj.text;
 
@@ -62,13 +63,22 @@ for i = 1:length(obj.knownBlocks)
             end
             break;
         end
-        cL = char(txt(line));
+        cL = char(txt(line));   % current line
         cL = strrep(cL,' ','');
         if contains(upper(cL),"%%"+obj.knownBlocks(i))
             firstLine = line;
             st_found = true;
         elseif (contains(upper(cL),"%%") && st_found)
             lastLine = line;
+            break;
+        end
+        if isempty(cL)
+            % not even a percentage sign is present, header is finished
+            % stop the loop
+            if st_found
+                lastLine = line - 1;
+            end
+            line = length(txt) +1;
             break;
         end
     end %while
@@ -83,8 +93,8 @@ end %for
 if obj.type == "class"
     txtNoCom = obj.noComments(txt);     %remove all comments from txt, but keep line count
     [~, fileName] = fileparts(obj.name);
-    propertiesList = properties(fileName);
-    methodsList = methods(fileName);
+    propertiesList = properties(fileName); % file name and class name MUST MATCH
+    methodsList = methods(fileName); % file name and class name MUST MATCH
     % remove unwanted elements from methods block, like self call
     % (constructor) or handle class specific items:
     handleElement = {'addlistener' 'eq' 'findprop' 'gt' 'le' 'lt' 'notify' ...
@@ -131,11 +141,12 @@ if obj.type == "class"
         end
         % increment or decrement endCounter
         if startLine ~= -1
-            txt(i) = highlightKeywords(txt(i));
-            if contains(currLine, strKeyword) 
+            if contains(currLine, strKeyword) % currLine still does not contain comments
                 endCounter = endCounter +1;
+                continue;
             end
-            if currLine == "end"
+            currLineNoSp = strrep(currLine, " ", "");
+            if currLineNoSp == "end" || currLineNoSp == "end;"
                 if endCounter == 0
                     endLine = i;
                     break; %  break out of loop if finished
@@ -144,8 +155,7 @@ if obj.type == "class"
                 end
             end
         end
-
-    end % for i
+    end % for i, constructor now defined between startLine and endLine
     if startLine ~= -1 && endLine ~= -1
         strConstructor = txt(startLine:endLine); % includes comments
         dum = Dummy("CONSTRUCTOR",strConstructor);
@@ -154,47 +164,3 @@ if obj.type == "class"
     end
 end % end if is class
 end % end function parseFile
-
-%% ------------ start of local functions --------------
-
-function modTxt = highlightKeywords(inputTxt, identLvl)
-    % insert spaces for indentation
-    modTxt = string(inputTxt);
-    if nargin ==1
-        identLvl = 0;
-    else
-        indent = strjoin(repmat(" ", 1, identLvl));
-        modTxt = indent + inputTxt;
-    end
-    
-    % markup keywords
-    keywords = ["if " "try " "while " "for " "parfor " "switch " ...
-        "function " "end"];
-    if contains(modTxt, keywords)
-        for i = 1:length(keywords)
-            currKey = keywords(i);
-            idx = strfind(modTxt, currKey);
-            if ~isempty(idx)
-                idEnd = idx(1) + length(char(currKey))-1;
-%                 if contains(currKey, " ")
-%                     idEnd = idEnd -1;
-%                 end
-                modChar = char(modTxt);
-                if idx == 1
-                    preTxt = "";
-                else
-                    preTxt = string(modChar(1:idx));
-                end
-                startD = "<div class='functionKeyword'>";
-                endDiv = "</div>";
-                if idEnd == length(modChar)
-                    aftTxt = "";
-                else
-                    aftTxt = string(modChar(idEnd:end));
-                end
-                modTxt = preTxt + startD + ...
-                    string(modChar(idx(1):idEnd)) +endDiv + aftTxt;
-            end
-        end
-    end
-end

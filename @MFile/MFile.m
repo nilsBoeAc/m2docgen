@@ -67,7 +67,6 @@ classdef MFile < handle
             fil = fopen(obj.path+name,'r','n','UTF-8');
             dat = textscan(fil,'%s','delimiter','\n','TextType',"string");
             fclose(fil);
-            
             % Reduced Text to header
             obj.text = string(dat{1});
         end % Constructor
@@ -101,7 +100,6 @@ classdef MFile < handle
     methods
         parseFile(obj)
         checkCrossRef(obj,fctlist)
-        getConstructor(obj);
         redTxt = reduceText(obj,txt)
         redTxt = noComments(obj, txt)
     end % methods (external)
