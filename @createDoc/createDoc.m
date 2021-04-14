@@ -64,6 +64,8 @@ classdef createDoc < handle
 %           - All files whose last folder is either "cars" or "rocket" will
 %           be found under a new sub-toc element instead of the root dir:
 %           Mytoolbox->Vehicles
+%   m2docFolder - string:
+%       entire path to the m2doc base folder
 %   verbose - boolean: false
 %       If true, then more intermediate steps will be documented in the
 %       command window.
@@ -98,6 +100,7 @@ properties (Access = public)
     fileList        struct;
     % from GenerateFuncRefList():
     funcRefList     string;
+    m2docPath       string;
 end
 
 methods (Access = public)
@@ -117,6 +120,7 @@ methods (Access = public)
         obj.htmlTemplate   = fullfile("Templates", opts.htmlTemplate);
         obj.verbose        = opts.verbose;
         obj.toolboxName    = opts.toolboxName;
+        obj.m2docPath      = opts.m2docPath;
         if obj.verbose
             disp("Sucessfully created m2doc object");
         end
