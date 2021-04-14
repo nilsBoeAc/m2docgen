@@ -44,9 +44,17 @@ for i = 1:length(allFileList)
     myName(i)   = tmpName;
     myext(i)    = myExt;
     allFileList(i).name = tmpName;
-    relPathtmp	= split(tmpPath, obj.mFolder);
+    % check that both tmpPath and mFolder have filesep chars at the end 
+    charMFolder = char(obj.mFolder);
+    if tmpPath(end) ~= filesep
+        tmpPath(end+1) = filesep;
+    end
+    if charMFolder(end) ~= filesep
+        charMFolder(end+1) = filesep;
+    end
+    % finally use split to get relative path.
+    relPathtmp	= split(string(tmpPath), string(charMFolder));
     relPath(i)  = relPathtmp{end};
-    
 end
 % add extension field
 [allFileList.ext] = myext{:};

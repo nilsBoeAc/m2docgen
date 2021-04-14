@@ -43,7 +43,6 @@ clearvars -except varargin;close all; fclose('all');
 %% add functions/path of m2doc to matlab path
 thisScript  = mfilename('fullpath');
 m2docFolder = fileparts(thisScript);
-cd(m2docFolder);
 addpath(genpath(m2docFolder));
 
 %% load options
@@ -61,6 +60,7 @@ else
         opts = opts.opts; % catch if loaded from mat-file with load
     end
 end
+opts.m2docPath = m2docFolder;
 addpath(genpath(opts.mFolder));
 
 %% create main object
