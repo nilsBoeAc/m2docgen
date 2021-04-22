@@ -1,0 +1,135 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>Description of TemplateHTML</title>
+<meta name="keywords" content="TemplateHTML">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="generator" content="SDBox &copy 2021: Nils Boehnisch">
+<meta name="robots" content="index, follow">
+<link type="text/css" rel="stylesheet" href="ressources\m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+
+<div><a class = "image" href="Welcome_to_m2doc.html"><img border="0" src="ressources\sdboxLogo_wide.jpg"></a></div>
+
+<h1>TemplateHTML </h1> <hr class="btw">
+<!-- START SHORT_DESC / important comment -->
+<div><pre class="firstDesc"> insert text dummys into html template, also does markup</pre></div>
+<!-- END SHORT_DESC / important comment -->
+
+<!-- START DESCRIPTION / important comment -->
+<h2><a name="_description"></a>Description <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">   This function reads in a template of a HTML document that includes
+   markings where to insert the text dummys from MFile.parse. It will be
+   stored in obj.str. Then it loops through all dummys and inserts them
+   accordingly. While doing that, some highlighting occurs.
+   </pres></div>
+<!-- END DESCRIPTION / important comment -->
+
+<!-- START SYNTAX / important comment -->
+<h2><a name="_synopsis"></a>Syntax <a href="#_top"></a></h2><hr class="btw">
+<div class="fragment"><pre class="syntax">   dm = TemplateHTML(name, templateFolder, outFolder, styleFolder, ...
+                       homePath, verbose);
+</pre></div>
+<!-- END SYNTAX / important comment -->
+
+<!-- START INPUT / important comment -->
+<h2><a name="_in"></a>Input <a href="#_top"></a></h2><hr class="btw">
+<div class="fragment"><pre class="io"> required input values;
+   name            - name of the m-file: "string"
+                     Name of the m-file that is converted to an HTML file 
+                     (including extension) 
+   templateFolder  - folder to template: "string"
+                     Absolute path to the template folder within m2doc 
+                     that contains all html templates and meta files.
+   outFolder       - output folder: "string"
+                     Target folder where to save the HTML document
+   styleFolder     - meta folder path: "string"
+                     relative path to the folder containing meta files
+                     (css, images), relative to the outFolder
+   homePath        - home target site: "string"
+                     relative path to the page that should open when
+                     clicking the home symbol on the website. Relative to
+                     outFolder. 
+   verbose         - debugging flag: logical
+                     if true then infos for each file will be spammed into
+                     the command line.
+</pre></div>
+<!-- END INPUT / important comment -->
+
+<!-- START OUTPUT / important comment -->
+<!-- END OUTPUT / important comment -->
+
+<!-- START REFERENCES / important comment -->
+<!-- END REFERENCES / important comment -->
+
+<!-- START DISCLAIMER / important comment -->
+<h2><a name="_description"></a>Disclaimer <a href="#_top"></a></h2><hr class="btw">
+<div class="fragment"><pre class="text">
+ Last editor:  Pierre Ollfisch
+ Last edit on: 07.04.2021
+ Code version: 1.0</pre></div>
+<!-- END DISCLAIMER / important comment -->
+
+<!-- START CONSTRUCTOR / important comment -->
+<!-- END CONSTRUCTOR / important comment -->
+
+<!-- START PROPERTIES / important comment -->
+<h2><a name="_description"></a>Properties <a href="#_top"></a></h2><hr class="btw">
+<ul>
+<li><div class="classBlock">name</div></li>
+<li><div class="classBlock">str</div></li>
+<li><div class="classBlock">templFolder</div></li>
+<li><div class="classBlock">outFolder</div></li>
+<li><div class="classBlock">styleFolder</div></li>
+<li><div class="classBlock">homePath</div></li>
+<li><div class="classBlock">verbose</div></li>
+<li><div class="classBlock">listFilKeys</div></li>
+<!-- properties above / important comment -->
+</ul>
+<!-- END PROPERTIES / important comment -->
+
+<!-- START METHODS / important comment -->
+<h2><a name="_description"></a>Methods <a href="#_top"></a></h2><hr class="btw">
+<ul>
+<li><div class="classBlock">addBlock</div></li>
+<li><div class="classBlock">createHTML</div></li>
+<li><div class="classBlock">filSTR</div></li>
+<li><div class="classBlock">getTPL</div></li>
+<li><div class="classBlock">parseDummysIntoTemplate</div></li>
+<li><div class="classBlock">removeBlocks</div></li>
+<!-- methods above / important comment -->
+</ul>
+<!-- END METHODS / important comment -->
+
+
+<!-- START TOTAL_CALL / important comment-->
+<h2><a name="_cross"></a>Function References<a href="#_top"></a></h2><hr class="btw">
+
+<!-- START NAME_CALL -->
+<pre class = "text">This function calls:</pre><ul>
+
+<li><a href="Dummy.html" class="code" title="Go To Function">Dummy</a></li>
+
+<li><a href="createHTML.html" class="code" title="Go To Function">createHTML</a></li>
+
+<li><a href="parseDummysIntoTemplate.html" class="code" title="Go To Function">parseDummysIntoTemplate</a></li>
+<!-- functRef above / important comment -->
+</ul>
+<!-- END NAME_CALL -->
+<!-- START NAME_CALLED -->
+<!-- END NAME_CALLED -->
+<!-- END TOTAL_CALL / important comment-->
+
+
+<!-- START SUBFUNCTIONS -->
+<!-- END SUBFUNCTIONS -->
+
+<hr class="last"> 
+<address>Generated on 19-Apr-2021 by <strong><a class = "image" href="Welcome_to_m2doc.html" title="Matlab Documentation">SDBox</a></strong> &copy; 2021 </address>
+<address class="small"> inspiried by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
