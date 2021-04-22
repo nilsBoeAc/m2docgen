@@ -84,7 +84,23 @@ classdef Dummy < handle
                 case {'{description}' '{short_desc}' '{syntax}' ...
                         '{input}' '{output}' '{disclaimer}' '{references}'}
                     % Removes '%' in the entire text
-                    fil = strrep(fil,"%","");
+                    %fil = strrep(fil,"%","");
+                    % removes '%' from the beginning of line
+                    for i = 1:length(fil)
+                        lineChar = char(fil(i));
+                        idx = find(lineChar == '%');
+                        if ~isempty(idx)
+                            if size(idx,2) > 1
+                                if idx(2) == 2
+                                    lineChar(2) = [];
+                                end
+                            end
+                            if idx(1) == 1
+                                lineChar(1) = [];
+                            end
+                            fil(i) = lineChar;
+                        end
+                    end
                 otherwise
                     % Removes '%' in the entire text
                     fil = strrep(fil,"%","");

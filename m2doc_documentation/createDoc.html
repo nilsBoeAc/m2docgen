@@ -1,0 +1,152 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>Description of createDoc</title>
+<meta name="keywords" content="createDoc">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="generator" content="SDBox &copy 2021: Nils Boehnisch">
+<meta name="robots" content="index, follow">
+<link type="text/css" rel="stylesheet" href="ressources\m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+
+<div><a class = "image" href="Welcome_to_m2doc.html"><img border="0" src="ressources\sdboxLogo_wide.jpg"></a></div>
+
+<h1>createDoc </h1> <hr class="btw">
+<!-- START SHORT_DESC / important comment -->
+<div><pre class="firstDesc"> This is the main class that controlls the export of .m files to an html
+ documentation of a toolbox. </pre></div>
+<!-- END SHORT_DESC / important comment -->
+
+<!-- START DESCRIPTION / important comment -->
+<h2><a name="_description"></a>Description <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">   Here comes a description. The Code-Word ist "Description" starting with
+   two "%%". The Block ends when the next comment-Block starts (next two 
+   "%%") Each Block does contain a "Code-Word". Those will be stored in a 
+   dummy object. 
+   </pres></div>
+<!-- END DESCRIPTION / important comment -->
+
+<!-- START SYNTAX / important comment -->
+<h2><a name="_synopsis"></a>Syntax <a href="#_top"></a></h2><hr class="btw">
+<div class="fragment"><pre class="syntax">   obj = createDoc(opts)
+       read about the opts structure in the run_m2doc.m file.
+</pre></div>
+<!-- END SYNTAX / important comment -->
+
+<!-- START INPUT / important comment -->
+<!-- END INPUT / important comment -->
+
+<!-- START OUTPUT / important comment -->
+<!-- END OUTPUT / important comment -->
+
+<!-- START REFERENCES / important comment -->
+<h2><a name="_description"></a>References <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">   m2html
+</pre></div>
+<!-- END REFERENCES / important comment -->
+
+<!-- START DISCLAIMER / important comment -->
+<h2><a name="_description"></a>Disclaimer <a href="#_top"></a></h2><hr class="btw">
+<div class="fragment"><pre class="text">
+ Author: Pierre Ollfisch</pre></div>
+<!-- END DISCLAIMER / important comment -->
+
+<!-- START CONSTRUCTOR / important comment -->
+<!-- END CONSTRUCTOR / important comment -->
+
+<!-- START PROPERTIES / important comment -->
+<h2><a name="_description"></a>Properties <a href="#_top"></a></h2><hr class="btw">
+<ul>
+<li><div class="classBlock">toolboxName</div></li>
+<li><div class="classBlock">delOld</div></li>
+<li><div class="classBlock">mFolder</div></li>
+<li><div class="classBlock">outputFolder</div></li>
+<li><div class="classBlock">buildSubDir</div></li>
+<li><div class="classBlock">excludeFolder</div></li>
+<li><div class="classBlock">excludeFile</div></li>
+<li><div class="classBlock">htmlMetaFolder</div></li>
+<li><div class="classBlock">startPage</div></li>
+<li><div class="classBlock">htmlFolderName</div></li>
+<li><div class="classBlock">htmlTemplate</div></li>
+<li><div class="classBlock">toc</div></li>
+<li><div class="classBlock">verbose</div></li>
+<li><div class="classBlock">fileList</div></li>
+<li><div class="classBlock">funcRefList</div></li>
+<li><div class="classBlock">m2docPath</div></li>
+<!-- properties above / important comment -->
+</ul>
+<!-- END PROPERTIES / important comment -->
+
+<!-- START METHODS / important comment -->
+<h2><a name="_description"></a>Methods <a href="#_top"></a></h2><hr class="btw">
+<ul>
+<li><div class="classBlock">ConvertFiles</div></li>
+<li><div class="classBlock">CopyMetaFiles</div></li>
+<li><div class="classBlock">ExportViaPublish</div></li>
+<li><div class="classBlock">GenerateFilteredFileList</div></li>
+<li><div class="classBlock">GenerateFolderStructure</div></li>
+<li><div class="classBlock">GenerateFuncRefList</div></li>
+<li><div class="classBlock">GenerateInfoXml</div></li>
+<li><div class="classBlock">GenerateRelOutputPath</div></li>
+<li><div class="classBlock">GenerateSearchDatabase</div></li>
+<li><div class="classBlock">GenerateTocStructure</div></li>
+<li><div class="classBlock">GenerateTocXml</div></li>
+<li><div class="classBlock">RemoveOldDoc</div></li>
+<li><div class="classBlock">Welcome_to_m2doc</div></li>
+<li><div class="classBlock">printToc</div></li>
+<!-- methods above / important comment -->
+</ul>
+<!-- END METHODS / important comment -->
+
+
+<!-- START TOTAL_CALL / important comment-->
+<h2><a name="_cross"></a>Function References<a href="#_top"></a></h2><hr class="btw">
+
+<!-- START NAME_CALL -->
+<pre class = "text">This function calls:</pre><ul>
+
+<li><a href="m2doc.html" class="code" title="Go To Function">m2doc</a></li>
+
+<li><a href="ConvertFiles.html" class="code" title="Go To Function">ConvertFiles</a></li>
+
+<li><a href="CopyMetaFiles.html" class="code" title="Go To Function">CopyMetaFiles</a></li>
+
+<li><a href="ExportViaPublish.html" class="code" title="Go To Function">ExportViaPublish</a></li>
+
+<li><a href="GenerateFilteredFileList.html" class="code" title="Go To Function">GenerateFilteredFileList</a></li>
+
+<li><a href="GenerateFolderStructure.html" class="code" title="Go To Function">GenerateFolderStructure</a></li>
+
+<li><a href="GenerateFuncRefList.html" class="code" title="Go To Function">GenerateFuncRefList</a></li>
+
+<li><a href="GenerateInfoXml.html" class="code" title="Go To Function">GenerateInfoXml</a></li>
+
+<li><a href="GenerateRelOutputPath.html" class="code" title="Go To Function">GenerateRelOutputPath</a></li>
+
+<li><a href="GenerateTocStructure.html" class="code" title="Go To Function">GenerateTocStructure</a></li>
+
+<li><a href="GenerateTocXml.html" class="code" title="Go To Function">GenerateTocXml</a></li>
+
+<li><a href="RemoveOldDoc.html" class="code" title="Go To Function">RemoveOldDoc</a></li>
+
+<li><a href="printToc.html" class="code" title="Go To Function">printToc</a></li>
+<!-- functRef above / important comment -->
+</ul>
+<!-- END NAME_CALL -->
+<!-- START NAME_CALLED -->
+<!-- END NAME_CALLED -->
+<!-- END TOTAL_CALL / important comment-->
+
+
+<!-- START SUBFUNCTIONS -->
+<!-- END SUBFUNCTIONS -->
+
+<hr class="last"> 
+<address>Generated on 19-Apr-2021 by <strong><a class = "image" href="Welcome_to_m2doc.html" title="Matlab Documentation">SDBox</a></strong> &copy; 2021 </address>
+<address class="small"> inspiried by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

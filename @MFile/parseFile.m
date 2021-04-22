@@ -40,7 +40,7 @@ if ~(cL(1:2) == "%%")
         end
         cL = char(txt(line));
         cL = strrep(cL,' ','');
-        if (contains(upper(cL),"%%"))
+        if (contains(upper(cL),"%%")) && ~contains(upper(cL),"'%%") && ~contains(upper(cL),'"%%')
             lastLine = line;
             break;
         end
@@ -68,7 +68,7 @@ for i = 1:length(obj.knownBlocks)
         if contains(upper(cL),"%%"+obj.knownBlocks(i))
             firstLine = line;
             st_found = true;
-        elseif (contains(upper(cL),"%%") && st_found)
+        elseif (contains(upper(cL),"%%")  && ~contains(upper(cL),"'%%")  && ~contains(upper(cL),'"%%') && st_found)
             lastLine = line;
             break;
         end

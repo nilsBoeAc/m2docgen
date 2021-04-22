@@ -3,9 +3,9 @@ classdef createDoc < handle
 % documentation of a toolbox. 
 %% Description:
 %   Here comes a description. The Code-Word ist "Description" starting with
-%   two %%. The Block ends when the next comment-Block starts (next two %%)
-%   Each Block does contain a "Code-Word". Those will be stored in a dummy
-%   object. 
+%   two "%%". The Block ends when the next comment-Block starts (next two 
+%   "%%") Each Block does contain a "Code-Word". Those will be stored in a 
+%   dummy object. 
 %   
 %% Syntax:
 %   obj = createDoc(opts)
@@ -25,9 +25,9 @@ classdef createDoc < handle
 %       The folder specified in this variable will contain a subfolder with 
 %       the converted html files, as well as the toc xml file. 
 %   buildSubDir - boolean : false
-%       If false, then the converted html files will be saved without
-%       structure directly into the outputFolder. If true, html files will
-%       be saved in a subfolders mirroring the TOC. 
+%       DO NOT USE! Matlabs Documentation requires all html files to be in
+%       one subfolder. If true, the html files will be exported into a
+%       subfolder structure that mirrors the table of content structure.
 %   excludeFolder - string array : ["folder_names_to_exclude"]
 %       If the path of an m file contains these words, they will be ignored
 %       and not be converted to html.
@@ -80,6 +80,7 @@ classdef createDoc < handle
 
 %% ToDo / Changelog
 % - use constructor to build the important file list (po - 15.03.2021)
+% - removed buildSubDir, updated header (po - 19.04.2021)
 
 properties (Access = public)
     % from initial call
@@ -110,7 +111,7 @@ methods (Access = public)
         obj.delOld         = opts.delOld;
         obj.mFolder        = opts.mFolder;
         obj.outputFolder   = opts.outputFolder;
-        obj.buildSubDir    = opts.buildSubDir;
+        obj.buildSubDir    = false;             %opts.buildSubDir;
         obj.excludeFile    = opts.excludeFile;
         obj.excludeFolder  = opts.excludeFolder;
         obj.htmlMetaFolder = opts.htmlMetaFolder;
@@ -149,6 +150,7 @@ methods (Access = public)
     GenerateFolderStructure(obj);
     GenerateFuncRefList(obj);
     ConvertFiles(obj);
+    ExportViaPublish(obj, inputPaht, exportPath);
 
 end % methods
 end % classdef

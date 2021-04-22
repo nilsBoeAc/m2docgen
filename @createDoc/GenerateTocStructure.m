@@ -108,7 +108,7 @@ if size(currCell,2) < 2
 end
 
 %% loop through all folder names in the folderPath
-for f = 1:numel(folderPath) % loops trough the folders in the path
+for f = numel(folderPath):-1:1 % loops trough the folders in the path
     searchForFolder = folderPath(f);
     % check if that folderName exists in the current cell layer
     for r = 1:size(currCell,1) % loops through the cell rows
@@ -212,7 +212,7 @@ if cellRows == 0 % empty cell
     % fill currCell with dummy values so that currCell{x,y} doesnt error
     % yes i know its ugly, but my internet is down and i cant google how
     % it works with nicer code...
-    currCell = {"RePlAcE!ME?XXX#äöü<>","",{}};
+    currCell = {"RePlAcE!ME?XXX#<>","",{}};
     cellRows = 1;
     cellColumns = 3;
 end
@@ -234,7 +234,7 @@ end
 %% add missing elements
 if ~flagFound
     % add missing element
-    if currCell{1,1} == "REPLACE!ME?XXX#äöü<>"
+    if currCell{1,1} == "RePlAcE!ME?XXX#<>"
         cellRows = cellRows -1;
     end
     currCell{cellRows+1, 1} = currTocName;
