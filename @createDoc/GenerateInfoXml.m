@@ -20,29 +20,32 @@ function GenerateInfoXml(obj)
 % Author: Pierre Ollfisch
 % Copyright (c) 2021
 
+%% ToDo / Changelog
+% - into xml now stored in the documentation folder.
+
 %% get template text and prepare xml file
 templateTxt = getTemplate(obj);
 %templateTxt = strrep(templateTxt, newline, ""); % otherwise there will be two newlines...
 % template contains target markers with %s, which can directly be addressed 
 % by sprintf or fprintf. 
-path2info   = fullfile(obj.mFolder, "info.xml");
-infoID      = fopen(path2info,'wt');
+path2info       = fullfile(obj.mFolder, "info.xml");
+infoID          = fopen(path2info,'wt');
 
 %% modify template and save file
-toolboxName = obj.toolboxName;
-myPathParts = strsplit(obj.outputFolder, filesep);
-toolboxPath = strsplit(obj.mFolder, filesep);
-toolboxPath = toolboxPath(toolboxPath ~= "");
-idx = find(toolboxPath(end) == myPathParts);
-if idx == numel(myPathParts)
-    helptocPath = myPathParts{end};
-else
-    helptocPath = myPathParts(idx+1:end);
-    helptocPath = fullfile(helptocPath{:});
-end
+% find out relative path from mFolder to output Folder
+toolboxName     = obj.toolboxName;
+strInFolder     = strsplit(string(obj.mFolder), filesep);
+strInFolder     = strInFolder(strInFolder ~= "");
+mFolder         = strInFolder(end);
+strOutFolder    = strsplit(string(obj.outputFolder), filesep);
+strOutFolder    = strOutFolder(strOutFolder ~= "");
+idx             = find(strOutFolder == mFolder);
+helpTocPath     = strOutFolder(idx+1:end);
+helpTocStr      = fullfile(helpTocPath{:});
+helpTocStr      = helpTocStr(helpTocStr ~= "");
 
 % write info.xml and replace %s in template with custom variables
-fprintf(infoID, templateTxt, toolboxName, helptocPath);
+fprintf(infoID, templateTxt, toolboxName, helpTocPath);
 
 %% close file
 fclose(infoID);

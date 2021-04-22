@@ -23,11 +23,22 @@ function GenerateSearchDatabase(obj)
 % Copyright (c) 2021
 
 htmlfolder = obj.outputFolder;
+warning('off');
+rmpath(genpath(htmlfolder));
+rmpath(genpath(obj.mFolder));
+addpath(genpath(obj.mFolder));
+addpath(genpath(htmlfolder));
+% removing and adding everything from the matlab path ensures that the
+% thing works everytime on the first try. If not, move one folder above the
+% toolbox you want to convert, remove it from the path, and add it again.
+% Only then will the info.xml file be parsed
+warning('on');
 
 try
     builddocsearchdb(htmlfolder);
-    disp("Building the search database was sucessful");
-catch
-    disp("Building the search database failed!")
+    disp("Building the search database was successful");
+catch ME
+    disp("Building the search database failed! Please try again!")
+    %rethrow(ME); % for debugging
 end
 end
