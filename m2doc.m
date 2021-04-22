@@ -1,9 +1,9 @@
-function m2doc = m2doc(varargin)
+function m2doc = m2doc(opts)
 % main function that controlls m2doc. m2doc converts a foder and subfolders
 % into a custom matlab documentation by converting m-files into HTML files.
 %% Description:
 %   m2doc must be called from a script or function that provides a specific
-%   option structure. Read the "example_run_m2doc.m" script or the header
+%   option structure. Read the "run_m2doc_example.m" script or the header
 %   of the class "createDoc". At first, m2doc adds itself and the target 
 %   folder to the matlab path. It creates a list of all m-files and
 %   assignes them an output path and table of content path (see constructor 
@@ -38,29 +38,13 @@ function m2doc = m2doc(varargin)
 % - call this function with options structure instead of a single self
 %   contained function (po - 16.03.2021)
 
-clearvars -except varargin;close all; fclose('all');
+clearvars -except opts;close all; fclose('all');
 
 %% add functions/path of m2doc to matlab path
 thisScript  = mfilename('fullpath');
 m2docFolder = fileparts(thisScript);
-addpath(genpath(m2docFolder));
-
-%% load options
-% check if they were given when calling this function
-p = inputParser();
-p.StructExpand = false;
-p.addOptional("opts", struct)
-p.parse(varargin{:})
-opts = p.Results.opts;
-if isempty(fieldnames(opts))
-    warning("Please specify an option structure when calling m2doc." ...
-        + "An example can be found in getOptions.m");
-else
-    if numel(fieldnames(opts)) == 1
-        opts = opts.opts; % catch if loaded from mat-file with load
-    end
-end
 opts.m2docPath = m2docFolder;
+addpath(genpath(m2docFolder));
 addpath(genpath(opts.mFolder));
 
 %% create main object
