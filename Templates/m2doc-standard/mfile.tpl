@@ -12,7 +12,7 @@
 <body>
 <a name="_top"></a>
 
-<div><a class = "image" href="{HOME_HTML}"><img border="0" src="{STYLE_FOLDER}sdboxLogo_wide.jpg"></a></div>
+<div><a class = "image" href="{HOME_HTML}"><img border="0" src="{STYLE_FOLDER}logo.jpg"></a></div>
 
 <h1>{NAME} </h1> <hr class="btw">
 <!-- START SHORT_DESC / important comment -->
@@ -94,7 +94,7 @@
 <!-- END SUBFUNCTIONS -->
 
 <hr class="last"> 
-<address>Generated on {DATE} by <strong><a class = "image" href="{HOME_HTML}" title="Matlab Documentation">SDBox</a></strong> &copy; {YEAR} </address>
+<address>Generated on {DATE} by <strong><a class = "image" href="{HOME_HTML}" title="Matlab Documentation">m2doc</a></strong> &copy; {YEAR} </address>
 <address class="small"> inspiried by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

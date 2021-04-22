@@ -62,9 +62,15 @@ for i = 1:numel(fileList)
         relFolderString = strsplit(string(relFolderPath), filesep);
         relFolderString = relFolderString(relFolderString ~= ""); % relative folder to obj.mFolder
         tocPath         = checkTocPath(obj.toc, relFolderString, []); % check if a custom structure has been defined for this folder
+        tocPath2        = generateTocPath(obj.toc, relFolderString,[]);
+        origPath        = string(fullfile(relFolderString{:}));
+        newPath         = string(fullfile(tocPath2{:}));
+        if  newPath == origPath
+            tocPath2 = [obj.toc{1,1},tocPath2];
+        end
         % Then the tocCell must be checked if the wanted toc path exists. 
         % If not, then the missing entrys must be added -> addMissingPathToCell
-        obj.toc         = addMissingPathToCell(obj.toc, tocPath); % check if path is currently in the cell
+        obj.toc         = addMissingPathToCell(obj.toc, tocPath2); % check if path is currently in the cell
     end
     % if the output argument localPath cannot be assigned, then
     % recheck your opts.toc second column, especially for missing
@@ -192,6 +198,8 @@ else
 end
 end % local function comparePath
 
+
+
 function currCell = addMissingPathToCell(tocCell, cellPath)
 % This function checks if a given cell path is present in the tocCell. If
 % no, then the missing elements and toc cell layers will be added.
@@ -252,3 +260,85 @@ else
     % result cell was already defined at the beginning of this function
 end
 end % local function checkuserTocInput
+
+%% ------------------ -Neuer Ansatz-------------------
+function tocPath = generateTocPath(tocCell, filePath, tracedPath)
+tocPath = filePath; % fallback
+
+lastFolder = filePath(end);
+listTocPaths = listAllPaths(tocCell, lastFolder, []);
+
+if isempty(listTocPaths)
+    if numel(filePath) > 1
+        nextPath = filePath(1:end-1);
+        tracedPath = [lastFolder,tracedPath];
+        tocPath = generateTocPath(tocCell, nextPath, tracedPath);
+        tocPath = [tocPath, tracedPath];
+    else
+        tocPath = filePath;
+    end
+else
+    % find out which path is the shortest
+    colMin = 999;
+    targetRow = 1;
+    for r=1:size(listTocPaths,1)
+        currRow = listTocPaths{r,:};
+        currRow = currRow(~cellfun(@isempty,currRow));
+        colNum = size(currRow, 2);
+        if colMin > colNum
+            colMin = colNum;
+            targetRow = r;
+        end
+    end
+    shortPath = listTocPaths(targetRow,:);
+    shortPath = shortPath(~cellfun(@isempty, shortPath));
+    tocPath = string(shortPath);
+end
+
+end % function pierretoc
+
+function pathList = listAllPaths(tocCell, folderName, tocPath)
+currCell = tocCell;
+rowNum = size(currCell,1);
+colNum = size(currCell,2);
+% safety check if empty cell
+if rowNum == 0 || colNum < 2
+    pathList = {};
+    return;
+end
+% safety check if no subcells are defined
+% if colNum == 2 || all(cellfun(@isempty,currCell(:,3)))
+%     pathList ={};
+%     return;
+% end
+
+% find elements named folderName in this cell
+pathList = {};
+for r = 1:rowNum
+    sourceNames = string(currCell{r,2});
+    targetName = string(currCell{r,1});
+    if any(folderName == sourceNames) || any(folderName == targetName)
+        currPath = [tocPath, targetName];
+        pathList = [pathList; num2cell(currPath)];
+    end
+end
+% serach for elements named folderName in subcells
+for r = 1:rowNum
+    nextCell = currCell{r,3};
+    nextPath = [tocPath, currCell{r,1}];
+    cellList = listAllPaths(nextCell, folderName, nextPath);
+    % add cellList to the end of pathList
+    % pathList = [pathList; cellList]; doesnt work because matlab hates me
+    rowNum = size(cellList,1);
+    oldEnd = size(pathList,1);
+    if rowNum > 0
+        for j = 1:rowNum
+            currRow = cellList(j,:);
+            currRow = currRow(~cellfun(@isempty, currRow));
+            colNum = size(currRow,2);
+            pathList(oldEnd + j,1:colNum) = currRow(:);
+        end
+    end
+    %pathList = [pathList; cellList];
+end
+end
