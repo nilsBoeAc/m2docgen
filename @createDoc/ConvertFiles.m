@@ -34,6 +34,13 @@ for i = 1:length(fileList)
     fprintf('Converting file <a href="matlab: open(%s)">%s</a>\n',"'" + ...
         fullfile(currFileFolder, currFileName) + "'", string(currFileName));
     
+    % check if this is a matlab live file
+    totalSourcePath = fullfile(currFileFolder, currFileName);
+    totalTargetPath = fullfile(currFileOutputFolder, fileList(i).name + ".html");
+    if fileList(i).ext == ".mlx"
+        obj.ExportViaPublish(totalSourcePath, totalTargetPath)
+        continue;
+    end
     % read m file and extract text "dummys"
     currMFile       = MFile(currFileName, currFileFolder);
     currMFile.parseFile; % find text dummys and add them to currMFile obj
