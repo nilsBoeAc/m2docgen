@@ -61,16 +61,18 @@ for i = 1:numel(fileList)
         % inputs must be scanned through -> checkTocPath
         relFolderString = strsplit(string(relFolderPath), filesep);
         relFolderString = relFolderString(relFolderString ~= ""); % relative folder to obj.mFolder
-        tocPath         = checkTocPath(obj.toc, relFolderString, []); % check if a custom structure has been defined for this folder
-        tocPath2        = generateTocPath(obj.toc, relFolderString,[]);
+        tocPath         = generateTocPath(obj.toc, relFolderString,[]); % generate the toc path from the file folder path
+        % if the generateTocPath function did not find a path to the
+        % element, then the element is new / currently undefined. Custom
+        % definition: Those elements are added unter the first TOC element!
         origPath        = string(fullfile(relFolderString{:}));
-        newPath         = string(fullfile(tocPath2{:}));
+        newPath         = string(fullfile(tocPath{:}));
         if  newPath == origPath
-            tocPath2 = [obj.toc{1,1},tocPath2];
+            tocPath = [obj.toc{1,1},tocPath];
         end
-        % Then the tocCell must be checked if the wanted toc path exists. 
+        % Then the tocCell must be checked if the toc path exists. 
         % If not, then the missing entrys must be added -> addMissingPathToCell
-        obj.toc         = addMissingPathToCell(obj.toc, tocPath2); % check if path is currently in the cell
+        obj.toc         = addMissingPathToCell(obj.toc, tocPath); % check if path is currently in the cell
     end
     % if the output argument localPath cannot be assigned, then
     % recheck your opts.toc second column, especially for missing
@@ -91,114 +93,6 @@ end
 end % end function
 
 %% ---------- start of local functions ----------------
-
-function newTocPath = checkTocPath(tocCell, folderPath, cellPath)
-% this function checks if the relative path defined in folderPath has
-% somewhere in tocCell been defined to change its target folder.
-% if no Folder of folderPath is defined in the current tocCell layer
-% (second column), then cells in the third column will be checked
-% (recursively). cellPath is a string array that describes the path through
-% the tocCell to the current cell layer. If no custom toc path for any
-% folder in folderPath has been defined, then the function returns the
-% input folderPath. Else, the modified toc path will be returned.
-currCell        = tocCell; % tocCell is different for each toc cell layer
-currCellPath    = cellPath;
-flagFound       = false;
-
-%% safety check
-if size(currCell,2) < 2
-    % no custom definitions are present in this cell layer, which means 
-    % this recusion can be canceled. 
-    newTocPath = folderPath;
-    return;
-end
-
-%% loop through all folder names in the folderPath
-for f = numel(folderPath):-1:1 % loops trough the folders in the path
-    searchForFolder = folderPath(f);
-    % check if that folderName exists in the current cell layer
-    for r = 1:size(currCell,1) % loops through the cell rows
-        targetFolderName = currCell{r,1};
-        sourceFolderNames = string(currCell{r,2});
-        if any(sourceFolderNames == searchForFolder)
-            % check if the current folder name has a custom definition in
-            % this cell layer
-            flagFound = true;
-            break;
-        end
-        if targetFolderName == searchForFolder
-            % check if the current folder has been defined as toc heading
-            flagFound = true;
-            break;
-        end
-    end
-    if flagFound
-        % if a custom definition for the searchForFolder has been made:
-        break;
-    end
-end
-
-%% change path from real file path to toc path if flagFound == true
-if flagFound
-    % check what part of the folderPath must be adapted
-    % element f must change name to customFolderName
-    newTocPath = folderPath;
-    newTocPath(f) = targetFolderName;
-    % element f + rest of folderPath must change position to currCellPath
-    if isempty(currCellPath) % check root folder.
-    else
-        newTocPath = [currCellPath, newTocPath(f:end)];
-        return;
-    end
-else
-    %% check cell layers deeper if flagFound == false
-    for r = 1:size(currCell,1)
-        nextCell = currCell{r,3};
-        nextCellPath = [currCellPath, currCell{r,1}];
-        if isempty(nextCell)
-            newTocPath = folderPath; % "branch" is empty, comparison comparePath must evaluate to true
-            continue
-        end
-        newTocPath = checkTocPath(nextCell, folderPath, nextCellPath);
-        if ~comparePath(newTocPath, folderPath)
-            % newTocPath contains a different path than put into
-            % checkTocPath, so there is definetly a changed name/ path
-            return;
-        end
-    end
-    % if the code runs through here, then nothing has been foud in this
-    % toc cell layer (see "continue")
-    if ~comparePath(newTocPath, folderPath)
-        % if newTocPath contains a different path than put into
-        % checkTocPath, then a custom definition was found and we can
-        % cancel this recursion layer
-        return;
-    end
-end
-
-%% fallback if nothing was found
-% if the code runs thorugh here, then no special definitions have been made
-% for any folders in the folderPath. However, my custom rule says that such
-% folders should appear under the first TOC element, not as new elements.
-if isempty(cellPath) && comparePath(newTocPath, folderPath)
-    newTocPath = [tocCell{1,1}, newTocPath];
-end
-end % function checkTocPath
-
-function areSame = comparePath(path1, path2)
-% small helper function that checks if the string arrays path1 and path2
-% are identical
-areSame = false;
-cmpA = string(fullfile(path1{:}));
-cmpB = string(fullfile(path2{:}));
-if cmpA == cmpB
-    areSame = true;
-else
-    areSame = false;
-end
-end % local function comparePath
-
-
 
 function currCell = addMissingPathToCell(tocCell, cellPath)
 % This function checks if a given cell path is present in the tocCell. If

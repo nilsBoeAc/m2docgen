@@ -22,7 +22,7 @@ function CopyMetaFiles(obj)
 % Copyright (c) 2021
 
 % copy entire folder with all meta files to target directory
-mySource = fullfile(obj.m2docPath, obj.htmlTemplate);
+mySource = obj.htmlTemplate;
 myTarget = fullfile(obj.outputFolder,obj.htmlMetaFolder);
 
 copyfile(mySource, myTarget);
