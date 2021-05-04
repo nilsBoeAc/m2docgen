@@ -1,6 +1,4 @@
 function GenerateTocStructure(obj)
-% Decide where the converted m-file should be acessible and save to the
-% objects file list.
 %% Description:
 %   This function assignes each file a table of contents path. For Example,
 %   if a file can be found unter /MyToolbox/Vehicles/Air/plane.m and the
@@ -157,41 +155,66 @@ end % local function checkuserTocInput
 
 %% ------------------ -Neuer Ansatz-------------------
 function tocPath = generateTocPath(tocCell, filePath, tracedPath)
-tocPath = filePath; % fallback
+% this function is used to convert the path of a file into a 'table of
+% content' path. It is done be checking the last element of a given path,
+% aka the "last folder" in a path, and checks if that folder was defined in
+% the tocCell. The TocCell defines the toc structure. If the folder name is
+% not defined within the tocCell, then the the function returns the input
+% file path. if that happens and the file path contains more parent
+% folders, then the next folder is searched for in the tocCell.
+% now 100% less recursion in this local function.
 
-lastFolder = filePath(end);
-listTocPaths = listAllPaths(tocCell, lastFolder, []);
-
-if isempty(listTocPaths)
-    if numel(filePath) > 1
-        nextPath = filePath(1:end-1);
-        tracedPath = [lastFolder,tracedPath];
-        tocPath = generateTocPath(tocCell, nextPath, tracedPath);
-        tocPath = [tocPath, tracedPath];
+tocPath = filePath; % fallback if nothing is found in this function
+tracedPath = [];
+numFolder = numel(tocPath);
+l = numFolder;
+debugC = 0;
+while l > 0
+    debugC = debugC +1; % debug counter to check if the loop is exited
+    if debugC > 35
+        error("m2doc: The function that generates the left nagivation menu " ...
+            + "has failed! Check if your toc structure has loops. If not," ...
+            + "open the function GenerateTocStructure in '@createDoc'!");
+    end
+    lastFolder = tocPath(l);
+    tracedPath = [lastFolder,tracedPath];
+    listTocPaths = listAllPaths(tocCell, lastFolder,[]); % converts folder path to toc path
+    if isempty(listTocPaths)
+        % nothing was found, check next parent folder
     else
-        tocPath = filePath;
-    end
-else
-    % find out which path is the shortest
-    colMin = 999;
-    targetRow = 1;
-    for r=1:size(listTocPaths,1)
-        currRow = listTocPaths{r,:};
-        currRow = currRow(~cellfun(@isempty,currRow));
-        colNum = size(currRow, 2);
-        if colMin > colNum
-            colMin = colNum;
-            targetRow = r;
+        % find out which path is the shortest stored in listTocPath
+        colMin = 999;
+        targetRow = 1;
+        for r=1:size(listTocPaths,1)
+            currRow = listTocPaths{r,:};
+            currRow = currRow(~cellfun(@isempty,currRow));
+            colNum = size(currRow, 2);
+            if colMin > colNum
+                colMin = colNum;
+                targetRow = r;
+            end
         end
+        shortPath = listTocPaths(targetRow,:);
+        shortPath = shortPath(~cellfun(@isempty, shortPath));
+        lfPath = string(shortPath); % toc path associated with the current "last folder"
+        tracedPath(1) = lfPath(end); % foldername migth have changed to a toc name
+        if numel(lfPath) >1
+            tocPath = [lfPath(1:end-1), tracedPath];
+        else
+            tocPath = tracedPath; % potential name change was already addressed a few lines above
+        end
+        % reset l, because the number of toc elements can increase...
+        oldNumFolder = numFolder;
+        numFolder = numel(tocPath);
+        l = numFolder -(oldNumFolder -l); 
     end
-    shortPath = listTocPaths(targetRow,:);
-    shortPath = shortPath(~cellfun(@isempty, shortPath));
-    tocPath = string(shortPath);
-end
-
-end % function pierretoc
+    l = l-1; % decrement folder length counter
+end %while
+end % function generateToc
 
 function pathList = listAllPaths(tocCell, folderName, tocPath)
+% checks if a folder name is defined somewehre in the toccell by going
+% through recursively each cell and their subccells and their subcells...
 currCell = tocCell;
 rowNum = size(currCell,1);
 colNum = size(currCell,2);
@@ -200,11 +223,6 @@ if rowNum == 0 || colNum < 2
     pathList = {};
     return;
 end
-% safety check if no subcells are defined
-% if colNum == 2 || all(cellfun(@isempty,currCell(:,3)))
-%     pathList ={};
-%     return;
-% end
 
 % find elements named folderName in this cell
 pathList = {};
