@@ -108,6 +108,7 @@ methods (Access = public)
     %% Constructor
      function obj = createDoc(opts)
         % set properties accorting to inputs and create filtered file list
+        obj.m2docPath      = opts.m2docPath;
         obj.delOld         = opts.delOld;
         obj.mFolder        = opts.mFolder;
         obj.outputFolder   = opts.outputFolder;
@@ -118,10 +119,10 @@ methods (Access = public)
         obj.startPage      = opts.startPage;
         obj.toc            = opts.toc;
         obj.htmlFolderName = opts.htmlFolderName;
-        obj.htmlTemplate   = fullfile("Templates", opts.htmlTemplate);
+        htmlTemplatePath   = checkTemplatePath(opts);
+        obj.htmlTemplate   = htmlTemplatePath;
         obj.verbose        = opts.verbose;
         obj.toolboxName    = opts.toolboxName;
-        obj.m2docPath      = opts.m2docPath;
         if obj.verbose
             disp("Sucessfully created m2doc object");
         end
@@ -154,3 +155,52 @@ methods (Access = public)
 
 end % methods
 end % classdef
+
+%% -------------------- Start of local functions --------------
+
+function templatePath = checkTemplatePath(opts)
+% this function checks the user input in opts.htmlTemplate: Is it a valid
+% global path? Is it a local path within m2doc?
+customPath = opts.htmlTemplate;
+%% check if it is empty. 
+%if yes, assume default template in m2html 
+if isempty(customPath) || string(customPath) == ""
+    templatePath = fullfile(opts.m2htmlPath, "Templates","m2doc-standard"); % global path to default template
+    return; % since we know this is a valid path, skip the rest...
+end
+%% check global path
+% custom folder must contain a mfile called 'm2html.css'
+identFile = "m2html.css";
+identPath = fullfile(customPath, identFile);
+% check if the custom path exists:
+if isfolder(customPath)
+    if isfile(identPath)
+        % custom path to template folder accepted!
+        templatePath = customPath;
+        return;
+    end
+end
+%% check local path
+% if code runs to here, then the custom path is not a global path to a
+% template folder.
+lclPath = fullfile(opts.m2docPath, customPath);
+if isfolder(lclPath)
+    lclIdent = fullfile(lclPath, "m2html.css");
+    if isfile(lclIdent)
+        templatePath = lclPath;
+        return;
+    end
+end
+% could also be directly addressing the folder "Template" within m2html
+lclPath = fullfile(opts.m2docPath, "Templates",customPath);
+if isfolder(lclPath)
+    lclIdent = fullfile(lclPath, "m2html.css");
+    if isfile(lclIdent)
+        templatePath = lclPath;
+        return;
+    end
+end
+% custom path is not a valid global or local path, loading default template
+disp("m2html: Template path not found, loading default template!");
+templatePath = fullfile(opts.m2docPath, "Templates","m2doc-standard");
+end % local function checkTemplatePath

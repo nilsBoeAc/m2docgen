@@ -48,7 +48,7 @@ for i = 1:length(fileList)
     
     % insert text dummys into template html to generate html file
     myName          = currMFile.name;
-    tplFolder       = fullfile(obj.m2docPath,obj.htmlTemplate);
+    tplFolder       = obj.htmlTemplate;
     outputFolder    = currFileOutputFolder;
     styleFolder     = obj.htmlMetaFolder;
     homePath        = obj.startPage;

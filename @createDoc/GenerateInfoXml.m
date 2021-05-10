@@ -42,10 +42,9 @@ strOutFolder    = strOutFolder(strOutFolder ~= "");
 idx             = find(strOutFolder == mFolder);
 helpTocPath     = strOutFolder(idx+1:end);
 helpTocStr      = fullfile(helpTocPath{:});
-helpTocStr      = helpTocStr(helpTocStr ~= "");
 
 % write info.xml and replace %s in template with custom variables
-fprintf(infoID, templateTxt, toolboxName, helpTocPath);
+fprintf(infoID, templateTxt, toolboxName, helpTocStr);
 
 %% close file
 fclose(infoID);
@@ -55,6 +54,6 @@ end
 function strTemplate = getTemplate(obj)
 % extra function because i needed to change this frequently to find the
 % correct one for this case...
-infoTemplate    = fullfile(obj.m2docPath,obj.htmlTemplate,"info.xml");
+infoTemplate    = fullfile(obj.htmlTemplate,"info.xml");
 strTemplate     = fileread(infoTemplate);
 end

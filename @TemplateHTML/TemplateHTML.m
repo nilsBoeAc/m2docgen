@@ -45,8 +45,8 @@ classdef TemplateHTML < handle
 %% Disclaimer:
 %
 % Last editor:  Pierre Ollfisch
-% Last edit on: 07.04.2021
-% Code version: 1.0
+% Last edit on: 03.05.2021
+% Code version: 1.1
 % Copyright (c) 2021
     
     %% Properties
@@ -59,6 +59,7 @@ classdef TemplateHTML < handle
         outFolder   string;     % Output folder: Here will the html be stored
         styleFolder string;     % Ref Folder where style are located for the output
         homePath    string;     % Path to home.html
+        htmlSegmentPath string = "html_segments"; % path within the @TemplateHTML folder to the folder with the segment blocks
         verbose     logical;    % controls how much spam will be printed to the command window
     end
     properties (Dependent)
@@ -72,27 +73,39 @@ classdef TemplateHTML < handle
             % TemplateHTML Construct an instance of this class
             
             % Set location where template get from
-            basisName ="mfile.tpl"; 
-            [p,n,ext] = fileparts(name);
-            obj.name = n;
-            obj.templFolder = templateFolder;
-            path = obj.templFolder+basisName;
+            docTemplate ="html_Template.tpl"; % template for header and footer
+            contentTemplate = "mfile.tpl";
+            
+            [fpath,fname,fext] = fileparts(name);
+            obj.name = fname;
+            obj.templFolder = templateFolder; % folder with css and logos etc
+            docpath = fullfile(obj.templFolder,docTemplate); % global path to general doc file
+            thisPath = mfilename('fullpath');
+            contPath = fullfile(fileparts(thisPath),obj.htmlSegmentPath,contentTemplate);
             
             % Set Output folder
             obj.outFolder = outFolder;
             obj.styleFolder = styleFolder;
             obj.homePath = homePath;
             
-            % Read template File
-            fil = fopen(path);
-            dat = textscan(fil,'%s','delimiter','\n');
+            % Read both template files (general documentation + content)
+            fil = fopen(docpath);
+            docDat = textscan(fil,'%s','delimiter','\n');
             fclose(fil);
-            obj.str = string(dat{1});
+            fil = fopen(contPath);
+            contDat = textscan(fil,"%s","delimiter",'\n');
+            fclose(fil);
+            docStr = string(docDat{1});
+            contStr = string(contDat{1});
+            % insert the (still empt) content template into the doc
+            % template
+            obj.str = obj.filSTR(docStr, "<!-- CONTENT_FROM_M2DOC -->",contStr);
+            obj.htmlSegmentPath = fileparts(contPath);
             obj.verbose = verbose;
         end
 
         function tplStr = getTPL(obj,type)
-            file = obj.templFolder+type+".tpl";
+            file = fullfile(obj.htmlSegmentPath,type+".tpl");
             fil = fopen(file);
             dat = textscan(fil,'%s','delimiter','\n');
             fclose(fil);
