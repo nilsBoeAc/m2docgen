@@ -76,7 +76,7 @@ for i = 1:length(obj.knownBlocks)
             % not even a percentage sign is present, header is finished
             % stop the loop
             if st_found
-                lastLine = line - 1;
+                lastLine = line;
             end
             line = length(txt) +1;
             break;

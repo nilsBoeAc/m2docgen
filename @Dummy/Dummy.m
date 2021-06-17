@@ -46,6 +46,9 @@ classdef Dummy < handle
         %% Dummy Constructor
         function obj = Dummy(name,filling)
             obj.name = name;
+            if(isempty(filling))
+                filling = "";
+            end
             obj.filling = filling;
         end
         
