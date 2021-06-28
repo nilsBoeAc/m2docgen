@@ -43,8 +43,10 @@ idx             = find(strOutFolder == mFolder);
 helpTocPath     = strOutFolder(idx+1:end);
 helpTocStr      = fullfile(helpTocPath{:});
 
-% write info.xml and replace %s in template with custom variables
-fprintf(infoID, templateTxt, toolboxName, helpTocStr);
+% write info.xml and replace the placeholders with the correct information
+templateTxt = strrep(templateTxt,"{TOOLBOXNAME}",toolboxName);
+templateTxt = strrep(templateTxt,"{TOOLBOXLOCATION}",helpTocStr);
+fprintf(infoID, templateTxt); % toolboxName, helpTocStr);
 
 %% close file
 fclose(infoID);

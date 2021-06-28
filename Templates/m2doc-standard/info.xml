@@ -10,7 +10,7 @@
     <!-- to parse the file -->
     <matlabrelease>2020a</matlabrelease>
     <!-- (Required) Title of toolbox. Appears in the Contents pane -->
-    <name>%s</name>
+    <name>{TOOLBOXNAME}</name>
     <!-- (Required) Label for the toolbox. pick one: -->
     <!-- matlab, toolbox, simulink, blockset, links_targets  -->
     <type>toolbox</type>
@@ -18,7 +18,7 @@
     <!-- but required to parse the file -->
     <icon/>
     <!-- (Required if you supply help) Relative path to help (HTML) folder -->
-    <help_location>%s</help_location>
+    <help_location>{TOOLBOXLOCATION}</help_location>
     <!-- (Required if you supply help) Icon used in the Help browser TOC -->
     <!-- Ignored in R2015a and later -->
     <help_contents_icon/>
