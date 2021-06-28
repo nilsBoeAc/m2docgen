@@ -28,8 +28,12 @@ function parseDummysIntoTemplate(obj,dummyList)
 
 %% ToDo / Changelog
 % - seperate from main class file (po - 07.04.21)
+% - add support for dynamically identified text blocks / dummies (po -
+%       27.06.2021)
 
-strTemplate = obj.str;     % string template
+strTemplate = obj.str;     % entire website template as string
+keyPlace = 'CONTENT_FROM_M2DOC'; % position in the strTemplate above which the segments must be inserted
+
 for di = 1:length(dummyList) % di = dummy index
     currDummy = dummyList{di};
     key     = currDummy.name;
@@ -39,51 +43,98 @@ for di = 1:length(dummyList) % di = dummy index
     dummyList{di,2} = currDummy.name; % for debugging in the workspace
 
     switch dumType
+        case 'SHORT_DESCR'
+            descrTemplPath = which("shortDescr.tpl");
+            descrTempl = obj.loadSegmentTemplate(descrTemplPath);
+            strBlock = filSTR(obj, descrTempl, key, filling);
+            strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
+        case "DYNAMIC"
+            dynaTemplPath = which("dynamicSegment.tpl");
+            dynaTempl = obj.loadSegmentTemplate(dynaTemplPath);
+            dynaDescrKey = "{DUMMYNAME}";
+            headingName = strrep(strrep(strrep(key,"{",""),"}",""),":",""); % remove }:{ from headings
+            namedBlock = filSTR(obj, dynaTempl, dynaDescrKey, headingName); % replace "{DYNADESCRKEY}" with the descriptive name
+            dynaFillKey = "{DUMMYFILLING}";
+            strBlock = filSTR(obj, namedBlock, dynaFillKey, filling); % replace "{DYNAFILLKEY}" with the dummy filling
+            keyPlace = 'CONTENT_FROM_M2DOC'; 
+            strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
         case char('functRef')
-            strTemplate = filSTR(obj,strTemplate,key,"");
-            strTemplate = filSTR(obj,strTemplate,"{TOTAL_CALL}","");
-
-            % get Block for adding List
-            strBlock = getTPL(obj,currDummy.type);
+            % insert Total call segment, insert name call segment, then
+            % insert the functionRef block into the name call segment
+            if ~contains(strTemplate, "{TOTAL_CALL}")
+                % if the website template already contains the name_call
+                % tag, then we can directly insert the function snippet.
+                % Otherwise, the function call segment must be added first.
+                totalCallTPLPath = which("totalCallSegment.tpl");
+                totalCallTxt = obj.loadSegmentTemplate(totalCallTPLPath);
+                keyPlace = 'CONTENT_FROM_M2DOC';
+                strTemplate = addBlock(obj, strTemplate, totalCallTxt, keyPlace);
+            end
+            if ~contains(strTemplate, "{NAME_CALL}")
+                % if the website template already contains the name_call
+                % tag, then we can directly insert the function snippet.
+                % Otherwise, the function call segment must be added first.
+                funcTemplatePath = which("nameCallSegment.tpl");
+                funcTemplate = obj.loadSegmentTemplate(funcTemplatePath);
+                keyPlace = '{TOTAL_CALL}';
+                strTemplate = addBlock(obj, strTemplate, funcTemplate, keyPlace);
+            end
+            % 
+            funcSnippetPath = which("functRef.tpl");
+            funcSnippet = obj.loadSegmentTemplate(funcSnippetPath);
             if(key == "{NAME_CALL}")
                 keyPlace = 'functRef above';
             else
                 key = "{NAME_CALL}";
                 keyPlace = 'functReRef above';
             end
-
-            strBlock = filSTR(obj,strBlock,key,filling);
+            strBlock = filSTR(obj,funcSnippet,key,filling);
             if(strcmp(refPath,"NA"))
                 strBlock = filSTR(obj,strBlock,"{REF_CALL}",filling+".html");
             else
                 strBlock = filSTR(obj,strBlock,"{REF_CALL}",refPath);
             end
-
             strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
         case char("classBlock")
-            % remove curly bracket text (PROPERTIES / METHODS)
-            %   from html document
-            strTemplate = filSTR(obj,strTemplate,key,"");
-            % get snippet template for this content
-            strBlock    = getTPL(obj,currDummy.type);
-            key         = "{SUB}"; % new key for new block
-            strBlock        = filSTR(obj,strBlock,key,filling);
+            % check if a methods/properties segment is present
             if currDummy.name == "{METHODS}"
-                keyPlace    = "methods above";
+                if ~contains(strTemplate, "METHODS")
+                    methodsSegmentPath = which("methodsSegments.tpl");
+                    methodsSegment = obj.loadSegmentTemplate(methodsSegmentPath);
+                    mainKey = 'CONTENT_FROM_M2DOC'; 
+                    strTemplate = addBlock(obj,strTemplate,methodsSegment,mainKey);
+                end
+                keyPlace    = "methods above"; 
             else
+                if ~contains(strTemplate, "CLASSPROPERTIES")
+                    propSegPath = which("propertiesSegments.tpl");
+                    propSegTpl = obj.loadSegmentTemplate(propSegPath);
+                    mainKey = 'CONTENT_FROM_M2DOC'; 
+                    strTemplate = addBlock(obj,strTemplate,propSegTpl,mainKey);
+                end
                 keyPlace    = "properties above";
             end
+            % get snippet template for this content
+            classTmplPath = which("classBlock.tpl");
+            classTmpl = obj.loadSegmentTemplate(classTmplPath);
+            key  = "{SUB}"; % new key for new block
+            strBlock        = filSTR(obj,classTmpl,key,filling);
             strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
+        case "constructor"
+            % highlight keywords in the constructor filling
+            filling = highlightFunctionKeywords(filling);
+            filling = highlightComments(filling);
+            % add segment for constructor
+            dynaTemplPath = which("dynamicSegment.tpl");
+            dynaTempl = obj.loadSegmentTemplate(dynaTemplPath);
+            constrTempl = filSTR(obj,dynaTempl,'{DUMMYNAME}', "CONSTRUCTOR");
+            constrTempltxt = filSTR(obj,constrTempl,'{DUMMYFILLING}', filling);
+            % insert filled template into website
+            keyPlace = 'CONTENT_FROM_M2DOC';
+            strTemplate = addBlock(obj,strTemplate,constrTempltxt,keyPlace);
         otherwise
             % check if constructor block is present
-            if contains(lower(currDummy.name), "constructor")
-                % add colorful html markups (divs) to certain elements
-                filling = highlightFunctionKeywords(filling);
-                filling = highlightComments(filling);
-            end
-            % add dummy text at key marker to template string
-            strTemplate = filSTR(obj,strTemplate,key,filling);
-            
+            error("Unknown Dummy types are not supported");
     end
 end
 obj.str = strTemplate;
@@ -170,6 +221,4 @@ for r = 1:rowCount
         end
     end
 end % for r rowcount
-
-    
 end % function highlightFunctionKeywords

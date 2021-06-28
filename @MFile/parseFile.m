@@ -25,6 +25,7 @@ function parseFile(obj)
 %% ToDo / Changelog:
 % - remove string manipulation that adds html div tags, now done in
 %   TemplateHTML (po - 07.04.2021)
+% - added autodetection of text blocks (po - 27.06.2021)
 
 txt = obj.text;
 
@@ -47,47 +48,62 @@ if ~(cL(1:2) == "%%")
     end
     fil = txt(2:lastLine-1);
     dum = Dummy("{SHORT_DESC}",fil);
+    dum.type = "SHORT_DESCR";
     obj.addDummy(dum);
 end
 
-%% Search for known Blocks (for regular header)
-for i = 1:length(obj.knownBlocks)
-    line = 0;
-    st_found = false;
-    firstLine = -1; lastLine = -1;
-    while(1)
-        line = line+1;          % current line that is searched for the keyword
-        if(line >length(txt))   % break while if end of file is reached
-            if(st_found)
-                lastLine = line-1;
-            end
-            break;
+%% Search for text Blocks (for regular header)
+line = 1;
+st_found = false;
+firstLine = -1; lastLine = -1;
+newBlockName = "";
+oldBlockName = "";
+j = 1; % counter variable for number of element in obj.foundBlocks
+while(1)
+    line = line+1;          % current line that is searched for the keyword, skip "function XXX" line
+    if(line >length(txt))   % break while if end of file is reached
+        if(st_found)
+            lastLine = line-1;
         end
-        cL = char(txt(line));   % current line
-        cL = strrep(cL,' ','');
-        if contains(upper(cL),"%%"+obj.knownBlocks(i))
-            firstLine = line;
-            st_found = true;
-        elseif (contains(upper(cL),"%%")  && ~contains(upper(cL),"'%%")  && ~contains(upper(cL),'"%%') && st_found)
-            lastLine = line;
-            break;
-        end
-        if isempty(cL)
-            % not even a percentage sign is present, header is finished
-            % stop the loop
-            if st_found
-                lastLine = line;
-            end
-            line = length(txt) +1;
-            break;
-        end
-    end %while
-    if(firstLine>0 && lastLine>0)
-        fil = txt(firstLine+1:lastLine-1);
-        dum = Dummy(obj.knownBlocks(i),fil);
-        obj.addDummy(dum);
+        break;
     end
-end %for
+    cL = char(txt(line));   % current line
+    cLwS = strrep(cL,' ',''); % current line without spaces
+    cLwSU = upper(cLwS); % current line without spaces, all uppercase
+    if contains(cLwSU,'%%')
+        if all(cLwSU(1:2) == '%') && length(cLwSU)>2
+            oldBlockName = newBlockName; % last block name
+            newBlockName = cLwSU(3:end); % current block name
+            obj.foundBlocks(j) = newBlockName; % store for debugging purposes
+            j=j+1;
+            if st_found
+                % entire text block is detected, add dummy
+                lastLine = line;
+                fil = txt(firstLine+1:lastLine-1); % entire text block
+                dum = Dummy(oldBlockName,fil);
+                dum.type = "DYNAMIC";
+                obj.addDummy(dum);
+                % reset first line
+                firstLine = line;
+            else
+                st_found = true;
+                firstLine = line;
+            end
+        end
+    elseif isempty(cLwSU) || cLwSU(1)~='%' % in case of code or empty line break the while loop
+        if st_found
+            % check if st_found is true; if yes add last dummy
+            lastLine = line;
+            fil = txt(firstLine+1:lastLine-1); % entire text block
+            dum = Dummy(newBlockName,fil);
+            dum.type = "DYNAMIC";
+            obj.addDummy(dum);
+        end
+        line = length(txt) +1;
+        break;
+    end
+end %while
+
 
 %% classdef searches for definitions of methods etc
 if obj.type == "class"
@@ -135,7 +151,7 @@ if obj.type == "class"
     endCounter = 0;
     for i = 1:length(txtNoCom)
         currLine = lower(txtNoCom(i));
-        if contains(currLine, "function") && contains(currLine, strCoName)
+        if contains(currLine, "function") && contains(currLine, lower(strCoName))
             % constructor found, now find the end of it
             startLine = i;
         end

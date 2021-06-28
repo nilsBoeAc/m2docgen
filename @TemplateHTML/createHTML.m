@@ -35,14 +35,6 @@ finalStr = filSTR(obj,finalStr,"{HOME_HTML}",obj.homePath);
 finalStr = filSTR(obj,finalStr,"{STYLE_FOLDER}",obj.styleFolder);
 obj.str = finalStr;
 
-if(~isempty(obj.listFilKeys))
-    if obj.verbose
-        disp("Open Key-Words - remove Blocks:");
-        disp(obj.listFilKeys);
-    end
-    obj.str = removeBlocks(obj);
-end
-
 % write HTML
 fil = fopen(outname,'w');
 fprintf(fil,"\n%s",obj.str);

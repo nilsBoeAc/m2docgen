@@ -43,10 +43,12 @@ classdef MFile < handle
         name string; % Name of File
         path string; % Full Path of File
         text string; % text of File
+        
+        foundBlocks string = [string]; % stores the found text blocks marked with '%%'
 
-        knownBlocks = ["DESCRIPTION","SYNTAX","INPUT","OUTPUT", ...
-                        "REFERENCES","DISCLAIMER"]; % for functions
-                    
+%         knownBlocks = ["DESCRIPTION","SYNTAX","INPUT","OUTPUT", ...
+%                         "REFERENCES","DISCLAIMER"]; % for functions
+             % depreceated, use foundblocks
         classBlocks = ["METHODS", "PROPERTIES"]; % CONSTRUCTOR?
         
         dummyList   = {}; %List with dummies

@@ -73,15 +73,13 @@ classdef TemplateHTML < handle
             % TemplateHTML Construct an instance of this class
             
             % Set location where template get from
-            docTemplate ="html_Template.tpl"; % template for header and footer
-            contentTemplate = "mfile.tpl";
+            websiteTemplate ="html_Template.tpl"; % template for header and footer
             
             [fpath,fname,fext] = fileparts(name);
             obj.name = fname;
             obj.templFolder = templateFolder; % folder with css and logos etc
-            docpath = fullfile(obj.templFolder,docTemplate); % global path to general doc file
+            docpath = fullfile(obj.templFolder,websiteTemplate); % global path to general doc file
             thisPath = mfilename('fullpath');
-            contPath = fullfile(fileparts(thisPath),obj.htmlSegmentPath,contentTemplate);
             
             % Set Output folder
             obj.outFolder = outFolder;
@@ -89,28 +87,9 @@ classdef TemplateHTML < handle
             obj.homePath = homePath;
             
             % Read both template files (general documentation + content)
-            fil = fopen(docpath);
-            docDat = textscan(fil,'%s','delimiter','\n');
-            fclose(fil);
-            fil = fopen(contPath);
-            contDat = textscan(fil,"%s","delimiter",'\n');
-            fclose(fil);
-            docStr = string(docDat{1});
-            contStr = string(contDat{1});
-            % insert the (still empt) content template into the doc
-            % template
-            obj.str = obj.filSTR(docStr, "<!-- CONTENT_FROM_M2DOC -->",contStr);
-            obj.htmlSegmentPath = fileparts(contPath);
+            obj.str = obj.loadSegmentTemplate(docpath);
             obj.verbose = verbose;
-        end
-
-        function tplStr = getTPL(obj,type)
-            file = fullfile(obj.htmlSegmentPath,type+".tpl");
-            fil = fopen(file);
-            dat = textscan(fil,'%s','delimiter','\n');
-            fclose(fil);
-            tplStr = string(dat{1});
-        end  % getTPL      
+        end    
 
         function entireTxt = filSTR(obj,entireTxt,strReplaceMarker,strOverwrite)
         % this function looks for a string defined by "strRelaceMarker" and 
@@ -130,7 +109,7 @@ classdef TemplateHTML < handle
                         entireTxt = [fil];
                     else
                         if tline == 1
-                            entireTxt = [fil; entireTxt(1:end)];
+                            entireTxt = [fil; entireTxt(2:end)];
                         elseif tline == length(entireTxt)
                             entireTxt = [entireTxt(1:end-1); fil];
                         else
@@ -185,6 +164,15 @@ classdef TemplateHTML < handle
             end
             strT = obj.str;
         end % function removeBlocks
+        
+        function strTxt = loadSegmentTemplate(obj, path)
+            % loads a (clear text, non binary) text file and returns the
+            % content line by line as a char vector
+            fID = fopen(path);
+            txtCell = textscan(fID,'%s','delimiter','\n');
+            fclose(fID);
+            strTxt = string(txtCell{1});
+        end % function loadSegmentTemplate
 
         %% set Functions
         function set.outFolder(obj,fd)
