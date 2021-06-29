@@ -73,7 +73,8 @@ while(1)
     if contains(cLwSU,'%%')
         if all(cLwSU(1:2) == '%') && length(cLwSU)>2
             oldBlockName = newBlockName; % last block name
-            newBlockName = cLwSU(3:end); % current block name
+            %newBlockName = cLwSU(3:end); % current block name
+            newBlockName = cL; % save entire line as block name, will be filtered in TemplateHTML.parseDummysIntoTemplate
             obj.foundBlocks(j) = newBlockName; % store for debugging purposes
             j=j+1;
             if st_found
@@ -129,14 +130,14 @@ if obj.type == "class"
     for i = 1:length(methodsList)
         singleMeth = methodsList{i};
         dum = Dummy("METHODS", singleMeth);
-        dum.type = "classBlock";
+        dum.type = "CLASSBLOCK";
         obj.addDummy(dum);
     end
     % properties
     for i = 1:length(propertiesList)
         singleProp = propertiesList{i};
         dum = Dummy("PROPERTIES", singleProp);
-        dum.type = "classBlock";
+        dum.type = "CLASSBLOCK";
         obj.addDummy(dum);
     end
 
@@ -175,7 +176,7 @@ if obj.type == "class"
     if startLine ~= -1 && endLine ~= -1
         strConstructor = txt(startLine:endLine); % includes comments
         dum = Dummy("CONSTRUCTOR",strConstructor);
-        dum.type = "constructor";
+        dum.type = "CONSTRUCTOR";
         obj.addDummy(dum);
     end
 end % end if is class
