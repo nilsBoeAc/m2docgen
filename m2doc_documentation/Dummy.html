@@ -19,19 +19,19 @@
 <!-- START SHORT_DESC / important comment -->
 <div><pre class="firstDesc"> text dummys that contain important information </pre></div>
 <!-- END SHORT_DESC / important comment -->
-<!-- START DESCRIPTION / important comment -->
-<h2><a name="_description"></a>DESCRIPTION <a href="#_top"></a></h2><hr  class="btw">
+<!-- START DESCRIPTION: / important comment -->
+<h2><a name="_description"></a>DESCRIPTION: <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text">   Objects of this class are used to store information about a m-file.
    While parsing an m-file in the function MFile.parse
    </pres></div>
-<!-- END DESCRIPTION / important comment -->
-<!-- START SYNTAX / important comment -->
-<h2><a name="_description"></a>SYNTAX <a href="#_top"></a></h2><hr  class="btw">
+<!-- END DESCRIPTION: / important comment -->
+<!-- START SYNTAX: / important comment -->
+<h2><a name="_description"></a>SYNTAX: <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text">   dm = dummy(name, filling);
 </pres></div>
-<!-- END SYNTAX / important comment -->
-<!-- START INPUT / important comment -->
-<h2><a name="_description"></a>INPUT <a href="#_top"></a></h2><hr  class="btw">
+<!-- END SYNTAX: / important comment -->
+<!-- START INPUT: / important comment -->
+<h2><a name="_description"></a>INPUT: <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text"> required input values;
    name - Heading of the dummy: "string"
        This is the heading where the dummy should be placed within the
@@ -42,25 +42,27 @@
        sure to not use newline characters in the string, but to use a
        vertical string.
 </pres></div>
-<!-- END INPUT / important comment -->
-<!-- START PROPERTIES / important comment -->
-<h2><a name="_description"></a>PROPERTIES <a href="#_top"></a></h2><hr  class="btw">
+<!-- END INPUT: / important comment -->
+<!-- START PROPERTIES: / important comment -->
+<h2><a name="_description"></a>PROPERTIES: <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text">   name    - see inputs
    filling - see inputs
    type    - classification of the dummy: string
    refPath - reference path that should be placed into a placeholder that
              is currently within the filling (content) of the dummy. see
              generation of function reference list.
+   type    - must be one of the following:
+             "SHORT_DESCR","DYNAMIC","FUNCTREF","CLASSBLOCK","CONSTRUCTOR"
 </pres></div>
-<!-- END PROPERTIES / important comment -->
-<!-- START DISCLAIMER / important comment -->
-<h2><a name="_description"></a>DISCLAIMER <a href="#_top"></a></h2><hr  class="btw">
+<!-- END PROPERTIES: / important comment -->
+<!-- START DISCLAIMER: / important comment -->
+<h2><a name="_description"></a>DISCLAIMER: <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text">
  Last editor:  Pierre Ollfisch
  Last edit on: 07.04.2021
  Code version: 1.0
  Copyright (c) 2021</pres></div>
-<!-- END DISCLAIMER / important comment -->
+<!-- END DISCLAIMER: / important comment -->
 <!-- START CLASSPROPERTIES / important comment -->
 <h2><a name="_description"></a>Properties <a href="#_top"></a></h2><hr class="btw">
 <ul>
@@ -68,6 +70,7 @@
 <li><div class="classBlock">filling</div></li>
 <li><div class="classBlock">type</div></li>
 <li><div class="classBlock">refPath</div></li>
+<li><div class="classBlock">typeCases</div></li>
 <!-- properties above / important comment -->
 </ul>
 <!-- END CLASSPROPERTIES / important comment -->
