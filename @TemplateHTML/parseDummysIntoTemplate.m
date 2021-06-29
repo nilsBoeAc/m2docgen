@@ -32,6 +32,8 @@ function parseDummysIntoTemplate(obj,dummyList)
 %       27.06.2021)
 
 strTemplate = obj.str;     % entire website template as string
+defaultDummy = Dummy("--","--");
+typeCase = defaultDummy.typeCases;
 keyPlace = 'CONTENT_FROM_M2DOC'; % position in the strTemplate above which the segments must be inserted
 
 for di = 1:length(dummyList) % di = dummy index
@@ -43,45 +45,52 @@ for di = 1:length(dummyList) % di = dummy index
     dummyList{di,2} = currDummy.name; % for debugging in the workspace
 
     switch dumType
-        case 'SHORT_DESCR'
+        case typeCase(1) %'SHORT_DESCR'
+            % step 1: load segment template
             descrTemplPath = which("shortDescr.tpl");
-            descrTempl = obj.loadSegmentTemplate(descrTemplPath);
-            strBlock = filSTR(obj, descrTempl, key, filling);
+            descrTempl  = obj.loadSegmentTemplate(descrTemplPath);
+            % step 2: load dummy into segment
+            strBlock    = filSTR(obj, descrTempl, key, filling);
+            % step 3: load segment into website template
             strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
-        case "DYNAMIC"
+        case typeCase(2) %"DYNAMIC"
+            % step 1: load dummy segment template
             dynaTemplPath = which("dynamicSegment.tpl");
-            dynaTempl = obj.loadSegmentTemplate(dynaTemplPath);
+            dynaTempl   = obj.loadSegmentTemplate(dynaTemplPath);
+            % step 2: replace dummyname placeholder with real dummy name in dummy segment
             dynaDescrKey = "{DUMMYNAME}";
-            headingName = strrep(strrep(strrep(key,"{",""),"}",""),":",""); % remove }:{ from headings
-            namedBlock = filSTR(obj, dynaTempl, dynaDescrKey, headingName); % replace "{DYNADESCRKEY}" with the descriptive name
+            headingName = filterName(key); % remove leading percent signs and spaces, remove curly brackets
+            namedBlock  = filSTR(obj, dynaTempl, dynaDescrKey, headingName); % replace "{DYNADESCRKEY}" with the descriptive name
+            % step 3: insert dummy filling into segment
             dynaFillKey = "{DUMMYFILLING}";
-            strBlock = filSTR(obj, namedBlock, dynaFillKey, filling); % replace "{DYNAFILLKEY}" with the dummy filling
-            keyPlace = 'CONTENT_FROM_M2DOC'; 
+            strBlock    = filSTR(obj, namedBlock, dynaFillKey, filling); % replace "{DYNAFILLKEY}" with the dummy filling
+            % step 4: add segment into website template
+            keyPlace    = 'CONTENT_FROM_M2DOC'; 
             strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
-        case char('functRef')
-            % insert Total call segment, insert name call segment, then
-            % insert the functionRef block into the name call segment
+        case typeCase(3) % "FUNCTREF"
+            % step 1: check if the segment for function references is
+            % already in the website template. if not add it in
             if ~contains(strTemplate, "{TOTAL_CALL}")
-                % if the website template already contains the name_call
-                % tag, then we can directly insert the function snippet.
-                % Otherwise, the function call segment must be added first.
                 totalCallTPLPath = which("totalCallSegment.tpl");
-                totalCallTxt = obj.loadSegmentTemplate(totalCallTPLPath);
-                keyPlace = 'CONTENT_FROM_M2DOC';
-                strTemplate = addBlock(obj, strTemplate, totalCallTxt, keyPlace);
+                totalCallTxt     = obj.loadSegmentTemplate(totalCallTPLPath);
+                keyPlace         = 'CONTENT_FROM_M2DOC';
+                strTemplate      = addBlock(obj, strTemplate, totalCallTxt, keyPlace);
             end
+            % step 2: check if the function reference segment already
+            % contains a "name called" subsegment. if not add it in.
             if ~contains(strTemplate, "{NAME_CALL}")
                 % if the website template already contains the name_call
                 % tag, then we can directly insert the function snippet.
                 % Otherwise, the function call segment must be added first.
                 funcTemplatePath = which("nameCallSegment.tpl");
-                funcTemplate = obj.loadSegmentTemplate(funcTemplatePath);
-                keyPlace = '{TOTAL_CALL}';
-                strTemplate = addBlock(obj, strTemplate, funcTemplate, keyPlace);
+                funcTemplate     = obj.loadSegmentTemplate(funcTemplatePath);
+                keyPlace         = '{TOTAL_CALL}';
+                strTemplate      = addBlock(obj, strTemplate, funcTemplate, keyPlace);
             end
-            % 
-            funcSnippetPath = which("functRef.tpl");
+            % step 3: load the function reference snippet template;
+            funcSnippetPath = which("functRefSnip.tpl");
             funcSnippet = obj.loadSegmentTemplate(funcSnippetPath);
+            % step 4: fill the snippet with the dummy filling / link
             if(key == "{NAME_CALL}")
                 keyPlace = 'functRef above';
             else
@@ -94,42 +103,49 @@ for di = 1:length(dummyList) % di = dummy index
             else
                 strBlock = filSTR(obj,strBlock,"{REF_CALL}",refPath);
             end
+            % step 5: place the snippet into the website template within
+            % the function reference segment inside the name called segment
             strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
-        case char("classBlock")
-            % check if a methods/properties segment is present
+        case typeCase(4) % "CLASSBLOCK" 
+            % step 1:check if a methods/properties segment is present. if
+            % not add it in. Method and Property have a different template
             if currDummy.name == "{METHODS}"
                 if ~contains(strTemplate, "METHODS")
-                    methodsSegmentPath = which("methodsSegments.tpl");
-                    methodsSegment = obj.loadSegmentTemplate(methodsSegmentPath);
+                    methodsSegmentPath  = which("methodsSegments.tpl");
+                    methodsSegment      = obj.loadSegmentTemplate(methodsSegmentPath);
                     mainKey = 'CONTENT_FROM_M2DOC'; 
-                    strTemplate = addBlock(obj,strTemplate,methodsSegment,mainKey);
+                    strTemplate         = addBlock(obj,strTemplate,methodsSegment,mainKey);
                 end
                 keyPlace    = "methods above"; 
             else
-                if ~contains(strTemplate, "CLASSPROPERTIES")
-                    propSegPath = which("propertiesSegments.tpl");
-                    propSegTpl = obj.loadSegmentTemplate(propSegPath);
-                    mainKey = 'CONTENT_FROM_M2DOC'; 
-                    strTemplate = addBlock(obj,strTemplate,propSegTpl,mainKey);
+                if ~contains(strTemplate, "CLASSPROPERTIES") 
+                    propSegPath     = which("propertiesSegments.tpl");
+                    propSegTpl      = obj.loadSegmentTemplate(propSegPath);
+                    mainKey         = 'CONTENT_FROM_M2DOC'; 
+                    strTemplate     = addBlock(obj,strTemplate,propSegTpl,mainKey);
                 end
                 keyPlace    = "properties above";
             end
-            % get snippet template for this content
-            classTmplPath = which("classBlock.tpl");
+            % step 2: get snippet template for this content
+            classTmplPath = which("classSnip.tpl");
             classTmpl = obj.loadSegmentTemplate(classTmplPath);
+            % step 3: insert dummy filling into the snippet
             key  = "{SUB}"; % new key for new block
             strBlock        = filSTR(obj,classTmpl,key,filling);
+            % step 4: add the snippet into the website template into the
+            % class specific segment.
             strTemplate = addBlock(obj,strTemplate,strBlock,keyPlace);
-        case "constructor"
-            % highlight keywords in the constructor filling
+        case typeCase(5) %"CONSTRUCTOR"
+            % Step 1: highlight keywords in the constructor filling
             filling = highlightFunctionKeywords(filling);
             filling = highlightComments(filling);
-            % add segment for constructor
+            % step 2: load segment for constructor
             dynaTemplPath = which("dynamicSegment.tpl");
             dynaTempl = obj.loadSegmentTemplate(dynaTemplPath);
+            % step 3: fill segment with dummy filling
             constrTempl = filSTR(obj,dynaTempl,'{DUMMYNAME}', "CONSTRUCTOR");
             constrTempltxt = filSTR(obj,constrTempl,'{DUMMYFILLING}', filling);
-            % insert filled template into website
+            % step 4: insert  segment into website template
             keyPlace = 'CONTENT_FROM_M2DOC';
             strTemplate = addBlock(obj,strTemplate,constrTempltxt,keyPlace);
         otherwise
@@ -222,3 +238,40 @@ for r = 1:rowCount
     end
 end % for r rowcount
 end % function highlightFunctionKeywords
+
+function txt = filterName(key)
+% this function gets a text line from a m-file and filters out the leading
+% percent signs, curly braces and spaces
+txt = char(key);
+txt = strrep(txt, '{',''); % remove curly brackets
+txt = strrep(txt, '}','');
+key = txt; % resave key because the break of the loop depends on it to be accurate
+% now remove leading spaces and percent signs
+cOut = 0; % counts number of loops
+charsToDelete = [' ','%'];
+while(true)
+    cOut = cOut+1;
+    currChar = txt(1);
+    if any(currChar == charsToDelete) 
+        if length(txt) >=2
+            txt = txt(2:end);
+        else
+            txt = '';
+        end
+    end
+    % break condition 1: if alphanumeric letter is found
+    if isletter(currChar) || ~isnan(str2double(currChar))
+        break;
+    end
+    % break condition 2: if cOut is greater than letter number of input
+    if cOut > strlength(key)
+        break;
+    end
+end
+
+if isempty(txt)
+    txt = "(-)";
+else
+    txt = string(txt); 
+end
+end % filterName
