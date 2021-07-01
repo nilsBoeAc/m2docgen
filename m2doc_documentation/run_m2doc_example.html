@@ -23,34 +23,30 @@
        If documentation folder opts.outputFolder already exist, delete it 
        first.
    mFolder - string array : ["absolute_path_to_scripts"]
-       The folder specified in this variable (and subfolders) will be 
+       The path specified in this variable (and subfolders) will be 
        searched for .m and .mlx files to convert to html. Multiple folders
        are possible. 
    outputFolder - string array : ["absolute_path_to_output_folder"]
-       The folder specified in this variable will contain a subfolder with 
-       the converted html files, as well as the toc xml file. 
+       The path specified in this variable will contain the converted html 
+       files, a subfolder with the .css files, and the toc xml file. 
    excludeFolder - string array : ["folder_names_to_exclude"]
        If the path of an m file contains these words, they will be ignored
        and not be converted to html.
    excludeFile - string array : ["file_name_to_exclude"]
        If the file name contains one of these words, they will be ignored
        and not converted to html.
-   htmlFolderName - string: "name_of_output_html_folder"
-       Within the opts.outputFolder will be a subfolder which contains the
-       converted html files. This variable is the name of that folder.
    htmlMetaFolder - string : ["relative_folder_name"]
        This folder will contain the css-files and images of the html files
        and will be a subfolder of opts.outputFolder.
    htmlTemplate - string:  ["relative_folder_name"]
        Define the folder containing the html template files that will
-       define the structure and look of the exported documents. The path
-       must be relative to m2docs template folder.
+       define the structure and look of the exported documents. If the
+       path is not valid, then the default template is used.
    startpage - string array: ["name_of_landing_page_html_file_name"]
        The very first toc-element will be displayed when opening the html
-       documentation, but is not a regular function/class m-file. Create
-       this landing page by manaully creating an m/mlx-file with this name
-       that contains the desired contents. It will be converted and used
-       accodingly.
+       documentation. Specify instead here a html site as landing page.
+       Create this page by writing an m/mlx-file with the specified name
+       The file will be converted to HTML and used as landing page.
    toc - cell: 
        The html documentation requires an xml file (helptoc.xml) that
        structures the documentation. If this variable is empty, then the
@@ -74,9 +70,9 @@
 <!-- START NAME_CALL -->
 <pre class = "text">{NAME_CALL}This function calls:</pre><ul>
 
-<li><a href="m2doc.html" class="code" title="Go To Function">m2doc</a></li>
-
 <li><a href="Welcome_to_m2doc.html" class="code" title="Go To Function">Welcome_to_m2doc</a></li>
+
+<li><a href="m2doc.html" class="code" title="Go To Function">m2doc</a></li>
 <!-- functRef above / important comment -->
 </ul>
 <!-- END NAME_CALL -->
@@ -86,7 +82,7 @@
 <!-- the comment above and this one will be replaced by the actual content -->
 
 <hr class="last"> 
-<address>Generated on 29-Jun-2021 by <strong><a class = "image" href="Welcome_to_m2doc.html" title="Matlab Documentation">m2doc</a></strong> &copy; 2021 </address>
+<address>Generated on 01-Jul-2021 by <strong><a class = "image" href="Welcome_to_m2doc.html" title="Matlab Documentation">m2doc</a></strong> &copy; 2021 </address>
 <address class="small"> inspiried by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

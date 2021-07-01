@@ -121,7 +121,6 @@
 <li><div class="classBlock">GenerateTocStructure</div></li>
 <li><div class="classBlock">GenerateTocXml</div></li>
 <li><div class="classBlock">RemoveOldDoc</div></li>
-<li><div class="classBlock">Welcome_to_m2doc</div></li>
 <li><div class="classBlock">printToc</div></li>
 <!-- methods above / important comment -->
 </ul>
@@ -156,13 +155,13 @@ obj.m2docPath      = opts.m2docPath;
 obj.delOld         = opts.delOld;
 obj.mFolder        = opts.mFolder;
 obj.outputFolder   = opts.outputFolder;
-obj.buildSubDir    = false;             <div class="comment">%opts.buildSubDir;</div>
+obj.buildSubDir    = false;             <div class="comment">%opts.buildSubDir; not used anymore</div>
 obj.excludeFile    = opts.excludeFile;
 obj.excludeFolder  = opts.excludeFolder;
 obj.htmlMetaFolder = opts.htmlMetaFolder;
 obj.startPage      = opts.startPage;
 obj.toc            = opts.toc;
-obj.htmlFolderName = opts.htmlFolderName;
+obj.htmlFolderName = ""; <div class="comment">%opts.htmlFolderName; htmlFolderName not used anymore</div>
 htmlTemplatePath   = checkTemplatePath(opts);
 obj.htmlTemplate   = htmlTemplatePath;
 obj.verbose        = opts.verbose;
@@ -222,7 +221,7 @@ obj.GenerateFuncRefList;
 <!-- the comment above and this one will be replaced by the actual content -->
 
 <hr class="last"> 
-<address>Generated on 29-Jun-2021 by <strong><a class = "image" href="Welcome_to_m2doc.html" title="Matlab Documentation">m2doc</a></strong> &copy; 2021 </address>
+<address>Generated on 01-Jul-2021 by <strong><a class = "image" href="Welcome_to_m2doc.html" title="Matlab Documentation">m2doc</a></strong> &copy; 2021 </address>
 <address class="small"> inspiried by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
