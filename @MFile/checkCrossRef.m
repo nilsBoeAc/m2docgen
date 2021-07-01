@@ -34,7 +34,7 @@ for i = 1:size(fctlist,1)
         if (contains(objTxt(line),fName) && ~contains(objTxt(line),"%"))
             refPath = fctlist(i,2);
             dum = Dummy("{NAME_CALL}",fName);
-            dum.type = "functRef";
+            dum.type = "FUNCTREF";
             dum.refPath = refPath;
             if lower(fName) == lower(objName)
                 % do not add a dummy if its a self call

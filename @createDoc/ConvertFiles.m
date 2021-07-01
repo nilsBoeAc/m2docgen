@@ -48,9 +48,9 @@ for i = 1:length(fileList)
     
     % insert text dummys into template html to generate html file
     myName          = currMFile.name;
-    tplFolder       = obj.htmlTemplate;
+    tplFolder       = obj.htmlTemplate; % template folder of the help site
     outputFolder    = currFileOutputFolder;
-    styleFolder     = obj.htmlMetaFolder;
+    styleFolder     = obj.htmlMetaFolder; % folder with the 
     homePath        = obj.startPage;
     myhtml          = TemplateHTML(myName, tplFolder, outputFolder, ...
                         styleFolder,homePath, obj.verbose);

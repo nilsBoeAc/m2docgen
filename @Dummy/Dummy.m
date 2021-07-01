@@ -25,6 +25,8 @@ classdef Dummy < handle
 %   refPath - reference path that should be placed into a placeholder that
 %             is currently within the filling (content) of the dummy. see
 %             generation of function reference list.
+%   type    - must be one of the following:
+%             "SHORT_DESCR","DYNAMIC","FUNCTREF","CLASSBLOCK","CONSTRUCTOR"
 %
 %% Disclaimer:
 %
@@ -40,6 +42,10 @@ classdef Dummy < handle
         type    string;
         refPath string = "NA";
     end
+    properties(Constant)
+        typeCases string = ["SHORT_DESCR","DYNAMIC","FUNCTREF",...
+            "CLASSBLOCK","CONSTRUCTOR"];
+    end
     
     %% methods
     methods
@@ -54,7 +60,13 @@ classdef Dummy < handle
         
         %% additional functions
         function set.type(obj,ty)
-            obj.type = ty;
+            % check if the type is listed in the typeCase property
+            if any(contains(obj.typeCases, ty))
+                obj.type = ty;
+            else
+                error("Error while setting the type property of the dummy " ...
+                    + obj.name + ". Please specify a valid type");
+            end
         end
         
         function set.name(obj,name)
