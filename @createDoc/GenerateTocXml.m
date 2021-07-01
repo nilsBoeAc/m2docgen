@@ -35,7 +35,8 @@ fprintf(tocFid,'<?xml version=''1.0'' encoding=''utf-8'' ?>\n');
 fprintf(tocFid,'<!-- $Date: %s $ -->\n\n', datestr(now,31));
 fprintf(tocFid,'<toc version="2.0">\n\n');
 %% write toc struture of toolbox into file
-writeTocRec(tocFid, obj.fileList, obj.toc, "", "");
+startHTMLPath = findStartPage(obj);
+writeTocRec(tocFid, obj.fileList, obj.toc, "", "",startHTMLPath);
 
 %% close file
 fprintf(tocFid,'\n</toc>');
@@ -44,7 +45,7 @@ disp("Generated the helptoc.xml file!")
 end % end function GenerateTocXml
 % ---------------- start local functions ---------------
 
-function writeTocRec(tocFid, fileList, tocCell, preTxt, tocPath)
+function writeTocRec(tocFid, fileList, tocCell, preTxt, tocPath, startHTMLPath)
 % tocFid = file id from fopen to the helptoc.xml file
 currTocCell = tocCell;
 currPreTxt  = preTxt; % preTxt are the spaces before a line in the xml document
@@ -55,9 +56,13 @@ for i = 1:size(currTocCell,1)
     % add files to that element if available
     currTocElement  = currTocCell{i,1};
     currTocPath     = fullfile(tocPath, currTocElement);
+    if (tocPath == "") && (preTxt == "") && (i == 1)
+        % case only for the very first element
+        pathToHtml = startHTMLPath;
+    else
+        pathToHtml = getHeadingHTMLPath(currTocElement);
+    end
     % write current element to file
-    pathToHtml      = ".html"; % complete path to html file (link of text) 
-    pathToHtml      = getHeadingHTMLPath(currTocElement);
     tocName         = currTocElement; % Text that will appear in the toc
     % fprintf(%s spaces  %s relative-path-to-html-file  %s displayed name)
     fprintf(tocFid,['%s<tocitem target="%s" ', ... 
@@ -67,7 +72,7 @@ for i = 1:size(currTocCell,1)
     % if available, do the loop on subelements of that toc ("subfolders")
     if ~isempty(currTocCell{i,3}) && iscell(currTocCell{i,3})
         newPreTxt = currPreTxt + "    ";
-        writeTocRec(tocFid, fileList, currTocCell{i,3}, newPreTxt, currTocPath);
+        writeTocRec(tocFid, fileList, currTocCell{i,3}, newPreTxt, currTocPath, startHTMLPath);
     end
     
     % loop throoug file list and add all files that belong to that toc
@@ -100,3 +105,13 @@ function htmlPath = getHeadingHTMLPath(myName)
 % by default it should display a html file with the same name
 htmlPath = myName + ".html";
 end % end function getHeadingPath
+
+function htmlPath = findStartPage(obj)
+
+startPage = string(obj.startPage);
+if startPage == ""
+    htmlPath = obj.toolboxName + ".html";
+else
+    htmlPath = startPage;
+end
+end
