@@ -1,6 +1,5 @@
 License
 
-LFT-Labor at FH Aachen is under the supervision of Prof.Dr.-Ing Carsten Braun.
 The toolbox was developed and designed by Nils Böhnisch M.Sc. and 
 Pierre Ollfisch B.Eng.
 
@@ -33,5 +32,5 @@ TERMS OF USE
 Purpose and Range of Application:
 Generates html documents from code headers and adds the html files to the 
 matlab documentation.
-This code is intended for personal and academic use only.
+This code is intended for personal use only.
 DISTRIBTUION OF THIS CODE WITHOUT PERMISSION IS NOT ALLOWED.
