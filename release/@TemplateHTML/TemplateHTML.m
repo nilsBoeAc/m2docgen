@@ -72,6 +72,11 @@ classdef TemplateHTML < handle
         function obj = TemplateHTML(name,templateFolder,outFolder,styleFolder,homePath, verbose)
             % TemplateHTML Construct an instance of this class
             
+            % adds htmlSegmentPath to search path - NB
+            cp = fileparts(which(mfilename));
+            cp = fullfile(cp,obj.htmlSegmentPath);
+            addpath(genpath(cp));
+            
             % Set location where template get from
             websiteTemplate ="html_Template.tpl"; % template for header and footer
             
