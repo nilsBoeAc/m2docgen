@@ -109,6 +109,11 @@
 <div class="fragment"><pre class="text"><div class='functionKeyword'>function</div> obj = TemplateHTML(name,templateFolder,outFolder,styleFolder,homePath, verbose)
 <div class="comment">% TemplateHTML Construct an instance of this class</div>
 
+<div class="comment">% adds htmlSegmentPath to search path - NB</div>
+cp = fileparts(which(mfilename));
+cp = fullfile(cp,obj.htmlSegmentPath);
+addpath(genpath(cp));
+
 <div class="comment">% Set location where template get from</div>
 websiteTemplate ="html_Template.tpl"; <div class="comment">% template <div class='functionKeyword'>for</div> header and footer</div>
 
@@ -147,6 +152,6 @@ obj.verbose = verbose;
 <!-- the comment above and this one will be replaced by the actual content -->
 
 <hr class="last"> 
-<address>Generated on 07-Jul-2021 by <strong><a class = "image" href="Welcome_to_m2doc.html" title="Matlab Documentation">m2doc</a></strong> &copy; 2021 </address>
+<address>Generated on 13-Jul-2021 by <strong><a class = "image" href="Welcome_to_m2doc.html" title="Matlab Documentation">m2doc</a></strong> &copy; 2021 </address>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- $Date: 2021-07-07 08:41:27 $ -->
+<!-- $Date: 2021-07-13 11:43:35 $ -->
 
 <toc version="2.0">
 
@@ -40,7 +40,9 @@
         <tocitem target="template_function_header.html">template_function_header</tocitem>
     </tocitem>
     <tocitem target="help.html" image="$toolbox/matlab/icons/book_mat.gif">help
+        <tocitem target="custom_structure.html">custom_structure</tocitem>
         <tocitem target="run_m2doc_example.html">run_m2doc_example</tocitem>
+        <tocitem target="run_structure_example.html">run_structure_example</tocitem>
     </tocitem>
     <tocitem target="Welcome_to_m2doc.html">Welcome_to_m2doc</tocitem>
     <tocitem target="m2doc.html">m2doc</tocitem>
