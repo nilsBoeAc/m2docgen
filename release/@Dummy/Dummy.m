@@ -71,7 +71,6 @@ classdef Dummy < handle
         
         function set.name(obj,name)
             % autotype braces around input string if missing
-            name = upper(name);
             tmp = char(name);
             if(~contains(tmp,'{'))
                 %disp("In Dummy: [Name] does not contain '{'. Will be added!");
@@ -93,35 +92,31 @@ classdef Dummy < handle
         end
         
         function set.filling(obj,fil)
-            switch lower(obj.name)
-                case {'{methods}' '{properties}' '{constructor}'}
-                    % no changes to input text, so leave all comments in
-                case {'{description}' '{short_desc}' '{syntax}' ...
-                        '{input}' '{output}' '{disclaimer}' '{references}'}
-                    % Removes '%' in the entire text
-                    %fil = strrep(fil,"%","");
-                    % removes '%' from the beginning of line
-                    for i = 1:length(fil)
-                        lineChar = char(fil(i));
-                        idx = find(lineChar == '%');
-                        if ~isempty(idx)
-                            if size(idx,2) > 1
-                                if idx(2) == 2
-                                    lineChar(2) = [];
-                                end
+            % by default remove all % in the 'filling' text block
+            % exception: constructor blocks
+            exceptions = ["{constructor}","{class properties}","{class methods}"];
+            currName = lower(obj.name);
+            if any(contains(currName, exceptions))
+                % do not remove anything
+            else
+               for i = 1:length(fil)
+                    lineChar = char(fil(i));
+                    idx = find(lineChar == '%');
+                    if ~isempty(idx)
+                        if size(idx,2) > 1
+                            if idx(2) == 2
+                                lineChar(2) = [];
                             end
-                            if idx(1) == 1
-                                lineChar(1) = [];
-                            end
-                            fil(i) = lineChar;
                         end
+                        if idx(1) == 1
+                            lineChar(1) = [];
+                        end
+                        fil(i) = lineChar;
                     end
-                otherwise
-                    % Removes '%' in the entire text
-                    fil = strrep(fil,"%","");
+                end 
             end
+            obj.filling = fil;           
             
-            obj.filling = fil;
         end
     end
 end
