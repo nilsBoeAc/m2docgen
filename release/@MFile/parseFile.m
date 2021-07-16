@@ -129,26 +129,27 @@ if obj.type == "class"
     % methods
     for i = 1:length(methodsList)
         singleMeth = methodsList{i};
-        dum = Dummy("METHODS", singleMeth);
+        dum = Dummy("Class Methods", singleMeth);
         dum.type = "CLASSBLOCK";
         obj.addDummy(dum);
     end
     % properties
     for i = 1:length(propertiesList)
         singleProp = propertiesList{i};
-        dum = Dummy("PROPERTIES", singleProp);
+        dum = Dummy("Class Properties", singleProp);
         dum.type = "CLASSBLOCK";
         obj.addDummy(dum);
     end
 
-    %% find constructor and entirely add as dummy text
+    %% find constructor and add as dummy text (entirely)
     txt = obj.text;
     [~,strCoName] = fileparts(obj.name);
     % onyl works if its defined in the class m-file itself
     startLine = -1;
     endLine = -1;
     % keywords that require an "end" afterwards
-    strKeyword = ["if " "try " "while " "for " "parfor " "switch "];
+    strKeyword = ["if " "try " "while " "for " "parfor " "switch "]; % spaces are to determine single word
+    strKeyword = [strKeyword, strrep(strKeyword," ", "(")];
     endCounter = 0;
     for i = 1:length(txtNoCom)
         currLine = lower(txtNoCom(i));
@@ -175,7 +176,7 @@ if obj.type == "class"
     end % for i, constructor now defined between startLine and endLine
     if startLine ~= -1 && endLine ~= -1
         strConstructor = txt(startLine:endLine); % includes comments
-        dum = Dummy("CONSTRUCTOR",strConstructor);
+        dum = Dummy("Constructor",strConstructor);
         dum.type = "CONSTRUCTOR";
         obj.addDummy(dum);
     end
