@@ -49,7 +49,7 @@
 %       If true, then more intermediate steps will be documented in the
 %       command window.
 
-cd(fileparts(which(mfilename)));
+%cd(fileparts(which(mfilename)));
 cPath = fileparts(which(mfilename));
 
 mF = string(fileparts(cPath));
