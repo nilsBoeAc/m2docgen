@@ -66,11 +66,12 @@ classdef MFile < handle
             obj.path = path;
             
             % open file and store text
-            fil = fopen(obj.path+name,'r','n','UTF-8');
-            dat = textscan(fil,'%s','delimiter','\n','TextType',"string");
-            fclose(fil);
+            %fil = fopen(obj.path+name,'r','n','UTF-8');
+            %dat = textscan(fil,'%s','delimiter','\n','TextType',"string");
+            %fclose(fil);
+            obj.text = textread(obj.path+name, '%s', 'delimiter', '\n', 'whitespace', '');
             % Reduced Text to header
-            obj.text = string(dat{1});
+            %obj.text = string(dat{1});
         end % Constructor
 
         function set.path(obj,p)
