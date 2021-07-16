@@ -78,7 +78,7 @@ for di = 1:length(dummyList) % di = dummy index
             end
             % step 2: check if the function reference segment already
             % contains a "name called" subsegment. if not add it in.
-            if ~contains(strTemplate, "{NAME_CALL}")
+            if ~contains(strTemplate, "NAME_CALL")
                 % if the website template already contains the name_call
                 % tag, then we can directly insert the function snippet.
                 % Otherwise, the function call segment must be added first.
@@ -109,8 +109,8 @@ for di = 1:length(dummyList) % di = dummy index
         case typeCase(4) % "CLASSBLOCK" 
             % step 1:check if a methods/properties segment is present. if
             % not add it in. Method and Property have a different template
-            if currDummy.name == "{METHODS}"
-                if ~contains(strTemplate, "METHODS")
+            if upper(currDummy.name) == "{CLASS METHODS}"
+                if ~contains(upper(strTemplate), "CLASSMETHODS")
                     methodsSegmentPath  = which("methodsSegments.tpl");
                     methodsSegment      = obj.loadSegmentTemplate(methodsSegmentPath);
                     mainKey = 'CONTENT_FROM_M2DOC'; 
@@ -118,7 +118,7 @@ for di = 1:length(dummyList) % di = dummy index
                 end
                 keyPlace    = "methods above"; 
             else
-                if ~contains(strTemplate, "CLASSPROPERTIES") 
+                if ~contains(upper(strTemplate), "CLASSPROPERTIES") 
                     propSegPath     = which("propertiesSegments.tpl");
                     propSegTpl      = obj.loadSegmentTemplate(propSegPath);
                     mainKey         = 'CONTENT_FROM_M2DOC'; 
@@ -143,7 +143,7 @@ for di = 1:length(dummyList) % di = dummy index
             dynaTemplPath = which("dynamicSegment.tpl");
             dynaTempl = obj.loadSegmentTemplate(dynaTemplPath);
             % step 3: fill segment with dummy filling
-            constrTempl = filSTR(obj,dynaTempl,'{DUMMYNAME}', "CONSTRUCTOR");
+            constrTempl = filSTR(obj,dynaTempl,'{DUMMYNAME}', "Constructor");
             constrTempltxt = filSTR(obj,constrTempl,'{DUMMYFILLING}', filling);
             % step 4: insert  segment into website template
             keyPlace = 'CONTENT_FROM_M2DOC';
@@ -182,13 +182,32 @@ end % function highlightComments
 function modTxt = highlightFunctionKeywords(inputTxt)
 % markup keywords
 keywords = ["if " "try " "while " "for " "parfor " "switch " ...
-    "function " "end"];
+    "function " "end"]; % spaces are important for identifying single words
+keywords = [keywords, strrep(keywords," ","(")]; % add keywords with braces
 modTxt = inputTxt; % return input by default,  fallback if nothing is modified
+
+% find out if there are any leading spaces in the first row
+fL = char(modTxt(1)); % first line char
+leadingSpace = 0;
+if ~isempty(fL) && numel(fL) > 0
+    for i = 1:numel(fL)
+        if fL(i) ~= ' '
+            leadingSpace = i-1;
+            break;
+        end
+    end
+end
 
 % loop throug each row and highlight keywords
 rowCount = size(inputTxt, 1);
 for r = 1:rowCount
     rowTxt = modTxt(r);
+    % remove leading spaces if required
+    if leadingSpace > 0 && strlength(rowTxt) > leadingSpace
+        rT = rowTxt; % funny matlab bug
+        rowTxt = extractAfter(rT, leadingSpace);
+        modTxt(r) = rowTxt;
+    end
     if contains(rowTxt, keywords)
         % now find all keywords that actually are present
         for i = 1:length(keywords)
