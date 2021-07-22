@@ -1,11 +1,16 @@
 function template_class_header()
-% Here comes a short description.Do not use two %% 
+% Here comes a short description. Do not use two %% 
 % It will read unitl the line starts with '%%'
 %% Description:
-%   Here comes a description. The Code-Word ist "Description" starting with
-%   two %%. The Block ends when the next comment-Block starts (next two %%)
-%   Each Block does contain a "Code-Word". Those will be stored in a dummy
-%   object. 
+%   Here comes a description. 
+%
+%% Custom heading:
+%   If a header line starts with two '%%' symbols, then the next word(s) 
+%   will be used as a heading in the html site. The following text with one
+%   '%' at the start, like here, will appear underneath. The combination of
+%   a descriptor and the text is called a "block". It ends with an empty 
+%   line, a line with two '%%' or a line of code. You do not need to use
+%   any of the names / blocks shown here.
 %   
 %% Syntax:
 %   Here are the syntax
@@ -14,7 +19,15 @@ function template_class_header()
 %   Input Values
 %
 %% Properties:
-%   Output Values
+%   Class files automatically generate headings for properties and methods,
+%   where the properties and methods of that class will be listed. However,
+%   the list might be not descriptive enought for your purposes. You can
+%   use a second "Properties" heading to write clarifications, e.g.:
+%
+%   opts - options structure: struct
+%       Structure that must be given when calling the class file:
+%       opts1 - first option: [double vector ]
+%       opts2 - second option: logical
 %
 %% References:
 %   [Ref1]
