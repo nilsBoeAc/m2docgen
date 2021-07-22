@@ -4,8 +4,8 @@
 <head>
   <title>Description of {NAME}</title>
   <meta name="keywords" content="{NAME}">
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="SDBox &copy 2021: Nils Boehnisch">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="generator" content="m2doc &copy 2021: Nils Boehnisch">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="{STYLE_FOLDER}m2html.css">
 </head>
