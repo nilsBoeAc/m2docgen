@@ -2,7 +2,7 @@
   <configuration file="\\ad.fh-aachen.de\files\user\Mitarbeiter\Home\nb4636e\Documents\GitHub\m2doc\private\m2doc.prj" location="\\ad.fh-aachen.de\files\user\Mitarbeiter\Home\nb4636e\Documents\GitHub\m2doc\private" name="m2doc" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>m2doc</param.appname>
     <param.authnamewatermark>Nils Böhnisch, Pierre Ollfisch</param.authnamewatermark>
-    <param.email>m2doc@gmail.com</param.email>
+    <param.email>m2doc@outlook.com</param.email>
     <param.company />
     <param.summary />
     <param.description>This program converts the header of matlab code files into HTML documents and adds those to the matlab documentation.

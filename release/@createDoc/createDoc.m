@@ -137,7 +137,7 @@ methods (Access = public)
         % generate reference list with all function names
         obj.GenerateFuncRefList;
         
-    end % constructor
+     end % constructor
     
     %% functions defined externally
     CopyMetaFiles(obj);
