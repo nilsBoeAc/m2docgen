@@ -1,4 +1,4 @@
-% installing m2doc Toolbox
+% installing m2docgen Toolbox
 %% Description
 % The Toolbox will be installed by adding the folder to the matlab search path
 % 
@@ -8,5 +8,5 @@
 
 cd(fileparts(which(mfilename)));
 addpath(genpath('.'));
-disp("m2doc is Installed / Added!");
+disp("m2docgen is Installed / Added!");
 % eof;

@@ -16,7 +16,7 @@ classdef TemplateHTML < handle
 %                     Name of the m-file that is converted to an HTML file 
 %                     (including extension) 
 %   templateFolder  - folder to template: "string"
-%                     Absolute path to the template folder within m2doc 
+%                     Absolute path to the template folder within m2docgen 
 %                     that contains all html templates and meta files.
 %   outFolder       - output folder: "string"
 %                     Target folder where to save the HTML document

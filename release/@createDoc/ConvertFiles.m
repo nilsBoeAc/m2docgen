@@ -1,7 +1,7 @@
 function ConvertFiles(obj)
 % converts the elements from obj.fileList to HTML documents
 %% Description:
-% This function is part of m2doc and converts all files listed in
+% This function is part of m2docgen and converts all files listed in
 % obj.fileList into html documents. 
 %   
 %% Syntax:
@@ -23,7 +23,7 @@ function ConvertFiles(obj)
 % Code version: 1.0
 % Copyright (c) 2021
 
-%% loop through all files in m2doc.fileList and convert them
+%% loop through all files in m2docgen.fileList and convert them
 fileList = obj.fileList;
 for i = 1:length(fileList)
     % assign general variables

@@ -1,4 +1,4 @@
-%% uninstalling m2doc Toolbox
+%% uninstalling m2docgen Toolbox
 %% Description
 % The Toolbox will be uninstalled by removing the folder from the matlab search path
 % 
@@ -8,5 +8,5 @@
 
 cd(fileparts(which(mfilename)));
 rmpath(genpath('.'));
-disp("m2doc is Uninstalled / Removed!");
+disp("m2docgen is Uninstalled / Removed!");
 % eof;
