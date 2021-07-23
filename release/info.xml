@@ -10,7 +10,7 @@
     <!-- to parse the file -->
     <matlabrelease>2020a</matlabrelease>
     <!-- (Required) Title of toolbox. Appears in the Contents pane -->
-    <name>m2doc</name>
+    <name>m2docgen</name>
     <!-- (Required) Label for the toolbox. pick one: -->
     <!-- matlab, toolbox, simulink, blockset, links_targets  -->
     <type>toolbox</type>
@@ -18,7 +18,7 @@
     <!-- but required to parse the file -->
     <icon/>
     <!-- (Required if you supply help) Relative path to help (HTML) folder -->
-    <help_location>m2doc_documentation</help_location>
+    <help_location>m2docgen_documentation</help_location>
     <!-- (Required if you supply help) Icon used in the Help browser TOC -->
     <!-- Ignored in R2015a and later -->
     <help_contents_icon/>

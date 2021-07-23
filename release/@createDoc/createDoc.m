@@ -43,7 +43,7 @@ classdef createDoc < handle
 %   htmlTemplate - string:  ["relative_folder_name"]
 %       Define the folder containing the html template files that will
 %       define the structure and look of the exported documents. The path
-%       must be relative to m2docs tempalte folder.
+%       must be relative to m2docgens tempalte folder.
 %   startpage - string array: ["name_of_landing_page_html_file_name"]
 %       The very first toc-element will be displayed when opening the html
 %       documentation, but is not a regular function/class m-file. Create
@@ -65,7 +65,7 @@ classdef createDoc < handle
 %           be found under a new sub-toc element instead of the root dir:
 %           Mytoolbox->Vehicles
 %   m2docFolder - string:
-%       entire path to the m2doc base folder
+%       entire path to the m2docgen base folder
 %   verbose - boolean: false
 %       If true, then more intermediate steps will be documented in the
 %       command window.
@@ -124,7 +124,7 @@ methods (Access = public)
         obj.verbose        = opts.verbose;
         obj.toolboxName    = opts.toolboxName;
         if obj.verbose
-            disp("Sucessfully created m2doc object");
+            disp("Sucessfully created m2docgen object");
         end
 
         % Generate list of files to convert
@@ -160,7 +160,7 @@ end % classdef
 
 function templatePath = checkTemplatePath(opts)
 % this function checks the user input in opts.htmlTemplate: Is it a valid
-% global path? Is it a local path within m2doc?
+% global path? Is it a local path within m2docgen?
 customPath = opts.htmlTemplate;
 %% check if it is empty. 
 %if yes, assume default template in m2html 
