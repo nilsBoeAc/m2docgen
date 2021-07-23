@@ -1,0 +1,72 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>Description of GenerateTocStructure</title>
+<meta name="keywords" content="GenerateTocStructure">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="generator" content="m2docgen &copy 2021: Nils Boehnisch">
+<meta name="robots" content="index, follow">
+<link type="text/css" rel="stylesheet" href="ressources\m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+
+<div><a class = "image" href="Welcome_to_m2docgen.html"><img border="0" src="ressources\logo.jpg"></a></div>
+
+<!-- START Description: / important comment -->
+<h2><a name="_description"></a>Description: <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">   This function assignes each file a table of contents path. For Example,
+   if a file can be found unter /MyToolbox/Vehicles/Air/plane.m and the
+   obj.toc is structured like "/MyToolbox/Aircraft", then each file in
+   the Vehicles/Air/-subfolder will be assigned the toc path 
+   "/MyToolbox/Aircraft". This works by (ONLY) checking the last folder of
+   the current .m file and cross-referencing it by revursively going
+   through the obj.toc structure, finding the last folder and writing the
+   current toc path to the file list.
+</pres></div>
+<!-- END Description: / important comment -->
+<!-- START Syntax: / important comment -->
+<h2><a name="_description"></a>Syntax: <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">   obj.GenerateTocStructure
+</pres></div>
+<!-- END Syntax: / important comment -->
+<!-- START Input: / important comment -->
+<h2><a name="_description"></a>Input: <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">   no direct inputs
+       gets obj.fileList
+</pres></div>
+<!-- END Input: / important comment -->
+<!-- START Output: / important comment -->
+<h2><a name="_description"></a>Output: <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">   no direct outputs
+       saves obj.fileList
+</pres></div>
+<!-- END Output: / important comment -->
+<!-- START Disclaimer: / important comment -->
+<h2><a name="_description"></a>Disclaimer: <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">
+ Author: Pierre Ollfisch
+ Copyright (c) 2021</pres></div>
+<!-- END Disclaimer: / important comment -->
+<!-- START TOTAL_CALL / important comment-->
+<h2><a name="_cross"></a>Function References<a href="#_top"></a></h2><hr class="btw">
+<!-- START NAME_CALL -->
+<pre class = "text">This function calls:</pre><ul>
+
+<li><a href="createDoc.html" class="code" title="Go To Function">createDoc</a></li>
+
+<li><a href="printToc.html" class="code" title="Go To Function">printToc</a></li>
+<!-- functRef above / important comment -->
+</ul>
+<!-- END NAME_CALL -->
+<!--{TOTAL_CALL} -->
+<!-- END TOTAL_CALL / important comment-->
+<!-- CONTENT_FROM_M2DOC -->
+<!-- the comment above and this one will be replaced by the actual content -->
+
+<hr class="last"> 
+<address>Generated on 23-Jul-2021 by <strong><a class = "image" href="Welcome_to_m2docgen.html" title="Matlab Documentation">m2docgen</a></strong> &copy; 2021 </address>
+</body>
+</html>
