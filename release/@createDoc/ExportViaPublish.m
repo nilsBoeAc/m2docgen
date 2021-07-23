@@ -1,12 +1,12 @@
 function ExportViaPublish(obj, inputPath, exportPath)
-% function directly exports a file to html with MATLABs publish
+% function directly exports a file to html with MATLABs editor 'save to'
 %% Description:
-%   This function is part of m2doc and converts a file into a html
+%   This function is part of m2docgen and converts a file into a html
 %   document a matlab build in function. Publish() was not used as it didnt
 %   work as expected. 
 %   
 %% Syntax:
-%   [m2doc].ExportViaPublish(inputPath, exportPath)
+%   [m2docgen].ExportViaPublish(inputPath, exportPath)
 %
 %% Input:
 % required input values

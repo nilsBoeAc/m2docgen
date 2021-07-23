@@ -1,5 +1,4 @@
-% create options struct for m2docgen with a custom toc structure. Read the
-% custom_structure page in the m2docgen documentation.
+% create options struct for m2docgen
 %% Options:
 %   toolboxName - string : "Name_of_the_toolbox"
 %       Distinct name that will be shown in the documentation
@@ -66,12 +65,7 @@ opts = struct(  'toolboxName',      "m2docgen", ...
                 'startPage',        ["Welcome_to_m2docgen.html"], ...
                 'toc',              [], ...
                 'verbose',          false);
-            
-opts.toc        = {"Welcome_to_m2docgen",  "/",    {} ; ...
-                    "Additional",       "help", {}};
-opts.toc{1,3}   = {"Dummy", "@Dummy", {};
-                    "MFile", "@MFile", {};
-                    "createDoc", ["@createDoc" "@TemplateHTML"], {}};  
+             
 
 % make sure to have added m2docgen to the matlab path
 res = m2docgen(opts);

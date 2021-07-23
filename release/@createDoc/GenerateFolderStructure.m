@@ -1,12 +1,12 @@
 function GenerateFolderStructure(obj)
-% generates the specified folder structure for m2doc documentation
+% generates the specified folder structure for m2docgen documentation
 %% Description:
-%   This function is part of m2doc and creates the folder structure. If the
-%   user specified a specific folder structure, then this function will
+%   This function is part of m2docgen and creates the folder structure. If 
+%   the user specified a specific folder structure, then this function will
 %   generate that.
 %   
 %% Syntax:
-%   [m2doc].GenerateFolderStructure;
+%   [m2docgen].GenerateFolderStructure;
 %
 %% Input:
 %   no input values required
