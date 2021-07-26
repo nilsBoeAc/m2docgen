@@ -42,7 +42,10 @@ strOutFolder    = strOutFolder(strOutFolder ~= "");
 idx             = find(strOutFolder == mFolder);
 helpTocPath     = strOutFolder(idx+1:end);
 helpTocStr      = fullfile(helpTocPath{:});
-
+% the search database index function doesnt like backslashs in the info.xml
+if contains(helpTocStr, filesep)
+    helpTocStr = strrep(helpTocStr,filesep, "/");
+end
 % write info.xml and replace the placeholders with the correct information
 templateTxt = strrep(templateTxt,"{TOOLBOXNAME}",toolboxName);
 templateTxt = strrep(templateTxt,"{TOOLBOXLOCATION}",helpTocStr);
