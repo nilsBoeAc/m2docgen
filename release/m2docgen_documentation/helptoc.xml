@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- $Date: 2021-07-23 11:55:28 $ -->
+<!-- $Date: 2022-02-18 14:36:10 $ -->
 
 <toc version="2.0">
 
@@ -10,7 +10,6 @@
     <tocitem target="@MFile.html" image="$toolbox/matlab/icons/book_mat.gif">@MFile
         <tocitem target="MFile.html">MFile</tocitem>
         <tocitem target="checkCrossRef.html">checkCrossRef</tocitem>
-        <tocitem target="noComments.html">noComments</tocitem>
         <tocitem target="parseFile.html">parseFile</tocitem>
         <tocitem target="reduceText.html">reduceText</tocitem>
     </tocitem>
@@ -38,6 +37,10 @@
     <tocitem target="Templates.html" image="$toolbox/matlab/icons/book_mat.gif">Templates
         <tocitem target="template_class_header.html">template_class_header</tocitem>
         <tocitem target="template_function_header.html">template_function_header</tocitem>
+    </tocitem>
+    <tocitem target="additional Functions.html" image="$toolbox/matlab/icons/book_mat.gif">additional Functions
+        <tocitem target="findCodeBlock.html">findCodeBlock</tocitem>
+        <tocitem target="removeComments.html">removeComments</tocitem>
     </tocitem>
     <tocitem target="help.html" image="$toolbox/matlab/icons/book_mat.gif">help
         <tocitem target="custom_structure.html">custom_structure</tocitem>
