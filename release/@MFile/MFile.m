@@ -75,9 +75,10 @@ classdef MFile < handle
         end % Constructor
 
         function set.path(obj,p)
+            % set a filesep at the end
             tmp = char(p);
-            if(tmp(end)~="\")
-                p = p+"\";
+            if(tmp(end)~=filesep)
+                p = p+filesep;
             end
             obj.path = p;
         end % function set.path
@@ -94,6 +95,7 @@ classdef MFile < handle
         end % function get.type
         
         function addDummy(obj,dum)
+            % adds a Dummy to the Dummy List in Object
             obj.dummyList{end+1,1} = dum;
         end % function addDummy
 
@@ -104,6 +106,5 @@ classdef MFile < handle
         parseFile(obj)
         checkCrossRef(obj,fctlist)
         redTxt = reduceText(obj,txt)
-        redTxt = noComments(obj, txt)
     end % methods (external)
 end % end classdef
