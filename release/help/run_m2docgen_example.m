@@ -52,7 +52,7 @@
 cPath = fileparts(which(mfilename));
 
 mF = string(fileparts(cPath));
-oF = mF+"\m2docgen_documentation";
+oF = fullfile(mF,"m2docgen_documentation");
 
 opts = struct(  'toolboxName',      "m2docgen", ...
                 'delOld',           true, ...
