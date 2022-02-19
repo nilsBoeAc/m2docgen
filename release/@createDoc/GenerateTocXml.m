@@ -68,21 +68,19 @@ function GenerateTocXml(obj)
 
     for i = 1:length(toc)
         newItem = false;
-        closeItem = false;
 
         if currentLevel < level(i)
-%             currentLevel = currentLevel + 1;
-            if currentToc(currentLevel) ~= tocSplit{i}(currentLevel)
-                closeItem = true;
-            end
             currentLevel = level(i);
-%             diffLevel    = level(i) - currentLevel;
             currentToc(end+1) = tocSplit{i}(currentLevel);
             newItem = true;
+
         elseif currentLevel > level(i)
-            fprintf(tocFid,'%s</tocitem>\n',getSpaces(currentLevel));
-            currentLevel = currentLevel - 1;
-            currentToc(end) = [];
+            diffLevel = currentLevel-level(i);
+            for j = diffLevel:-1:1
+              fprintf(tocFid,'%s</tocitem>\n',getSpaces(currentLevel));
+              currentLevel = currentLevel - 1;
+              currentToc(end) = [];
+            end
         end
         
         if currentToc(currentLevel) ~= tocSplit{i}(currentLevel)
