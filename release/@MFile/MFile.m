@@ -52,6 +52,7 @@ classdef MFile < handle
         classBlocks = ["METHODS", "PROPERTIES"]; % CONSTRUCTOR?
         
         dummyList   = {}; %List with dummies
+        insideFunctions struct;
     end
     
     properties (Dependent)
@@ -95,7 +96,8 @@ classdef MFile < handle
         end % function get.type
         
         function addDummy(obj,dum)
-            % adds a Dummy to the Dummy List in Object
+            % Add a dummy to DummyList Object
+            
             obj.dummyList{end+1,1} = dum;
         end % function addDummy
 

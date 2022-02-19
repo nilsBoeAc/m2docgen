@@ -31,7 +31,7 @@ function parseFile(obj)
     
     %% Check for SHORT_DESC (has to be first comment line)
     cL = char(txt(2)); cL = strrep(cL,' ','');
-    if ~(cL(1:2) == "%%")
+    if ~(cL(1:2) == "%%") && contains(upper(cL),"%")
         line = 2;
         while(1)
             line = line+1;
@@ -40,8 +40,8 @@ function parseFile(obj)
                 break;
             end
             cL = char(txt(line));
-            cL = strrep(cL,' ','');
-            if (contains(upper(cL),"%%")) && ~contains(upper(cL),"'%%") && ~contains(upper(cL),'"%%')
+            cL = strrep(cL,' ',''); % current line without spaces
+            if (contains(upper(cL),"%%")) && ~contains(upper(cL),"'%%") && ~contains(upper(cL),'"%%') || isempty(cL)
                 lastLine = line;
                 break;
             end
@@ -157,11 +157,17 @@ function parseFile(obj)
 
             % if tmpTXT is not empty, than the definiton is in the current file, as well
             if ~isempty(tmpTXT)
-                disp("  -> Function def in Class found! -> "+methodsList(i));
                 % find complete function code to store and to use at "own" file
                 codeBlock = findCodeBlock(obj.text,methodsList(i));
+                inFunct.name = methodsList(i);
+                inFunct.text = codeBlock;
+                if isempty(obj.insideFunctions)
+                    obj.insideFunctions = inFunct;
+                else
+                    obj.insideFunctions(end+1) = inFunct;
+                end
             end
         end
-
     end % end if is class
+    
 end % end function parseFile
