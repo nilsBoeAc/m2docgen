@@ -152,7 +152,7 @@ function parseFile(obj)
 
         %% search for functions/methods defined in the class files 
         for i=1:length(methodsList)
-            idxSum = contains(obj.text,"function") & contains(obj.text,methodsList(i));
+            idxSum = contains(obj.text,"function ") & contains(obj.text,methodsList(i));
             tmpTXT = obj.text(idxSum);
 
             % if tmpTXT is not empty, than the definiton is in the current file, as well
