@@ -1,0 +1,5 @@
+function addDummy(obj,dum)
+% Add a dummy to DummyList Object
+
+obj.dummyList{end+1,1} = dum;
+end % function addDummy

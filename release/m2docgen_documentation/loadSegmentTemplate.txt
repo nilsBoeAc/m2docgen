@@ -1,0 +1,9 @@
+function strTxt = loadSegmentTemplate(obj, path)
+% loads a (clear text, non binary) text file and returns the
+% content line by line as a char vector
+fID = fopen(path);
+txtCell = textscan(fID,'%s','delimiter','
+');
+fclose(fID);
+strTxt = string(txtCell{1});
+end % function loadSegmentTemplate
