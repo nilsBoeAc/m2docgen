@@ -1,3 +1,4 @@
+% Script:
 % create options struct for m2docgen
 %% Options:
 %   toolboxName - string : "Name_of_the_toolbox"
