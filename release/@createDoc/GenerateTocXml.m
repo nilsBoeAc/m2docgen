@@ -43,6 +43,7 @@ function GenerateTocXml(obj)
         startHTMLPath = startPage;
     end
 
+    %% read fileList and Sort
     name = repmat("",length(obj.fileList),1);
     toc  = repmat("",length(obj.fileList),1);
     level = zeros(length(obj.fileList),1);
@@ -55,54 +56,50 @@ function GenerateTocXml(obj)
         level(i,1) = length(tmp);
         tocSplit{i,1} = tmp;
     end
+
+    tocLevelsWN = repmat("",length(level),max(level)+1);
+    tocLevels = repmat("",length(level),max(level));
+    for i = 1:length(tocSplit)
+      lgt = length(tocSplit{i});
+      tocLevelsWN(i,1:lgt+1) = [tocSplit{i},"0000"+name(i)];
+      tocLevels(i,1:lgt)     =  tocSplit{i};
+    end
  
-    [toc,idx]   = sort(toc);
+    [~,idx] = sortrows(lower(tocLevelsWN));
+    tocLevels = tocLevels(idx,:);
     name = name(idx);
     level = level(idx);
-    tocSplit = tocSplit(idx);
 
-
-    currentToc   = tocSplit{1}(1);
-    currentLevel = 1;
+    %% Create Toc XLM with sorted List
+    currentToc   = tocLevels(1,1);
     fprintf(tocFid,'<tocitem target="%s" image="$toolbox/matlab/icons/book_mat.gif">%s\n',startHTMLPath, currentToc);
 
-    for i = 1:length(toc)
-        newItem = false;
+    currentToc   = tocLevels(1,:);
+    currentLevel = level(1);
+    for i = 1:length(tocLevels)
+        compareLV = currentToc == tocLevels(i,:);
+        idx = find(compareLV(1:level(i))==0,1);
 
-        if currentLevel < level(i)
-            currentLevel = level(i);
-            currentToc(end+1) = tocSplit{i}(currentLevel);
-            newItem = true;
-
-        elseif currentLevel > level(i)
-            diffLevel = currentLevel-level(i);
-            for j = diffLevel:-1:1
-              fprintf(tocFid,'%s</tocitem>\n',getSpaces(currentLevel));
-              currentLevel = currentLevel - 1;
-              currentToc(end) = [];
-            end
-        end
-        
-        if currentToc(currentLevel) ~= tocSplit{i}(currentLevel)
-            fprintf(tocFid,'%s</tocitem>\n',getSpaces(currentLevel));
-            newItem = true;
+        % close Items down to the point where the change starts
+        for j = currentLevel:-1:idx
+            closeItem(tocFid,currentLevel);
+            currentLevel = currentLevel - 1;
         end
 
-        if newItem
-            currentToc(end) = tocSplit{i}(currentLevel);
-            htmlpath = tocSplit{i}(currentLevel) + ".html";
-            fileName = tocSplit{i}(currentLevel);
-            % open new tocitem
-            fprintf(tocFid,'%s<tocitem target="%s" image="$toolbox/matlab/icons/book_mat.gif">%s\n',getSpaces(currentLevel),htmlpath, fileName);
+        % open Items ip to the level required
+        for j = idx:level(i)
+            currentLevel = currentLevel + 1;
+            openItem(tocFid,currentLevel,tocLevels(i,currentLevel) + ".html",tocLevels(i,currentLevel));
         end
+
+        % write current Item
+        currentToc = tocLevels(i,:);
+        currentLevel = level(i);
+        writeItem(tocFid,currentLevel,name(i)+".html",name(i));
  
-         % write Item
-        tmpFileName = name(i);
-        htmlpath  = fullfile(tmpFileName + ".html");
-        fileName = tmpFileName;
-        fprintf(tocFid,'%s<tocitem target="%s">%s</tocitem>\n',getSpaces(currentLevel+1),htmlpath, fileName);        
     end
     
+    % close remaining opem items
     for i = currentLevel:-1:1
         fprintf(tocFid,'%s</tocitem>\n',getSpaces(i));
     end
@@ -113,6 +110,18 @@ function GenerateTocXml(obj)
     disp("Generated the helptoc.xml file!");
 
 end % end
+
+function openItem(tocFid,currentLevel,htmlpath,fileName)
+    fprintf(tocFid,'%s<tocitem target="%s" image="$toolbox/matlab/icons/book_mat.gif">%s\n',getSpaces(currentLevel),htmlpath, fileName);
+end
+
+function closeItem(tocFid,currentLevel)
+    fprintf(tocFid,'%s</tocitem>\n',getSpaces(currentLevel));
+end
+
+function writeItem(tocFid,currentLevel,htmlpath,fileName)
+    fprintf(tocFid,'%s<tocitem target="%s">%s</tocitem>\n',getSpaces(currentLevel+1),htmlpath, fileName);
+end
 
 function spaces = getSpaces(level)
     spaces = "";
