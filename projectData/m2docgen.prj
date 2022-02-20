@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration file="C:\Users\pubbe\Documents\GitHub\m2doc\private\m2docgen.prj" location="C:\Users\pubbe\Documents\GitHub\m2doc\private" name="m2docgen" target="target.toolbox" target-name="Package Toolbox">
+  <configuration file="C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\projectData\m2docgen.prj" location="C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\projectData" name="m2docgen" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>m2docgen</param.appname>
     <param.authnamewatermark>Nils Böhnisch, Pierre Ollfisch</param.authnamewatermark>
     <param.email>m2docgen@outlook.com</param.email>
@@ -8,7 +8,7 @@
     <param.description>This program converts the header of matlab code files into HTML documents and adds those to the matlab documentation.
 See "Welcome_to_m2doc.mlx" page!</param.description>
     <param.screenshot>${PROJECT_ROOT}\new_logo.jpg</param.screenshot>
-    <param.version>1.1</param.version>
+    <param.version>1.2</param.version>
     <param.output>${PROJECT_ROOT}\m2docgen.mltbx</param.output>
     <param.products.name />
     <param.products.id />
@@ -21,7 +21,7 @@ See "Welcome_to_m2doc.mlx" page!</param.description>
     <param.demosxml />
     <param.apps />
     <param.registered.apps />
-    <param.docs>C:\Users\pubbe\Documents\GitHub\m2doc\release\info.xml</param.docs>
+    <param.docs>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\info.xml</param.docs>
     <param.getting.started.guide />
     <param.matlabpath.excludes />
     <param.javaclasspath.excludes />
@@ -76,33 +76,41 @@ See "Welcome_to_m2doc.mlx" page!</param.description>
       <param.additional.sw.linux.url />
     </unset>
     <fileset.rootdir>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release</file>
     </fileset.rootdir>
     <fileset.rootfiles>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\@createDoc</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\@Dummy</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\@MFile</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\@TemplateHTML</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\help</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\info.xml</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\License.txt</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\m2docgen.m</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\m2docgen_documentation</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\m2docgen_install.m</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\m2docgen_uninstall.m</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\Templates</file>
-      <file>C:\Users\pubbe\Documents\GitHub\m2doc\release\Welcome_to_m2docgen.mlx</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\@createDoc</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\@Dummy</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\@MFile</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\@TemplateHTML</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\additional Functions</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\help</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\info.xml</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\License.txt</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\m2docgen.m</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\m2docgen_documentation</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\m2docgen_install.m</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\m2docgen_uninstall.m</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\Templates</file>
+      <file>C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\release\Welcome_to_m2docgen.mlx</file>
     </fileset.rootfiles>
     <fileset.depfun.included />
     <fileset.depfun.excluded />
     <fileset.package />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}" name="m2docgen.mltbx" optional="false">C:\Users\pubbe\Documents\GitHub\m2doc\private\m2docgen.mltbx</file>
+      <file location="${PROJECT_ROOT}" name="m2docgen.mltbx" optional="false">C:\Users\Nils Böhnisch\Documents\Programfiles\GitHub\m2doc\projectData\m2docgen.mltbx</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>C:\Program Files\MATLAB\R2020a</root>
-      <toolboxes />
+      <root>C:\Program Files\MATLAB\R2021b</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
     </matlab>
     <platform>
       <unix>false</unix>

@@ -3,8 +3,8 @@
 "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 <head>
-<title>Description of GenerateTocStructure</title>
-<meta name="keywords" content="GenerateTocStructure">
+<title>Description of GenerateTocXml_old</title>
+<meta name="keywords" content="GenerateTocXml_old">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="m2docgen &copy 2021: Nils Boehnisch">
 <meta name="robots" content="index, follow">
@@ -15,35 +15,41 @@
 
 <div><a class = "image" href="Welcome_to_m2docgen.html"><img border="0" src="ressources\logo.jpg"></a></div>
 
+<h1>GenerateTocXml_old </h1> <hr class="btw">
+<!-- START SHORT_DESC / important comment -->
+<div><pre class="firstDesc"> this function generates the helptoc.xml file that controls the displayed
+ table of contents in the matlab documentation of the toolbox.</pre></div>
+<!-- END SHORT_DESC / important comment -->
 <!-- START Description: / important comment -->
 <h2><a name="_description"></a>Description: <a href="#_top"></a></h2><hr  class="btw">
-<div class="fragment"><pre class="text">   This function assignes each file a table of contents path. For Example,
-   if a file can be found unter /MyToolbox/Vehicles/Air/plane.m and the
-   obj.toc is structured like "/MyToolbox/Aircraft", then each file in
-   the Vehicles/Air/-subfolder will be assigned the toc path 
-   "/MyToolbox/Aircraft". This works by (ONLY) checking the last folder of
-   the current .m file and cross-referencing it by revursively going
-   through the obj.toc structure, finding the last folder and writing the
-   current toc path to the file list.
-</pres></div>
+<div class="fragment"><pre class="text">   This function loads a template of an xml file which controlls the table
+   of content structure of the custom MATLAB toolbox documentation. The
+   structure will follow the one given by the cell structure obj.toc
+   </pres></div>
 <!-- END Description: / important comment -->
 <!-- START Syntax: / important comment -->
 <h2><a name="_description"></a>Syntax: <a href="#_top"></a></h2><hr  class="btw">
-<div class="fragment"><pre class="text">   obj.GenerateTocStructure
+<div class="fragment"><pre class="text">   obj.GenerateTocXml
 </pres></div>
 <!-- END Syntax: / important comment -->
 <!-- START Input: / important comment -->
 <h2><a name="_description"></a>Input: <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text">   no direct inputs
-       gets obj.fileList
+       requires obj.outputFolder
+       requires obj.fileList
+       requires obj.toc
 </pres></div>
 <!-- END Input: / important comment -->
 <!-- START Output: / important comment -->
 <h2><a name="_description"></a>Output: <a href="#_top"></a></h2><hr  class="btw">
-<div class="fragment"><pre class="text">   no direct outputs
-       saves obj.fileList
+<div class="fragment"><pre class="text">   saves helptoc.xml to the folder specified by obj.outputFolder
 </pres></div>
 <!-- END Output: / important comment -->
+<!-- START References: / important comment -->
+<h2><a name="_description"></a>References: <a href="#_top"></a></h2><hr  class="btw">
+<div class="fragment"><pre class="text">   m2html - lines 654 - 690 - used as inspiration
+</pres></div>
+<!-- END References: / important comment -->
 <!-- START Disclaimer: / important comment -->
 <h2><a name="_description"></a>Disclaimer: <a href="#_top"></a></h2><hr  class="btw">
 <div class="fragment"><pre class="text">
@@ -55,11 +61,7 @@
 <!-- START NAME_CALL -->
 <pre class = "text">This function calls:</pre><ul>
 
-<li><a href="m2docgen.html" class="code" title="Go To Function">m2docgen</a></li>
-
-<li><a href="createDoc.html" class="code" title="Go To Function">createDoc</a></li>
-
-<li><a href="printToc.html" class="code" title="Go To Function">printToc</a></li>
+<li><a href="GenerateTocXml.html" class="code" title="Go To Function">GenerateTocXml</a></li>
 <!-- functRef above / important comment -->
 </ul>
 <!-- END NAME_CALL -->
