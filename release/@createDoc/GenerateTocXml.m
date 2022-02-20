@@ -1,117 +1,131 @@
 function GenerateTocXml(obj)
-% this function generates the helptoc.xml file that controls the displayed
-% table of contents in the matlab documentation of the toolbox.
-%% Description:
-%   This function loads a template of an xml file which controlls the table
-%   of content structure of the custom MATLAB toolbox documentation. The
-%   structure will follow the one given by the cell structure obj.toc
-%   
-%% Syntax:
-%   obj.GenerateTocXml
-%
-%% Input:
-%   no direct inputs
-%       requires obj.outputFolder
-%       requires obj.fileList
-%       requires obj.toc
-%
-%% Output:
-%   saves helptoc.xml to the folder specified by obj.outputFolder
-%
-%% References:
-%   m2html - lines 654 - 690 - used as inspiration
-%
-%% Disclaimer:
-%
-% Author: Pierre Ollfisch
-% Copyright (c) 2021
+    % this function generates the helptoc.xml file that controls the displayed
+    % table of contents in the matlab documentation of the toolbox.
+    %% Description:
+    %   This function loads a template of an xml file which controlls the table
+    %   of content structure of the custom MATLAB toolbox documentation. The
+    %   structure will follow the one given by the cell structure obj.toc
+    %   
+    %% Syntax:
+    %   obj.GenerateTocXml
+    %
+    %% Input:
+    %   no direct inputs
+    %       requires obj.outputFolder
+    %       requires obj.fileList
+    %       requires obj.toc
+    %
+    %% Output:
+    %   saves helptoc.xml to the folder specified by obj.outputFolder
+    %
+    %% References:
+    %   m2html - lines 654 - 690 - used as inspiration
+    %
+    %% Disclaimer:
+    %
+    % Author: Pierre Ollfisch
+    % Copyright (c) 2021
+    
+    %% generate file to write toc to
+    tocFile = fullfile(obj.outputFolder,"helptoc.xml");
+    tocFid = fopen(tocFile,'wt');
+    
+    %% write standard beginning of file
+    fprintf(tocFid,'<?xml version=''1.0'' encoding=''utf-8'' ?>\n');
+    fprintf(tocFid,'<!-- $Date: %s $ -->\n\n', datestr(now,31));
+    fprintf(tocFid,'<toc version="2.0">\n\n');
 
-%% generate file to write toc to
-tocFile = fullfile(obj.outputFolder,"helptoc.xml");
-[tocFid, debugMsg] = fopen(tocFile,'wt');
-
-%% write standard beginning of file
-fprintf(tocFid,'<?xml version=''1.0'' encoding=''utf-8'' ?>\n');
-fprintf(tocFid,'<!-- $Date: %s $ -->\n\n', datestr(now,31));
-fprintf(tocFid,'<toc version="2.0">\n\n');
-%% write toc struture of toolbox into file
-startHTMLPath = findStartPage(obj);
-writeTocRec(tocFid, obj.fileList, obj.toc, "", "",startHTMLPath);
-
-%% close file
-fprintf(tocFid,'\n</toc>');
-fclose(tocFid);
-disp("Generated the helptoc.xml file!")
-end % end function GenerateTocXml
-% ---------------- start local functions ---------------
-
-function writeTocRec(tocFid, fileList, tocCell, preTxt, tocPath, startHTMLPath)
-% tocFid = file id from fopen to the helptoc.xml file
-currTocCell = tocCell;
-currPreTxt  = preTxt; % preTxt are the spaces before a line in the xml document
-% index i:  toc element from currToc
-% index ii: file element from fileList
-for i = 1:size(currTocCell,1)
-    % loop through the currrent elements in the toc cell
-    % add files to that element if available
-    currTocElement  = currTocCell{i,1};
-    currTocPath     = fullfile(tocPath, currTocElement);
-    if (tocPath == "") && (preTxt == "") && (i == 1)
-        % case only for the very first element
-        pathToHtml = startHTMLPath;
+    %% write toc struture of toolbox into file
+    startPage = string(obj.startPage);
+    if startPage == ""
+        startHTMLPath = obj.toolboxName + ".html";
     else
-        pathToHtml = getHeadingHTMLPath(currTocElement);
+        startHTMLPath = startPage;
     end
-    % write current element to file
-    tocName         = currTocElement; % Text that will appear in the toc
-    % fprintf(%s spaces  %s relative-path-to-html-file  %s displayed name)
-    fprintf(tocFid,['%s<tocitem target="%s" ', ... 
-        'image="$toolbox/matlab/icons/book_mat.gif">%s\n'], ...
-        currPreTxt, pathToHtml, tocName); 
-    
-    % if available, do the loop on subelements of that toc ("subfolders")
-    if ~isempty(currTocCell{i,3}) && iscell(currTocCell{i,3})
-        newPreTxt = currPreTxt + "    ";
-        writeTocRec(tocFid, fileList, currTocCell{i,3}, newPreTxt, currTocPath, startHTMLPath);
+
+    %% read fileList and Sort
+    name = repmat("",length(obj.fileList),1);
+    toc  = repmat("",length(obj.fileList),1);
+    level = zeros(length(obj.fileList),1);
+    tocSplit = cell(length(obj.fileList),1);
+
+    for i = 1:length(obj.fileList)
+        name(i,1) = string(obj.fileList(i).name);
+        toc(i,1)  = string(obj.fileList(i).toc);
+        tmp = strsplit(toc(i),filesep);
+        level(i,1) = length(tmp);
+        tocSplit{i,1} = tmp;
     end
-    
-    % loop throoug file list and add all files that belong to that toc
-    for ii = 1:size(fileList,1)
-        tmpFileToc  = fileList(ii).toc;
-        tmpFileName = fileList(ii).name;
-        % special flag if the file should be put in the root toc directory
-        rootFlag = false;
-        if tmpFileToc == "/" || tmpFileToc == "\"
-            if tocPath == ""
-                rootFlag = true;
-            end
+
+    tocLevelsWN = repmat("",length(level),max(level)+1);
+    tocLevels = repmat("",length(level),max(level));
+    for i = 1:length(tocSplit)
+      lgt = length(tocSplit{i});
+      tocLevelsWN(i,1:lgt+1) = [tocSplit{i},"0000"+name(i)];
+      tocLevels(i,1:lgt)     =  tocSplit{i};
+    end
+ 
+    [~,idx] = sortrows(lower(tocLevelsWN));
+    tocLevels = tocLevels(idx,:);
+    name = name(idx);
+    level = level(idx);
+
+    %% Create Toc XLM with sorted List
+    currentToc   = tocLevels(1,1);
+    fprintf(tocFid,'<tocitem target="%s" image="$toolbox/matlab/icons/book_mat.gif">%s\n',startHTMLPath, currentToc);
+
+    currentToc   = tocLevels(1,:);
+    currentLevel = level(1);
+    for i = 1:length(tocLevels)
+        compareLV = currentToc == tocLevels(i,:);
+        idx = find(compareLV(1:level(i))==0,1);
+
+        % close Items down to the point where the change starts
+        for j = currentLevel:-1:idx
+            closeItem(tocFid,currentLevel);
+            currentLevel = currentLevel - 1;
         end
-        if tmpFileToc == currTocPath || rootFlag
-            % fprintf(%s spaces  %s path_to_html_file  %s displayed name);
-            preSpaces = preTxt + "    ";
-            htmlpath  = fullfile(fileList(ii).htmlOutputPath, tmpFileName + ".html");
-            fileName = tmpFileName;
-            fprintf(tocFid,'%s<tocitem target="%s">%s</tocitem>\n', ...
-					preSpaces, htmlpath, fileName);
+
+        % open Items ip to the level required
+        for j = idx:level(i)
+            currentLevel = currentLevel + 1;
+            openItem(tocFid,currentLevel,tocLevels(i,currentLevel) + ".html",tocLevels(i,currentLevel));
         end
+
+        % write current Item
+        currentToc = tocLevels(i,:);
+        currentLevel = level(i);
+        writeItem(tocFid,currentLevel,name(i)+".html",name(i));
+ 
     end
     
-    % close current toc element
-    fprintf(tocFid,'%s</tocitem>\n', currPreTxt);
-end % end for i
-end % end local function writeTocRec
+    % close remaining opem items
+    for i = currentLevel:-1:1
+        fprintf(tocFid,'%s</tocitem>\n',getSpaces(i));
+    end
 
-function htmlPath = getHeadingHTMLPath(myName)
-% by default it should display a html file with the same name
-htmlPath = myName + ".html";
-end % end function getHeadingPath
+    %% close file
+    fprintf(tocFid,'\n</toc>');
+    fclose(tocFid);
+    disp("Generated the helptoc.xml file!");
 
-function htmlPath = findStartPage(obj)
+end % end
 
-startPage = string(obj.startPage);
-if startPage == ""
-    htmlPath = obj.toolboxName + ".html";
-else
-    htmlPath = startPage;
+function openItem(tocFid,currentLevel,htmlpath,fileName)
+    fprintf(tocFid,'%s<tocitem target="%s" image="$toolbox/matlab/icons/book_mat.gif">%s\n',getSpaces(currentLevel),htmlpath, fileName);
 end
+
+function closeItem(tocFid,currentLevel)
+    fprintf(tocFid,'%s</tocitem>\n',getSpaces(currentLevel));
+end
+
+function writeItem(tocFid,currentLevel,htmlpath,fileName)
+    fprintf(tocFid,'%s<tocitem target="%s">%s</tocitem>\n',getSpaces(currentLevel+1),htmlpath, fileName);
+end
+
+function spaces = getSpaces(level)
+    spaces = "";
+    for i=2:level
+        spaces = spaces + "   ";
+    end
 end

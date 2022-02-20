@@ -1,0 +1,26 @@
+function strT = removeBlocks(obj)
+listT = obj.listFilKeys;
+for i = 1:length(listT)
+key = listT(i);
+startKey = "START "+key; endKey = "END "+key; 
+tline = 0; startLine = []; endLine = [];
+while(1)
+tline = tline+1;
+if(tline>length(obj.str))
+break; 
+end
+
+if(contains(obj.str(tline),startKey))
+startLine = tline;
+end
+if(contains(obj.str(tline),endKey))
+endLine = tline;
+break;
+end
+end
+if(~isempty(startLine) || ~isempty(endLine))
+obj.str = [obj.str(1:startLine); obj.str(endLine:end)];
+end
+end
+strT = obj.str;
+end % function removeBlocks

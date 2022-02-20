@@ -1,0 +1,15 @@
+function mainHTML = addBlock(obj,mainHTML,strBlock,keyword)
+% this function looks for a magic comment (keyword) and inserts
+% the new content (strBlock) above the magic keyword
+tline = 0;
+while(1)
+tline = tline+1;
+if(tline>length(mainHTML))
+break;
+end
+if(contains(mainHTML(tline),keyword))
+mainHTML = [mainHTML(1:tline-1); strBlock; mainHTML(tline:end)];
+break;
+end
+end
+end % addBlock
