@@ -1,5 +1,0 @@
-function HelloDummy(obj)
-% Test Function
-
-displ("Test");
-end

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- $Date: 2022-02-19 23:18:04 $ -->
+<!-- $Date: 2022-02-20 12:04:34 $ -->
 
 <toc version="2.0">
 
@@ -47,10 +47,6 @@
    <tocitem target="additional Functions.html" image="$toolbox/matlab/icons/book_mat.gif">additional Functions
       <tocitem target="findCodeBlock.html">findCodeBlock</tocitem>
       <tocitem target="removeComments.html">removeComments</tocitem>
-      <tocitem target="@Dummy2.html" image="$toolbox/matlab/icons/book_mat.gif">@Dummy2
-         <tocitem target="Dummy2.html">Dummy2</tocitem>
-         <tocitem target="HelloDummy.html">HelloDummy</tocitem>
-      </tocitem>
    </tocitem>
    <tocitem target="help.html" image="$toolbox/matlab/icons/book_mat.gif">help
       <tocitem target="custom_structure.html">custom_structure</tocitem>
