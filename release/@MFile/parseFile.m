@@ -18,9 +18,17 @@ function parseFile(obj)
     %       adds "DUMMY" objects to obj
     %
     %% Disclaimer:
+    %   Last editor : Nils Böhnisch
+    %   Last edit on: 22.02.2022
     %
-    % Author: Pierre Ollfisch
-    % Copyright (c) 2021
+    %   Copyright (c) 2020 Nils Böhnisch, Pierre Ollfisch.
+    %
+    %   This file is part of m2docgen.
+    %
+    %   m2docgen is free software: you can redistribute it and/or modify
+    %   it under the terms of the GNU General Public License as published by
+    %   the Free Software Foundation, either version 3 of the License, or
+    %   any later version. Also see the file "License.txt".
     
     %% ToDo / Changelog:
     % - remove string manipulation that adds html div tags, now done in
@@ -31,7 +39,7 @@ function parseFile(obj)
     
     %% Check for SHORT_DESC (has to be first comment line)
     cL = char(txt(2)); cL = strrep(cL,' ','');
-    if ~(cL(1:2) == "%%") && contains(upper(cL),"%")
+    if ~isempty(cL) && length(cL)>1 && ~(cL(1:2) == "%%") && contains(upper(cL),"%")
         line = 2;
         while(1)
             line = line+1;
@@ -41,7 +49,7 @@ function parseFile(obj)
             end
             cL = char(txt(line));
             cL = strrep(cL,' ',''); % current line without spaces
-            if (contains(upper(cL),"%%")) && ~contains(upper(cL),"'%%") && ~contains(upper(cL),'"%%') || isempty(cL)
+            if (contains(upper(cL),"%%")) && ~contains(upper(cL),"'%%") && ~contains(upper(cL),'"%%') || isempty(cL) || cL(1)~="%"
                 lastLine = line;
                 break;
             end

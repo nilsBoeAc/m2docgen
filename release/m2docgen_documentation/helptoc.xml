@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- $Date: 2022-02-20 12:04:34 $ -->
+<!-- $Date: 2022-02-22 16:13:15 $ -->
 
 <toc version="2.0">
 
 <tocitem target="Welcome_to_m2docgen.html" image="$toolbox/matlab/icons/book_mat.gif">m2docgen
+   <tocitem target="License.html">License</tocitem>
    <tocitem target="m2docgen.html">m2docgen</tocitem>
    <tocitem target="m2docgen_install.html">m2docgen_install</tocitem>
    <tocitem target="m2docgen_uninstall.html">m2docgen_uninstall</tocitem>

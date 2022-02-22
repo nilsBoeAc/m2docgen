@@ -28,11 +28,16 @@ function m2docgen = m2docgen(opts)
 %   m2html
 %
 %% Disclaimer:
+%   Last editor:  Pierre Ollfisch
 %
-% Last editor:  Pierre Ollfisch
-% Last edit on: 23.07.2021
-% Code version: 1.3
-% Copyright (c) 2021
+%   Copyright (c) 2020 Nils Böhnisch, Pierre Ollfisch.
+%
+%   This file is part of m2docgen.
+%
+%   m2docgen is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   any later version. Also see the file "License.txt".
 
 %% ToDo / Changelog
 % - call this function with options structure instead of a single self

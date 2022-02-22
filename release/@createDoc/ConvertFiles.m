@@ -17,11 +17,17 @@ function ConvertFiles(obj)
     %   m2html
     %
     %% Disclaimer:
+    %   Last editor : Nils Böhnisch
+    %   Last edit on: 22.02.2022
     %
-    % Last editor:  Nils Böhnisch
-    % Last edit on: 19.02.2022
-    % Code version: 1.0
-    % Copyright (c) 2022
+    %   Copyright (c) 2020 Nils Böhnisch, Pierre Ollfisch.
+    %
+    %   This file is part of m2docgen.
+    %
+    %   m2docgen is free software: you can redistribute it and/or modify
+    %   it under the terms of the GNU General Public License as published by
+    %   the Free Software Foundation, either version 3 of the License, or
+    %   any later version. Also see the file "License.txt".
     
     %% loop through all files in m2docgen.fileList and convert them
     i = 0;

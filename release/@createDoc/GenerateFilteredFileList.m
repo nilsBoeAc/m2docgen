@@ -23,12 +23,29 @@ function GenerateFilteredFileList(obj)
 %   obj.GenerateFilteredFileList;
 %
 %% Disclaimer:
+%   Last editor : Nils Böhnisch
+%   Last edit on: 22.02.2022
 %
-% Author: Nils Böhnisch
-% Copyright (c) 2021
+%   Copyright (c) 2020 Nils Böhnisch, Pierre Ollfisch.
+%
+%   This file is part of m2docgen.
+%
+%   m2docgen is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   any later version. Also see the file "License.txt".
 
 %% generate overview of all files with .m as part of the name
-allFileList = dir(fullfile(obj.mFolder, '**\*.m*'));
+allFileList = dir(fullfile(obj.mFolder, "**"+filesep+"*.m*"));
+tmp  = dir(fullfile(obj.mFolder,"**"+filesep+"License.txt"));
+if ~isempty(tmp)
+  allFileList(end+1) = tmp;
+end
+
+tmp  = dir(fullfile(obj.mFolder,"**"+filesep+"COPYING.txt"));
+if ~isempty(tmp)
+  allFileList(end+1) = tmp;
+end
 
 %% remove unwanted struct fields from allFileList
 allFileList = rmfield(allFileList, ["date" "datenum" "bytes" "isdir"]);
@@ -63,7 +80,7 @@ end
 
 %% remove all non .m / .mlx files
 allExt      = string({allFileList.ext});
-idxExt      = allExt == ".m" | allExt == ".mlx";
+idxExt      = allExt == ".m" | allExt == ".mlx" | allExt == ".txt";
 allFileList = allFileList(idxExt);
 
 %% remove all unwanted folders

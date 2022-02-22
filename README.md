@@ -3,7 +3,7 @@ Welcome to m2docgen:
 
 This is only a short "README":
 
-m2docgen is a a program that converts .m files into html files and creates a structured xml file compatible with the matlab documentation.
+m2docgen is a program that converts .m files into html files and creates a structured xml file compatible with the matlab documentation.
 
 -----
 The Structure of this project is as follows:

@@ -17,11 +17,17 @@ function ExportViaPublish(obj, inputPath, exportPath)
 %  no direct output values
 %
 %% Disclaimer:
+%   Last editor : Nils Böhnisch
+%   Last edit on: 22.02.2022
 %
-% Last editor:  Pierre Ollfisch
-% Last edit on: 17.04.2021
-% Code version: 1.1
-% Copyright (c) 2021
+%   Copyright (c) 2020 Nils Böhnisch, Pierre Ollfisch.
+%
+%   This file is part of m2docgen.
+%
+%   m2docgen is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   any later version. Also see the file "License.txt".
 
 %% ToDo / Changelog
 % - initial version (17.04.2021 - po)
