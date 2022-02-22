@@ -14,43 +14,15 @@
 <a name="_top"></a>
 
 <div><a class = "image" href="Welcome_to_m2docgen.html"><img border="0" src="ressources\logo.jpg"></a></div>
-
 <h1>filSTR </h1> <hr class="btw">
 <!-- START SHORT_DESC / important comment -->
 <div><pre class="firstDesc"> this function looks for a string defined by "strRelaceMarker" and 
- replaces it with the string defined in "strOverwrite". 
-tline = 0;
-while(1)
-tline = tline+1;
-if(tline>length(entireTxt))
-break;
-end
-if(contains(entireTxt(tline),strReplaceMarker))
-splitSTR = split(entireTxt(tline),strReplaceMarker);
-fil = strOverwrite;
-fil(1) = splitSTR(1)+fil(1);
-fil(end) = fil(end) + splitSTR(end);
-if length(entireTxt) == 1
-entireTxt = [fil];
-else
-if tline == 1
-entireTxt = [fil; entireTxt(2:end)];
-elseif tline == length(entireTxt)
-entireTxt = [entireTxt(1:end-1); fil];
-else
-entireTxt = [entireTxt(1:tline-1); fil; entireTxt(tline+1:end)];
-end
-end
-tline = tline + length(fil) -1;
-break;
-end
-end
-end % filSTR</pre></div>
+ replaces it with the string defined in "strOverwrite". </pre></div>
 <!-- END SHORT_DESC / important comment -->
 <!-- CONTENT_FROM_M2DOC -->
 <!-- the comment above and this one will be replaced by the actual content -->
 
 <hr class="last"> 
-<address>Generated on 20-Feb-2022 by <strong><a class = "image" href="Welcome_to_m2docgen.html" title="Matlab Documentation">m2docgen</a></strong> &copy; 2022 </address>
+<address>Generated on 22-Feb-2022 by <strong><a class = "image" href="Welcome_to_m2docgen.html" title="Matlab Documentation">m2docgen</a></strong> &copy; 2022 </address>
 </body>
 </html>
