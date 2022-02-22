@@ -9,7 +9,7 @@
 % any later version.
 %
 % Find below the copy of the GNU General Public License
-% long with m2docgen.  See also <http://www.gnu.org/licenses/>.
+% long with m2docgen.  See also http://www.gnu.org/licenses/.
           
 -----------------------------------------------------------------------
 
