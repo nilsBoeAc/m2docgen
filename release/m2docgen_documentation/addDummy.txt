@@ -1,4 +1,0 @@
-function addDummy(obj,dum)
-% addDummy to List
-obj.dummyList{end+1,1} = dum;
-end % function addDummy
