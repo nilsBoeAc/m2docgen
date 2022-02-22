@@ -39,7 +39,7 @@ function parseFile(obj)
     
     %% Check for SHORT_DESC (has to be first comment line)
     cL = char(txt(2)); cL = strrep(cL,' ','');
-    if ~(cL(1:2) == "%%") && contains(upper(cL),"%")
+    if ~isempty(cL) && length(cL)>1 && ~(cL(1:2) == "%%") && contains(upper(cL),"%")
         line = 2;
         while(1)
             line = line+1;
@@ -49,7 +49,7 @@ function parseFile(obj)
             end
             cL = char(txt(line));
             cL = strrep(cL,' ',''); % current line without spaces
-            if (contains(upper(cL),"%%")) && ~contains(upper(cL),"'%%") && ~contains(upper(cL),'"%%') || isempty(cL)
+            if (contains(upper(cL),"%%")) && ~contains(upper(cL),"'%%") && ~contains(upper(cL),'"%%') || isempty(cL) || cL(1)~="%"
                 lastLine = line;
                 break;
             end

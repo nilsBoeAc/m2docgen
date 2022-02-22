@@ -36,7 +36,16 @@ function GenerateFilteredFileList(obj)
 %   any later version. Also see the file "License.txt".
 
 %% generate overview of all files with .m as part of the name
-allFileList = dir(fullfile(obj.mFolder, '**\*.m*'));
+allFileList = dir(fullfile(obj.mFolder, "**"+filesep+"*.m*"));
+tmp  = dir(fullfile(obj.mFolder,"**"+filesep+"License.txt"));
+if ~isempty(tmp)
+  allFileList(end+1) = tmp;
+end
+
+tmp  = dir(fullfile(obj.mFolder,"**"+filesep+"COPYING.txt"));
+if ~isempty(tmp)
+  allFileList(end+1) = tmp;
+end
 
 %% remove unwanted struct fields from allFileList
 allFileList = rmfield(allFileList, ["date" "datenum" "bytes" "isdir"]);
@@ -71,7 +80,7 @@ end
 
 %% remove all non .m / .mlx files
 allExt      = string({allFileList.ext});
-idxExt      = allExt == ".m" | allExt == ".mlx";
+idxExt      = allExt == ".m" | allExt == ".mlx" | allExt == ".txt";
 allFileList = allFileList(idxExt);
 
 %% remove all unwanted folders

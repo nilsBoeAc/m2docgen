@@ -103,8 +103,7 @@ classdef MFile < handle
         end % function get.type
         
         function addDummy(obj,dum)
-            % Add a dummy to DummyList Object
-            
+            % addDummy to List
             obj.dummyList{end+1,1} = dum;
         end % function addDummy
 

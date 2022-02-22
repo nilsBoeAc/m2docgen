@@ -13,7 +13,7 @@
 <a name="_top"></a>
 
 <div><a class = "image" href="{HOME_HTML}"><img border="0" src="{STYLE_FOLDER}logo.jpg"></a></div>
-
+<h1>{NAME} </h1> <hr class="btw">
 <!-- CONTENT_FROM_M2DOC -->
 <!-- the comment above and this one will be replaced by the actual content -->
 
