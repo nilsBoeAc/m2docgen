@@ -16,11 +16,18 @@ function createHTML(obj)
 %   no output values
 %
 %% Disclaimer:
+%   Last editor:  Pierre Ollfisch
+%   Last edit on: 07.04.2021
+%   Code version: 1.0
 %
-% Last editor:  Pierre Ollfisch
-% Last edit on: 07.04.2021
-% Code version: 1.0
-% Copyright (c) 2021
+%   Copyright (c) 2020 Nils Böhnisch, Pierre Ollfisch.
+%
+%   This file is part of m2docgen.
+%
+%   m2docgen is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   any later version. Also see the file "License.txt".
 
 %% ToDo / Changelog
 % - seperate from main class file (po - 07.04.2021)

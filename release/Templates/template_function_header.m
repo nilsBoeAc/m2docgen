@@ -26,11 +26,17 @@ function template_function_header()
 %   [Ref2]
 %
 %% Disclaimer:
+%   Last editor : Name LastName
+%   Last edit on: DD.MM.YYYY
 %
-% Last editor:  Name LastName
-% Last edit on: DD.MM.YYYY
-% Code version: X.Y.Z
-% Copyright (c) 2021
+%   Copyright (c) 2020 Nils Böhnisch, Pierre Ollfisch.
+%
+%   This file is part of m2docgen.
+%
+%   m2docgen is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   any later version. Also see the file "License.txt".
 
 %% ToDo / Changelog
 % - because the ToDo is seperated by an empty line from the rest of the

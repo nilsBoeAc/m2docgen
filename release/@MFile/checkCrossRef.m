@@ -19,11 +19,18 @@ function checkCrossRef(obj,fctlist)
 %   stores text dummies in obj
 %
 %% Disclaimer:
+%   Last editor:  Nils Böhnisch
+%   Last edit on: 22.02.2022
+%   Code version: 1.1
 %
-% Last editor:  Pierre Ollfisch
-% Last edit on: 22.03.2021
-% Code version: 1.1
-% Copyright (c) 2021
+%   Copyright (c) 2020 Nils Böhnisch, Pierre Ollfisch.
+%
+%   This file is part of m2docgen.
+%
+%   m2docgen is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   any later version. Also see the file "License.txt".
 
 % go through list and search file for function name
 objTxt          = obj.text;             % text from m-file
