@@ -51,65 +51,49 @@ function GenerateTocXml(obj)
         startHTMLPath = startPage;
     end
 
-    %% read fileList and Sort
-    name = repmat("",length(obj.fileList),1);
-    toc  = repmat("",length(obj.fileList),1);
-    level = zeros(length(obj.fileList),1);
-    tocSplit = cell(length(obj.fileList),1);
-
-    for i = 1:length(obj.fileList)
-        name(i,1) = string(obj.fileList(i).name);
-        toc(i,1)  = string(obj.fileList(i).toc);
-        tmp = strsplit(toc(i),filesep);
-        level(i,1) = length(tmp);
-        tocSplit{i,1} = tmp;
-    end
-
-    tocLevelsWN = repmat("",length(level),max(level)+1);
-    tocLevels = repmat("",length(level),max(level));
-    for i = 1:length(tocSplit)
-      lgt = length(tocSplit{i});
-      tocLevelsWN(i,1:lgt+1) = [tocSplit{i},"0000"+name(i)];
-      tocLevels(i,1:lgt)     =  tocSplit{i};
-    end
- 
-    [~,idx] = sortrows(lower(tocLevelsWN));
-    tocLevels = tocLevels(idx,:);
+    %% read fileList and sort entries
+    name   = string({obj.fileList(:).name});
+    toc    = string({obj.fileList(:).toc});
+    
+    sortIndex = join([toc', name'], '0000', 2);
+    [~,idx] = sortrows(lower(sortIndex));
+    
     name = name(idx);
-    level = level(idx);
-
+    toc  = toc(idx);
+    
+    
     %% Create Toc XLM with sorted List
-    currentToc   = tocLevels(1,1);
-    fprintf(tocFid,'<tocitem target="%s" image="$toolbox/matlab/icons/book_mat.gif">%s\n',startHTMLPath, currentToc);
-
-    currentToc   = tocLevels(1,:);
-    currentLevel = level(1);
-    for i = 1:length(tocLevels)
-        compareLV = currentToc == tocLevels(i,:);
-        idx = find(compareLV(1:level(i))==0,1);
-
+    
+    toc = cellfun(@(x) strsplit(x, filesep), toc, 'UniformOutput', false);
+    
+    % We add a dummy entry at the start and end to prevent edge cases
+    name = ["", name, ""];
+    toc  = [{{}}; toc(:); {{}}];
+    for ii = 2:numel(toc)
+        
+        nCommonLevels = min(numel(toc{ii-1}), numel(toc{ii}));
+        firstDifferentLevel = find(~strcmp(toc{ii-1}(1:nCommonLevels), toc{ii}(1:nCommonLevels)), 1);
+        if isempty(firstDifferentLevel)
+            firstDifferentLevel = nCommonLevels+1;
+        end
+        
         % close Items down to the point where the change starts
-        for j = currentLevel:-1:idx
-            closeItem(tocFid,currentLevel);
-            currentLevel = currentLevel - 1;
+        for jj = numel(toc{ii-1}):-1:firstDifferentLevel
+            closeItem(tocFid,jj);
         end
 
+        if ii == numel(toc)
+            break;
+        end
+        
         % open Items ip to the level required
-        for j = idx:level(i)
-            currentLevel = currentLevel + 1;
-            openItem(tocFid,currentLevel,tocLevels(i,currentLevel) + ".html",tocLevels(i,currentLevel));
+        for jj = firstDifferentLevel:numel(toc{ii})
+            openItem(tocFid,jj,toc{ii}{jj} + ".html",toc{ii}{jj});
         end
 
         % write current Item
-        currentToc = tocLevels(i,:);
-        currentLevel = level(i);
-        writeItem(tocFid,currentLevel,name(i)+".html",name(i));
+        writeItem(tocFid,numel(toc{ii}),name{ii}+".html",name{ii});
  
-    end
-    
-    % close remaining opem items
-    for i = currentLevel:-1:1
-        fprintf(tocFid,'%s</tocitem>\n',getSpaces(i));
     end
 
     %% close file
