@@ -57,7 +57,7 @@ end
 % write info.xml and replace the placeholders with the correct information
 templateTxt = strrep(templateTxt,"{TOOLBOXNAME}",toolboxName);
 templateTxt = strrep(templateTxt,"{TOOLBOXLOCATION}",helpTocStr);
-fprintf(infoID, templateTxt); % toolboxName, helpTocStr);
+fprintf(infoID, '%s', templateTxt); % toolboxName, helpTocStr);
 
 %% close file
 fclose(infoID);

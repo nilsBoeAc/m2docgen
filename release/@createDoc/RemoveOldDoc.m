@@ -33,7 +33,7 @@ if obj.verbose
 else
     warning('off');
 end
-rmdir(obj.outputFolder, 's'); % also removes subfolders and files
+[~] = rmdir(obj.outputFolder, 's'); % also removes subfolders and files
 % please close all programms that currently access the html documents
 % (e.g. browsers, matlab, editors, etc..)
 warning('on');
