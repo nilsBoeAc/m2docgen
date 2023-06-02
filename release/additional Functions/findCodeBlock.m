@@ -40,7 +40,7 @@ function codeBlock = findCodeBlock(text,functionName)
       end
       % increment or decrement endCounter
       if startLine ~= -1
-          if contains(currLine, strKeyword) % currLine still does not contain comments
+          if contains(currLine, strKeyword) && ~contains(currLine,"elseif") % currLine still does not contain comments
               endCounter = endCounter +1;
               continue;
           end
