@@ -55,7 +55,7 @@ function GenerateTocXml(obj)
     name   = string({obj.fileList(:).name});
     toc    = string({obj.fileList(:).toc});
     
-    sortIndex = join([toc', name'], '0000', 2);
+    sortIndex = join([toc', name'], '    ', 2);
     [~,idx] = sortrows(lower(sortIndex));
     
     name = name(idx);

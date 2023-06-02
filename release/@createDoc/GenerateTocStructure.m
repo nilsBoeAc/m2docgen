@@ -38,7 +38,7 @@ fileList = obj.fileList;
 toc = "";
 tbsplit = strsplit(obj.mFolder, filesep);
 tbroot = tbsplit{end}; % toolbox root folder
-if obj.verbose
+if obj.verbose && ~isempty(obj.toc) % can only print the TOC if it is not empty. If it is, it will be created later.
     obj.printToc;
 end
 
@@ -50,6 +50,9 @@ if isempty(obj.toc)
     rootFolder = lastFolder(end);
     obj.toc = {obj.toolboxName, rootFolder , {}};
     % the obj.toc will be scanned, then back filled
+	if obj.verbose % if the TOC was not printed before while it was empty, print it now.
+		obj.printToc;
+	end
 end
 
 %% Define output toc path for each file
