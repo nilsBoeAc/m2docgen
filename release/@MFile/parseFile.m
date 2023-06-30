@@ -36,6 +36,10 @@ function parseFile(obj)
     % - added autodetection of text blocks (po - 27.06.2021)
     
     txt = obj.text;
+    if isempty(txt)
+        warning("Could not add %s to docs", obj.name)
+        return
+    end
     
     %% Check for SHORT_DESC (has to be first comment line)
     cL = char(txt(2)); cL = strrep(cL,' ','');

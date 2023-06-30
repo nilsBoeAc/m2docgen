@@ -189,24 +189,24 @@ classdef TemplateHTML < handle
         %% set Functions
         function set.outFolder(obj,fd)
             tmp = char(fd);
-            if(tmp(end)~="\")
-                fd = fd+"\";
+            if(tmp(end)~=filesep)
+                fd = fd+filesep;
             end
             obj.outFolder = fd;
         end
         
         function set.styleFolder(obj,fd)
             tmp = char(fd);
-            if(tmp(end)~="\")
-                fd = fd+"\";
+            if(tmp(end)~=filesep)
+                fd = fd+filesep;
             end
             obj.styleFolder = fd;
         end
         
         function set.templFolder(obj,fd)
             tmp = char(fd);
-            if(tmp(end)~="\")
-                fd = fd+"\";
+            if(tmp(end)~=filesep)
+                fd = fd+filesep;
             end
             obj.templFolder = fd;
         end
